@@ -1,0 +1,117 @@
+#!/bin/bash
+# 
+# backup (Shell Script) 
+# 
+# Objetivo: Fazer backup de um arquivo ou de uma lista
+# de arquivos.
+# 
+# Site: http://www.dirackslouge.online
+# 
+# Versão 1.0
+# 
+# Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+VERSAO="Versão 1.0"
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -a | -l ]
+
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-a Faz backup de um arquivo fornecido pelo usuário
+-l --list Faz backup de uma lista de arquivos fornecida pelo usuário
+
+Exemplo de uso: 
+	bash$ $0 -a arquivo.txt 
+	bash$ $0 -a arq1.txt arq2.txt arq3.txt # Mais de um arquivo pode ser informado
+	bash$ $0 -l lista.txt #O arquivo lista deve conter endereços válidos de arquivos
+"
+# Verificar se o usuário forneceu algum parâmetro
+[ -z "$1" ] && {
+	echo "O usuário não forneceu nenhum parâmetro!"
+	echo "Digite $0 -h para obter ajuda!"
+	exit 1 
+}
+
+
+case "$1" in
+-h | --help) ## Exibir ajuda
+	echo "$MENSAGEM_USO"
+	exit 0
+;;
+
+-v | --version) ## Exibir versão
+	echo "$VERSAO"
+	exit 0
+;;
+
+-a) ## Compactar arquivo
+
+	# O usuário forneceu um nome de arquivo?
+	[ -z "$2" ] && {
+	
+		echo "O usuário não forneceu um nome de arquivo!"
+		exit 2
+	}
+	
+	# O usuário pode informar mais de um arquivo
+	while [ "$2" ]
+	do
+		# Verificar se o arquivo existe
+		[ -f "$2" -o -d "$2" ] || {
+
+			echo "Arquivo ou diretório não encontrado!"
+			exit 2
+
+		}
+
+		compactado="$2.$(date +%d-%m-%Y.%H-%M-%S).tar"
+		echo "$PWD/$compactado"
+		tar -zcf "$compactado" "$2"
+		[ "$PWD/$compactado" = "$PWD/$2" ] && mv "$compactado" "$PWD"
+		echo "Arquivo $2 compactado com sucesso!"
+		shift
+	done
+	exit 0
+;;
+
+-l | --list) # O usuário pode fornecer uma lista de arquivos
+	     # Em arquivo .txt, cada linha um enddereço
+
+	     # Verificar se o usuário forneceu o nome do arquivo
+	     [ -z "$2" ] && {
+	     	echo "O usuário não forneceu o nome do arquivo!"
+		exit 2
+	     }
+
+	     while read linha
+	     do
+	     
+		 # Verificar se o arquivo existe
+	     	[ -f "$linha" -o -d "$linha" ] || {
+			echo "Arquivo ou diretório $linha não encontrado!"
+			exit 2
+	     	}
+
+		compactado="$linha.$(date +%d-%m-%Y.%H-%M-%S).tar"
+		tar -zcf "$compactado" "$linha"
+		[ "$PWD/$compatado" = "$PWD/$linha" ] &&  mv "$compactado" "$PWD"
+	     	echo "Arquivo $linha compactado com sucesso!"
+	     	shift
+
+	     done < $2
+
+
+;;
+
+*)
+	echo "ERRO: Opção $1 desconhecida!"
+	echo "Digite $0 -h para obter ajuda"
+	exit 1
+;;
+esac
+
