@@ -1,70 +1,121 @@
-#!/bin/bash
-#
-# Objetivo: criar aliases permanentes
+# !/bin/bash
 # 
-# Versão 1.1
+# Jonas (Shell Script)
+# 
+# Objetivo: Criar atalhos para pastas e aliases permanentes.
+# Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh
+# Adicione a linha abaixo ao seu arquivo $HOME/.bashrc
 #
-# Programador: Rodolfo A. C. Neves 06/03/2018
+# source $HOME/.aliases.sh
+# 
+# Site: http://www.dirackslounge.online
+# 
+# Versão 2.0
+# 
+# Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+# Verificar se o usuário passou parâmetros para o programa
+if [ -z "$1" ]
+then
+	echo "ERRO: Usuário não passou nenhum parâmetro!"
+	echo "Digite $0 -h para obter ajuda"
+	exit 1
+fi
 
 MENSAGEM_USO="
 
-USO: $(basename "$0") [-h | -V | -a | -c] 
+USO: $(basename "$0") [-h | -V | -a | -c | -l] 
 
- -h exibe este menu e sai 
+ -h --help exibe este menu e sai 
 
- -V exibe a versão do programa e sai 
+ -V --version exibe a versão do programa e sai 
  
  -a gera atalho para a pasta atual (alias)
 
  -c gera comando personalizado (alias)
+
+ -l --list exibe a lista de aliases já cadastrados
 "
-case $1 in
+case "$1" in
 
--h | --help)
+	-h | --help)
 
-	echo "$MENSAGEM_USO"
-	exit 0
+		echo "$MENSAGEM_USO"
+		exit 0
+		;;
+
+	-V | --version)
+		
+		echo Programa: $(basename "$0")
+		head $HOME/bin/jonas | grep '# Versão' | tr -d \#
+		exit 0
+		;;
+
+	-a)
+
+		# Peça para o usuário dar nome ao atalho
+		echo -e "Criando atalho para a pasta\n $PWD\n"
+		read -p "Dê nome ao atalho: " nome
+
+		# Verificar se algum nome foi passado ao atalho
+		[ -z "$nome" ] && {
+			echo "ERRO: Usuário não deu nenhum nome ao atalho!"
+			exit 1
+		}
+	 
+		# Guarda a localização atual, substitua os espaços por '\ '
+		atalho=$(pwd | sed 's/ /\\ /g')
+
+		## escreva o atalho criado no arquivo .aliases.sh
+		sudo echo alias $nome=\"cd $atalho\" >> $HOME/.aliases.sh
+		source $HOME/.bashrc # Validar o atalho		
+		echo  "Atalho criado com sucesso!"
+		exit 0
+		;;
+	-c)
+		##gerar comando personalizado
+		read -p "Digite o apelido (alias) do comando: " apelido
+
+		# Verificar se algum apelido foi passado ao atalho
+		[ -z "$apelido" ] && {
+			echo "ERRO: Usuário não deu nenhum apelido ao atalho!"
+			exit 1
+		}
+
+		# Verificar se o alias já existe
+		 lista=$(cut -d" " -f2 $HOME/.aliases.sh | cut -d "=" -f1 | grep -x "$apelido") 
+
+		[ -n "$lista" ] && {
+			echo "O alias $apelido já está cadastrado!"
+			exit 2
+		}
+
+		read -p "Digite o comando: " comando
+
+		# Verificar se algum comando foi passado pelo usuário		
+		[ -z "$comando" ] && {
+			echo "ERRO: Usuário não passou nenhum comando!"
+			exit 1
+		}
+		
+		##escreva o comando no arquivo .aliases.sh
+		sudo echo alias $apelido=\"$comando\" >> $HOME/.aliases.sh
+		source $HOME/.bashrc # Validar atalho 
+		exit 0
+		;;
+
+	-l | --list ) ## Exibir a lista de aliases já cadastrados
+
+		 cut -d" " -f2 $HOME/.aliases.sh | cut -d "=" -f1 
 	;;
 
--V | --version)
-	
-	echo Programa: $(basename "$0")
-	head $HOME/bin/jonas | grep '# Versão' | tr -d \#
-	exit 0
-	;;
+	*)
 
--a)
-
-	## peça para o usuário dar nome ao atalho
-	read -p "Dê nome ao atalho: " nome
- 
-	## guarda a localização atual
-	## substitua os espaços por '\ '
-	atalho=$(pwd >> tmp.txt && sed -i 's/ /\\ /g' tmp.txt && cat tmp.txt)
-	rm tmp.txt
-
-	## escreva o atalho em .bashrc
-	echo -e '\033[31m Atalho criado!\033[m'
-	sudo echo alias $nome=\"cd $atalho\" >> $HOME/.bashrc
-	echo -e '\033[31m digite soubash ou soure $HOME/.bashrc para validar o atalho!\033[m'
-	exit 0
-	;;
--c)
-	##gerar comando personalizado
-	read -p "Digite o apelido (alias) do comando:" apelido
-	read -p "Digite o comando: " comando
-	
-	##escreva o comando em .bashrc
-	sudo echo alias $apelido=\"$comando\" >> $HOME/.bashrc
-	echo -e '\033[31mDigite source $HOME/.bashrc para validar o atalho!\033[m'
-	exit 0
-	;;
-
-*)
-
-	echo -e 'Opção inválida! Digite \033[31mjonas -h\033[m para obter ajuda.'
-	exit 1
-	;;
+		echo -e "Opção $1 desconhecida!\nDigite $0 -h para obter ajuda."
+		exit 1
+		;;
 esac
-
-#exit
