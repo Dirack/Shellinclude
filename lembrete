@@ -1,0 +1,138 @@
+#!/bin/bash
+# 
+# Lembrete (Shell Script)
+# 
+# Objetivo: Armazenar lembretes e idéias no arquivo $HOME/.post
+# 
+# Site: http://www.dirackslounge.online
+# 
+# Versão 1.0
+# 
+# Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+VERSAO="Versão 1.0"
+
+# Verificar se o usuário passou algum parâmetro pela linha de comandos
+[ -z "$1" ] && {
+	echo "Usuário não forneceu nenhum parâmetro!"
+	echo "Digite $0 -h para obter ajuda!"
+	exit 1
+}
+
+# Verificar se o arquivo de banco de dados exite
+# Se não, crie
+[ -f "$HOME/.post" ] || {
+	touch $HOME/.post
+}
+
+MENSAGEM_USO="
+$(basename $0) [ -h | -v | -a | -l ]
+
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a versão do programa e sai
+-a --add adicionar lembretes
+-l --list listar lembretes
+-r -- remove remover lembretes
+
+Exemplo:
+	bash~$ $0 -a tag -m \"Mensagem\" # Adicionar lembrete tag=Mensagem
+"
+
+case "$1" in
+	-h | --help) # Exibir ajuda
+		echo "$MENSAGEM_USO"
+		exit 0
+	;;
+
+	-v | --version) # Exibir versão do programa
+		echo "$VERSAO"
+		exit 0	
+	;;
+
+	-a | --add) # Adicionar lembretes, a sintaxe é: ./lembrete -a tag -m "Mensagem"
+
+		# Verificar se o usuário forneceu corretamente o comando
+		[ -z "$2" -o -z "$3" -o "$3" != "-m" -o -z "$4" ] && {
+			echo "ERRO: Sintaxe incorreta do comando!"
+			echo 'A sintaxe correta é:'
+			echo "$0 -a tag -m Mensagem"
+			exit 2
+		}
+		
+		# Verificar se lembrete já existe
+		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+		[ -z "$existe" ] || {
+			echo "ERRO: lembrete já cadastrado!"
+			exit 2
+		}
+		
+		# Campos do arquivo $HOME/.post
+		# tag:lembrete:data:hora
+		echo "$2:$4:$(date +%d-%m-%Y):$(date +%H-%M-%S)" >> $HOME/.post
+		
+		echo "lembrete cadastrado com sucesso!"
+		exit 0
+	;;
+
+	-l | --list) # Listar lembretes armazenados no arquivo $HOME/.post
+	    
+		# Se nenhuma chave específica for passada, mostre todos
+		[ -z "$2" ] && {
+			echo "Lembretes cadastrados: "
+			cut -d":" -f1 $HOME/.post
+			exit 0
+		}
+
+		# Se uma chave específica for passada, procure
+		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+
+		if [ -z "$existe" ] 
+		then 
+			echo "ERRO: lembrete NÃO encontrado!"
+			exit 2
+		else
+			grep "$2" $HOME/.post
+			exit 0
+		fi
+
+		
+	;;
+
+	-r | --remove) # remover lembrete armazenado no arquivo $HOME/.post
+
+		# Verificar se o usuário forneceu corretamente o comando
+		[ -z "$2" ] && {
+			echo "ERRO: Sintaxe incorreta do comando!"
+			echo 'A sintaxe correta é:'
+			echo "$0 -r lembrete"
+			exit 2
+		}
+
+		# Verificar se lembrete já existe
+		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+
+		if [ -z "$existe" ] 
+		then
+			echo "ERRO: lembrete NÃO encontrado!"
+			exit 2
+		else
+			linha=$(grep -n "$2" $HOME/.post | cut -d":" -f1)
+			echo $linha
+			sed -i "${linha}d" $HOME/.post			
+			echo "lembrete $2 apagado!"
+			exit 0
+		fi
+
+		
+	;;
+
+	*)
+		echo "ERRO: Opção $1 desconhecida!"
+		echo "Digite $0 para obter ajuda"
+		exit 1
+	;;
+esac
