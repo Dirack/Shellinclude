@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# Objetivo: criar aliases permanentes
+# 
+# Versão 1.1
+#
+# Programador: Rodolfo A. C. Neves 06/03/2018
+
+MENSAGEM_USO="
+
+USO: $(basename "$0") [-h | -V | -a | -c] 
+
+ -h exibe este menu e sai 
+
+ -V exibe a versão do programa e sai 
+ 
+ -a gera atalho para a pasta atual (alias)
+
+ -c gera comando personalizado (alias)
+"
+case $1 in
+
+-h | --help)
+
+	echo "$MENSAGEM_USO"
+	exit 0
+	;;
+
+-V | --version)
+	
+	echo Programa: $(basename "$0")
+	head $HOME/bin/jonas | grep '# Versão' | tr -d \#
+	exit 0
+	;;
+
+-a)
+
+	## peça para o usuário dar nome ao atalho
+	read -p "Dê nome ao atalho: " nome
+ 
+	## guarda a localização atual
+	## substitua os espaços por '\ '
+	atalho=$(pwd >> tmp.txt && sed -i 's/ /\\ /g' tmp.txt && cat tmp.txt)
+	rm tmp.txt
+
+	## escreva o atalho em .bashrc
+	echo -e '\033[31m Atalho criado!\033[m'
+	sudo echo alias $nome=\"cd $atalho\" >> $HOME/.bashrc
+	echo -e '\033[31m digite soubash ou soure $HOME/.bashrc para validar o atalho!\033[m'
+	exit 0
+	;;
+-c)
+	##gerar comando personalizado
+	read -p "Digite o apelido (alias) do comando:" apelido
+	read -p "Digite o comando: " comando
+	
+	##escreva o comando em .bashrc
+	sudo echo alias $apelido=\"$comando\" >> $HOME/.bashrc
+	echo -e '\033[31mDigite source $HOME/.bashrc para validar o atalho!\033[m'
+	exit 0
+	;;
+
+*)
+
+	echo -e 'Opção inválida! Digite \033[31mjonas -h\033[m para obter ajuda.'
+	exit 1
+	;;
+esac
+
+#exit

@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# cabecalho 1.0
+#
+# Objetivo: Gerar um cabeçalho para um arquivo de programa em uma
+# determinada linguagem de programação.
+#
+# Site: www.dirackslounge.online
+#
+# Versão 1.0
+#
+# Programador: Rodolfo A. C. Neves 17/09/2018
+#
+# email: rodolfo_profissional@hotmail.com
+#
+# Funcionamento: cabecalho -op NomeDoArquivo.sh (cria o arquivo já com um cabeçalho padronizado)
+#		** -Op pode assumir os seguintes valores
+#			-sh (shell script)
+#			-sci (scilab)
+#
+# Exemplo de uso: cabecalho -sh arquivo.sh (Gera o arquivo.sh com o cabeçalho padronizado)
+#
+# Licença: software de uso livre e código aberto.
+
+## Variável que armazena mensagem de ajuda
+MENSAGEM_USO="
+
+Gera cabeçalho para um arquivo de programa em uma
+Linguagem escolhida.
+
+Uso: cabecalho [ -h | -V | -sh | -sci ]
+
+-h --help exibe essa tela de ajuda e sai
+
+-V --version exibe a versão do programa e sai
+
+cabecalho -op NomeDoArquivo
+
+	** -op pode assumir os valores:
+		-sh (Para um programa em shell script)
+		-sci (Para um programa do scilab)
+
+Exemplo: cabecalho -sh Arquivo.sh (Gera um cabeçalho para Arquivo.sh)
+
+"
+
+## variável que armazena o cabeçalho padronizado
+HEAD='Interpretador\n\nNomeDoPrograma\n\nObjetivo:\n\nSite:\n\nVersão\n\nProgramador\n\nemail:\n\nFuncionamento:\n\nLicença: Software de uso livre e código aberto.'
+
+
+case $1 in
+-h | --help) ## Exibe a ajuda
+	echo "$MENSAGEM_USO"
+	exit 0
+	;;
+
+-V | --version) ## Exibe a versão do programa
+	head $HOME/bin/cabecalho | grep '# Versão' | tr -d \#
+	exit 0
+	;;
+
+-sh)	## cabeçalho para shell script
+	echo -e "$HEAD" | sed 's/Interpretador/!\/bin\/bash/;s/^/# /g' >> "$2"
+	;;
+
+-sci) ## cabeçalho para script do scilab
+	echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;' >> "$2"
+	echo -e "clc\nclear\nclose" >> "$2"
+	;;
+*)
+	echo "Digite cabecalho -h para obter ajuda"
+esac
+exit
+
