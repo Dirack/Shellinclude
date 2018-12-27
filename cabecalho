@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# cabecalho 1.0
+# cabecalho 
 #
 # Objetivo: Gerar um cabeçalho para um arquivo de programa em uma
 # determinada linguagem de programação.
 #
-# Site: www.dirackslounge.online
+# Site: http://www.dirackslounge.online
 #
-# Versão 1.0
+# Versão 2.0
 #
-# Programador: Rodolfo A. C. Neves 17/09/2018
+# Programador: Rodolfo A. C. Neves 27/12/2018
 #
 # email: rodolfo_profissional@hotmail.com
 #
@@ -17,58 +17,112 @@
 #		** -Op pode assumir os seguintes valores
 #			-sh (shell script)
 #			-sci (scilab)
+#			-c (linguagem C)
+#			-c++ (linguagem C++)
 #
 # Exemplo de uso: cabecalho -sh arquivo.sh (Gera o arquivo.sh com o cabeçalho padronizado)
 #
 # Licença: software de uso livre e código aberto.
 
+
+## Verificar se o usuário forneceu $1 e $2
+if [ -z "$1" ]
+then
+	echo "ERRO: Usuário não ofereceu parâmetros ao programa!"
+	echo "digite $0 -h para obter ajuda"
+	exit 1
+elif [ -z "$2" -a "$1" != "-h" -a "$1" != "--help" ]
+then
+	echo "ERRO: Usuário não ofereceu o nome do arquivo!"
+	echo "digite $0 -h para obter ajuda"
+	exit 2
+fi	
+
+# Verificar se o usuário forneceu o nome 
+# de um arquivo que já existe.
+# Se sim, faça uma cópia. 
+# $control é uma chave para informar
+# ao programa que o arquivo existe
+if [ -f "$2" ] 
+then
+	echo "O arquivo existe! Fazendo uma cópia..."
+	control="1"
+	file="$2"
+	mv "$2" "$2.bak" #cópia .bak
+else
+	file="$2"
+fi
+
+
 ## Variável que armazena mensagem de ajuda
 MENSAGEM_USO="
+$(basename $0)
 
 Gera cabeçalho para um arquivo de programa em uma
 Linguagem escolhida.
 
-Uso: cabecalho [ -h | -V | -sh | -sci ]
+Opções: [ -h | -V | -sh | -sci | -c | -c++ ]
 
 -h --help exibe essa tela de ajuda e sai
 
 -V --version exibe a versão do programa e sai
 
-cabecalho -op NomeDoArquivo
+-sh (Cabeçalho para um programa em shell script)
 
-	** -op pode assumir os valores:
-		-sh (Para um programa em shell script)
-		-sci (Para um programa do scilab)
+-sci (Cabeçalho para um programa do scilab)
 
-Exemplo: cabecalho -sh Arquivo.sh (Gera um cabeçalho para Arquivo.sh)
+-c (Cabeçalho para um programa em C)
+
+-c++ (Cabeçalho para um programa em C++)
+
+Exemplo: $0 -sh Arquivo.sh (Cabeçalho para Arquivo.sh)
 
 "
 
 ## variável que armazena o cabeçalho padronizado
-HEAD='Interpretador\n\nNomeDoPrograma\n\nObjetivo:\n\nSite:\n\nVersão\n\nProgramador\n\nemail:\n\nFuncionamento:\n\nLicença: Software de uso livre e código aberto.'
+HEAD="Interpretador\n\nNomeDoPrograma\n\nObjetivo:\n\nSite:\n\nVersão\n\n\
+Programador: Seu nome aqui!\t $(date +%d/%m/%Y)\n\nemail:\n\nFuncionamento:\n\
+\nLicença: Software de uso livre e código aberto."
 
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		echo "$MENSAGEM_USO"
+		exit 0
+		;;
 
-case $1 in
--h | --help) ## Exibe a ajuda
-	echo "$MENSAGEM_USO"
-	exit 0
-	;;
+	-V | --version) ## Exibe a versão do programa
+		head $HOME/bin/cabecalho | grep '# Versão' | tr -d \#
+		exit 0
+		;;
 
--V | --version) ## Exibe a versão do programa
-	head $HOME/bin/cabecalho | grep '# Versão' | tr -d \#
-	exit 0
-	;;
+	-sh)	## cabeçalho para shell script
+		echo -e "$HEAD" | sed 's/Interpretador/!\/bin\/bash/;s/^/# /g' >> "$file"
+		;;
 
--sh)	## cabeçalho para shell script
-	echo -e "$HEAD" | sed 's/Interpretador/!\/bin\/bash/;s/^/# /g' >> "$2"
-	;;
-
--sci) ## cabeçalho para script do scilab
-	echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;' >> "$2"
-	echo -e "clc\nclear\nclose" >> "$2"
-	;;
-*)
-	echo "Digite cabecalho -h para obter ajuda"
+	-sci) ## cabeçalho para script do scilab
+		echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;' >> "$file"
+		echo -e "clc\nclear\nclose" >> "$file"
+		;;
+		
+	-c | -c++) ## cabeçalho para C e C++
+		echo -e "/*" >> "$file"
+		echo -e "$HEAD" | sed 's/^/* /g;' >> "$file"
+		echo -e "*/" >> "$file"
+		;;
+		
+	*)
+		echo "Opção $1 desconhecida!"
+		echo "Digite cabecalho -h para obter ajuda"
 esac
-exit
+
+# Se o arquivo existe
+# Copie o resto do arquivo
+# para o cabeçalho
+if [ "$control" = "1" ] 
+then
+	echo -e "\n" >> "$file"
+	cat "$file.bak" >> "$file"
+fi
+
+exit 0
 
