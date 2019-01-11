@@ -1,0 +1,123 @@
+#!/bin/bash
+#
+# comp (Shell Script)
+#
+# Objetivo: Realizar a compilação e adicionar programas ao
+# pacote de processamento sísmico MADAGASCAR.
+# 
+# Site: http://www.dirackslouge.online
+#
+# Versão 1.0
+#
+# Programador: Rodolfo A. C. Neves 10/01/2019
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+#----------------{ Configuração de variáveis }-----------------------------#
+#	Ao mudar o endereço da pasta na variável USER, o programa pode 
+#	ser adaptado para a compilação de programas de outro usuário.
+
+# Pasta do usuário rodolfo dentro do pacote MADAGASCAR
+USER="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0/user/rodolfo" 
+
+# Diretório principal do pacote MADAGASCAR
+TOP="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0"
+
+# Versão deste programa
+VERSAO="Versão 1.0"
+
+# Saída padrão de erro do programa
+ERRO="/tmp/erro.txt"
+#--------------------------------------------------------------------------#
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -c ]
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-c Realiza a compilação e adiciona os programas ao pacote MADAGASCAR
+
+Pasta de usuário a ser compilada:\n$USER
+
+Exemplo de uso: 
+	bash$ $0 -c 
+"
+# Verificar se o usuário forneceu algum parâmetro
+[ -z "$1" ] && {
+	exec 28> "$ERRO"
+	echo "O usuário não forneceu nenhum parâmetro!" 
+	echo "Digite $0 -h para obter ajuda!" 
+	date >&28
+	echo "ERRO(1): Usuário não forneceu parâmetros ao programa" >&28	
+	exit 1 
+}
+
+case "$1" in
+-h | --help) ## Exibir ajuda
+	echo -e "$MENSAGEM_USO"
+	exit 0
+;;
+
+-v | --version) ## Exibir versão
+	echo "$VERSAO"
+	exit 0
+;;
+
+-c) ## Compilar e adicionar programas ao MADAGASCAR
+	
+	exec 28> "$ERRO"
+
+	# Mover para a pasta de usuário e rodar o scons
+	if cd "$USER" 2> /dev/null
+	then 
+		echo -e "\033[35mCompilando conteúdo de $USER\033[m"
+	else
+		echo -e "\033[31mDiretório $USER não encontrado!\033[m"
+		date >&28
+		echo "ERRO(4) diretório $USER não encontrado!" >&28
+		exit 4
+	fi
+
+	# Informar o usuário se ocorrer erro de compilação
+	# direcionar a saída de erro para 'erro.txt'
+	if scons 2>&28
+	then
+
+		echo -e "\033[35mCompilação realizada com sucesso!\033[m"
+
+		# Conseguiu compilar?
+		# Adicione os programas ao pacote MADAGASCAR
+		cd "$TOP" # Mover para o diretório principal
+
+		if sudo scons install 2>&28 # Instalar
+		then
+			echo -e "\033[35mInstalação realizada com sucesso!\033[m"
+		else
+			echo -e "\033[31mERRO durante a instalação!\033[m"
+			date >&28
+			echo "ERRO(5): erro de instalação !" >&28
+			cat "$ERRO"
+			exit 5
+		fi	
+
+	else
+		date >&28 
+		echo "ERRO(2): Erro de compilação em $USER" >&28
+		echo -e "\033[31mErro de compilação em $USER!!!\033[m"
+		cat "$ERRO"
+		exit 2
+	fi
+
+	exit 0
+;;
+
+*) ## Usuário forneceu parâmetro desconhecido
+	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
+	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
+	exec 28> "$ERRO"
+	date >&28
+	echo "ERRO(2): Usuário forneceu \$1=$1 parâmetro desconhecido ao programa" >&28
+	exit 3
+;;
+esac
