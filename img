@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# img (Shell Script)
+#
+# Objetivo: Converter arquivos .vpl 
+# (imagens do pacote de processamento sísmico MADAGASCAR)
+# em imagens .jpeg
+# 
+# Site: http://www.dirackslouge.online
+#
+# Versão 1.0
+#
+# Programador: Rodolfo A. C. Neves 13/01/2019
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+#----------------{ Configuração de variáveis }-----------------------------#
+
+# Versão deste programa
+VERSAO="Versão 1.0"
+
+#--------------------------------------------------------------------------#
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -c ]
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-i Converte os arquivos .vpl da pasta atual em imagens jpeg
+
+Exemplo de uso: 
+	bash$ $0 -i 
+"
+# Verificar se o usuário forneceu algum parâmetro
+[ -z "$1" ] && {
+	echo "O usuário não forneceu nenhum parâmetro!" 
+	echo "Digite $0 -h para obter ajuda!" 
+	exit 1 
+}
+
+case "$1" in
+-h | --help) ## Exibir ajuda
+	echo -e "$MENSAGEM_USO"
+	exit 0
+;;
+
+-v | --version) ## Exibir versão
+	echo "$VERSAO"
+	exit 0
+;;
+
+-i) ## Compilar e adicionar programas ao MADAGASCAR
+
+	# Armazene os arquivos da pasta atual em um arquivo
+	# temporário
+	ls -1 *.vpl > /tmp/lista.txt
+
+	# Obtenha a imagem jpeg a partir dos arquivos em ARQ
+	while read linha
+	do
+		< "$linha" jpegpen > "$linha.jpeg"
+	
+	done < /tmp/lista.txt
+
+	exit 0
+;;
+
+*) ## Usuário forneceu parâmetro desconhecido
+	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
+	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
+	exit 3
+;;
+esac
