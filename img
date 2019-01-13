@@ -8,7 +8,7 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.0
+# Versão 2.0
 #
 # Programador: Rodolfo A. C. Neves 13/01/2019
 # 
@@ -19,18 +19,22 @@
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
-VERSAO="Versão 1.0"
+VERSAO="Versão 2.0"
 
 #--------------------------------------------------------------------------#
 
 MENSAGEM_USO="
-$(basename $0) [-h | -v | -c ]
+$(basename $0) [-h | -v | -i | -r ]
 -h --help Exibe esta mensagem de ajuda e sai
 -v --version Exibe a Versão do programa e sai
--i Converte os arquivos .vpl da pasta atual em imagens jpeg
+-i Converte os arquivos .vpl de uma pasta em imagens jpeg
+-r Remove os arquivos .jpeg de uma pasta
 
 Exemplo de uso: 
-	bash$ $0 -i 
+	bash$ $0 -i # Converte arquivos .vpl da pasta atual
+	bash$ $0 -i /home/user # Converte arquivos .vpl da pasta /home/user
+	bash$ $0 -r # Remove os arquivos .jpeg da pasta atual
+	bash$ $0 -r /home/user # Remove os arquivos .jpeg da pasta /home/user
 "
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$1" ] && {
@@ -50,20 +54,127 @@ case "$1" in
 	exit 0
 ;;
 
--i) ## Compilar e adicionar programas ao MADAGASCAR
+-i) ## Converter arquivos .vpl (MADAGASCAR) em imagens jpeg
 
-	# Armazene os arquivos da pasta atual em um arquivo
-	# temporário
-	ls -1 *.vpl > /tmp/lista.txt
+	# Se o usuário não forneceu uma pasta, converta
+	# arquivos .vpl da pasta atual
+	if [ -z "$2" ]
+	then
+		# Armazene os arquivos da pasta atual em um arquivo
+		# temporário
+		ls -1 *.vpl > /tmp/lista.txt
 
-	# Obtenha a imagem jpeg a partir dos arquivos em ARQ
-	while read linha
-	do
-		< "$linha" jpegpen > "$linha.jpeg"
+		# Obtenha a imagem jpeg a partir dos arquivos em ARQ
+		while read linha
+		do
+			< "$linha" jpegpen > "$linha.jpeg"
+		
+		done < /tmp/lista.txt
+
+		exit 0
+
+	# O usuário forneceu o endereço de uma pasta específica,
+	# converta os arquivos .vpl desta pasta
+	else
+
+		# Verifique se o endereço fornecido existe
+		[ -d "$2" ] || {
+
+			echo "Diretório $2 não encontrado"
+			exit 4		
+		}
+
+		# Armazene os arquivos da pasta atual em um arquivo
+		# temporário
+		ls -1 $2 | grep ".vpl$" > /tmp/lista.txt
+
+		# Obtenha a imagem jpeg a partir dos arquivos em ARQ
+		while read linha
+		do
 	
-	done < /tmp/lista.txt
+			# Verifique se o arquivo existe antes de converter
+			[ -f "$2${linha}" ] || {
 
-	exit 0
+				echo "Arquivo $2${linha} não encontrado"
+				exit 5	
+			}
+			
+			# Converter de .vpl para jpeg
+			< "$2${linha}" jpegpen > "$2${linha}.jpeg"
+		
+		done < /tmp/lista.txt
+
+		exit 0
+	fi
+;;
+
+-r) ## Remover arquivos jpeg de uma pasta
+	
+	# Se o usuário não forneceu uma pasta, apague
+	# arquivos .jpeg da pasta atual
+	if [ -z "$2" ]
+	then
+		# Remover arquivos?
+		echo "Pasta atual: $PWD"
+		read -p "Remover arquivos .jpeg da pasta atual? (y/n)" RESP
+
+		# Usuário desistiu?
+		if [ "$RESP" = "n" ]
+		then
+			echo "Remoção abortada! Nenhum arquivo removido"
+			exit 0
+			
+		elif [ "$RESP" = "y" ]
+		then
+			rm *.jpeg
+			echo "Arquivos .jpeg removidos com sucesso!"
+			exit 0
+
+		else
+			echo "Opção $RESP desconhecida! Abortada a execução"
+			exit 6
+		fi
+
+	# O usuário forneceu o endereço de uma pasta específica,
+	# apague os arquivos .jpeg desta pasta
+	else
+
+		# Verifique se o endereço fornecido existe
+		[ -d "$2" ] || {
+
+			echo "Diretório $2 não encontrado"
+			exit 4		
+		}
+
+		# Remover arquivos?
+		echo "Pasta escolhida: $2"
+		read -p "Remover arquivos .jpeg da pasta? (y/n)" RESP
+
+		# Usuário desistiu?
+		if [ "$RESP" = "n" ]
+		then
+			echo "Remoção abortada! Nenhum arquivo removido de $2"
+			exit 0
+			
+		elif [ "$RESP" = "y" ]
+		then
+
+			# Verifique se há algum .jpeg na pasta para ser removido
+			rm "$2"*.jpeg && {
+				echo "Arquivos .jpeg removidos de $2 com sucesso!"
+			} || {
+				echo "Arquivos .jpeg não foram encontrados em $2"
+			}
+			exit 0
+
+		else
+			echo "Opção $RESP desconhecida! Abortada a execução"
+			exit 6
+		fi
+
+		
+	fi
+	
 ;;
 
 *) ## Usuário forneceu parâmetro desconhecido
