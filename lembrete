@@ -40,6 +40,7 @@ $(basename $0) [ -h | -v | -a | -l ]
 
 Exemplo:
 	bash~$ $0 -a tag -m \"Mensagem\" # Adicionar lembrete tag=Mensagem
+	bash~$ $0 -l tag # Procurar por lembrete chamado 'tag'
 "
 
 case "$1" in
@@ -84,18 +85,31 @@ case "$1" in
 		[ -z "$2" ] && {
 			echo "Lembretes cadastrados: "
 			cut -d":" -f1 $HOME/.post
+
+			echo -e "\n*Digite $0 -l NomeDoLembrete para exibir um lembrete específico."
 			exit 0
 		}
 
 		# Se uma chave específica for passada, procure
 		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
 
+		# Se o lembrete NÃO foi encontrado, informe ao usuário
 		if [ -z "$existe" ] 
 		then 
 			echo "ERRO: lembrete NÃO encontrado!"
 			exit 2
 		else
-			grep "$2" $HOME/.post
+
+		# Se o lembrete foi encontrado, exiba o lembrete ao usuário
+			TMP=$(grep "$2" $HOME/.post)
+			LEMBRETE=$(echo "$TMP" | cut -d":" -f1)
+			DATA=$(echo "$TMP" | cut -d":" -f3 | tr '-' '/')
+			HORA=$(echo "$TMP" | cut -d":" -f4 | tr '-' ':')
+			MSG=$(echo "$TMP" | cut -d":" -f2)
+			echo "LEMBRETE= $LEMBRETE"
+			echo "DATA= $DATA"
+			echo "HORA= $HORA"
+			echo "MENSAGEM= $MSG"
 			exit 0
 		fi
 
