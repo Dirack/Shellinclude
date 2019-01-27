@@ -67,7 +67,7 @@ case "$1" in
 		# Obtenha a imagem jpeg a partir dos arquivos em ARQ
 		while read linha
 		do
-			< "$linha" jpegpen > "$linha.jpeg"
+			< "$linha" jpegpen bgcolor=w > "$linha.jpeg"
 		
 		done < /tmp/lista.txt
 
@@ -100,7 +100,7 @@ case "$1" in
 			}
 			
 			# Converter de .vpl para jpeg
-			< "$2${linha}" jpegpen > "$2${linha}.jpeg"
+			< "$2${linha}" jpegpen bgcolor=w > "$2${linha}.jpeg"
 		
 		done < /tmp/lista.txt
 
