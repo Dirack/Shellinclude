@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+# senha (Shell Script)
+#
+# Objetivo: Esconder a senha do servidor que está em alguns arquivos PHP 
+# antes de salvar no git. Exibir a senha do servidor nos arquivos
+# quando necessário testar. Armazene a sua senha na variável SENHA e
+# cadastre os arquivos PHP em um arquivo '.senha' na mesma pasta.
+# 
+# Site: http://www.dirackslouge.online
+#
+# Versão 1.0
+#
+# Programador: Rodolfo A. C. Neves 03/02/2019
+# 
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+# Versão deste programa
+VERSAO="Versão 1.0"
+
+# Senha a ser escondida e exibida
+SENHA="" #Sua senha do servidor aqui!
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -s | -e ]
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-s Mostra a senha nos arquivos de programas da pasta atual
+-e Esconde a senha dos arquivos de programas da pasta atual
+
+* Basta cadastrar os arquivos a serem alterados 
+em um arquivo .senha na pasta atual.
+
+Exemplo de uso: 
+	bash$ $0 -s # Exibe as senhas nos arquivos
+	bash$ $0 -e # Esconde as senhas nos arquivos
+"
+
+# Verificar se o usuário forneceu algum parâmetro
+[ -z "$1" ] && {
+	echo "O usuário não forneceu nenhum parâmetro!" 
+	echo "Digite $0 -h para obter ajuda!" 
+	exit 1 
+}
+
+case "$1" in
+-h | --help) ## Exibir ajuda
+	echo -e "$MENSAGEM_USO"
+	exit 0
+;;
+
+-v | --version) ## Exibir versão
+	echo "$VERSAO"
+	exit 0
+;;
+
+-s) ## Exibir senhas
+
+	## Verificar se o arquivo .senha está na pasta atual
+	[ -f ".senha" ] && {
+
+		#Exibir senha nos arquivos cadastrados
+		while read linha
+		do
+			sed -i "s/§/$SENHA/" "$linha"
+		done < ".senha"
+			
+		echo "Agora vê..."
+		exit 0
+	}
+	
+	echo "arquivo .senha não encontrado na pasta atual!"
+	exit 2
+;;
+
+-e) ## Esconder senhas
+
+	## Verificar se o arquivo .senha está na pasta atual
+	[ -f ".senha" ] && {
+
+		#Esconder senha dos arquivos cadastrados
+		while read linha
+		do
+			sed -i "s/$SENHA/§/" "$linha"
+		done < ".senha"
+		
+		echo "Agora NÃO vê..."	
+		exit 0
+	}
+	
+	echo "arquivo .senha não encontrado na pasta atual!"
+	exit 2
+;;
+
+
+*) ## Usuário forneceu parâmetro desconhecido
+	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
+	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
+	exit 3
+;;
+esac
