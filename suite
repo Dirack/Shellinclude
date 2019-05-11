@@ -5,6 +5,8 @@
 # Objetivo: Suíte de testes de programas para o
 # pacote de processamento sísmico MADAGASCAR.
 # 
+# IMPORTANTE: Depende do programa comp para funcionar!
+#
 # Site: http://www.dirackslouge.online
 #
 # Versão 1.0
@@ -34,10 +36,10 @@ MENSAGEM_USO="
 $(basename $0) [-h | -v | -c ]
 -h --help Exibe esta mensagem de ajuda e sai
 -v --version Exibe a Versão do programa e sai
--t nomeDoPrograma Realiza a compilação e teste do programa no pacote MADAGASCAR
+-c nomeDoPrograma Realiza a compilação e teste do programa no pacote MADAGASCAR
 
 Exemplo de uso: 
-	bash$ $0 -t teste.c
+	bash$ $0 -c teste.c
 "
 
 case "$1" in
@@ -58,15 +60,47 @@ case "$1" in
 	if [ -z "$2" ] 
 	then
 
-		echo "Nome do programa a ser testado não foi fornecido!"
+		echo -e "\033[31mERRO: Nome do programa a ser testado não foi fornecido!\033[m"
 		exit 1
 	else
 
-		## Verificar se o programa existe na pasta atual
-		if [ ! -f "$2" ] then; echo "Arquivo $2 não encontrado!" && exit 2 ; fi
+		## Verificar se o programa existe no endereço fornecido
+		if [ ! -f "$2" ] 
+		then
+			echo -e "Programa \033[31m$2\033[m não encontrado!"
+			exit 2 
+		fi
+
+		set -xv
+
+		## Verificar o formato do nome do programa
+		echo "$2" | grep -qs "^M*" # Começa com M maiúsculo ?
+		echo "$2" | grep -qs ".*\.c" # Tem a extensão '.c' ?
+
+		if [ "$?" -ne "0" ] 
+		then
+
+			echo $?
+			echo -e "\033[031mERRO: Os nomes dos programas do MADAGASCAR devem seguir o padrão\033[m"
+			echo -e "\033[34mM\033[mnome\033[34m.c\033[m"			
+			echo -e "\033[31ma primeira letra M maiúsculo\033[m"
+			echo -e "\033[31ma extensão .c\033[m"
+
+			exit 3
+
+		fi
 		
-		echo "Programa $2 encontrado!"
-		exit 0
+		## Copiar o programa para a pasta de testes
+		cp "$2" "$USER"
+
+		## Formatar o nome do programa para o SConstruct
+		NOME=$(echo "$2" | cut -d"M" -f2 | cut -d"." -f1)
+
+		## Adicionar o nome do programa ao SConstruct
+		sed -i "6s/^.*$/$NOME/" "$USER/SConstruct"
+
+		## Fazer a compilação
+		comp -c testes
 
 	fi
 
