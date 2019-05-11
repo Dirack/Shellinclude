@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# suite (Shell Script)
+#
+# Objetivo: Suíte de testes de programas para o
+# pacote de processamento sísmico MADAGASCAR.
+# 
+# Site: http://www.dirackslouge.online
+#
+# Versão 1.0
+#
+# Programador: Rodolfo A. C. Neves 11/05/2019
+#
+# email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+#----------------{ Configuração de variáveis }-----------------------------#
+#	Ao mudar o endereço da pasta na variável USER, o programa pode 
+#	ser adaptado para a compilação de programas de outro usuário.
+
+# Diretório principal do pacote MADAGASCAR
+TOP="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0"
+
+# Pasta PADRÃO do usuário de testes dentro do pacote MADAGASCAR
+USER="$TOP/user/testes"
+ 
+# Versão deste programa
+VERSAO="Versão 1.0"
+
+#--------------------------------------------------------------------------#
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -c ]
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-t nomeDoPrograma Realiza a compilação e teste do programa no pacote MADAGASCAR
+
+Exemplo de uso: 
+	bash$ $0 -t teste.c
+"
+
+case "$1" in
+-h | --help) ## Exibir ajuda
+	echo -e "$MENSAGEM_USO"
+	exit 0
+;;
+
+-v | --version) ## Exibir versão
+	echo "$VERSAO"
+	exit 0
+;;
+
+-c) ## Compilar e adicionar programas ao MADAGASCAR
+	
+	## $2 é o nome do programa a ser testado
+	## Se não for fornecido $2, avise o usuário e encerre
+	if [ -z "$2" ] 
+	then
+
+		echo "Nome do programa a ser testado não foi fornecido!"
+		exit 1
+	else
+
+		## Verificar se o programa existe na pasta atual
+		if [ ! -f "$2" ] then; echo "Arquivo $2 não encontrado!" && exit 2 ; fi
+		
+		echo "Programa $2 encontrado!"
+		exit 0
+
+	fi
+
+
+	exit 0
+;;
+
+*) ## Usuário forneceu parâmetro desconhecido
+	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
+	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
+	exit 3
+;;
+esac
