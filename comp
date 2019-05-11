@@ -7,42 +7,18 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.0
+# Versão 2.0
 #
-# Programador: Rodolfo A. C. Neves 10/01/2019
+# Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0)
+#	       Rodolfo A. C. Neves 11/05/2019 (modificada 2.0)
 # 
 # email: rodolfo_profissional@hotmail.com
 # 
 # Licença: Software de uso livre e código aberto.
 
-#----------------{ Configuração de variáveis }-----------------------------#
-#	Ao mudar o endereço da pasta na variável USER, o programa pode 
-#	ser adaptado para a compilação de programas de outro usuário.
-
-# Pasta do usuário rodolfo dentro do pacote MADAGASCAR
-USER="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0/user/rodolfo" 
-
-# Diretório principal do pacote MADAGASCAR
-TOP="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0"
-
-# Versão deste programa
-VERSAO="Versão 1.0"
-
 # Saída padrão de erro do programa
 ERRO="/tmp/erro.txt"
-#--------------------------------------------------------------------------#
 
-MENSAGEM_USO="
-$(basename $0) [-h | -v | -c ]
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a Versão do programa e sai
--c Realiza a compilação e adiciona os programas ao pacote MADAGASCAR
-
-Pasta de usuário a ser compilada:\n$USER
-
-Exemplo de uso: 
-	bash$ $0 -c 
-"
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$1" ] && {
 	exec 28> "$ERRO"
@@ -52,6 +28,31 @@ Exemplo de uso:
 	echo "ERRO(1): Usuário não forneceu parâmetros ao programa" >&28	
 	exit 1 
 }
+
+#----------------{ Configuração de variáveis }-----------------------------#
+#	Ao mudar o endereço da pasta na variável USER, o programa pode 
+#	ser adaptado para a compilação de programas de outro usuário.
+
+# Diretório principal do pacote MADAGASCAR
+TOP="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0"
+
+# Pasta PADRÃO do usuário rodolfo dentro do pacote MADAGASCAR
+USER="$TOP/user/rodolfo"
+ 
+# Versão deste programa
+VERSAO="Versão 2.0"
+
+#--------------------------------------------------------------------------#
+
+MENSAGEM_USO="
+$(basename $0) [-h | -v | -c ]
+-h --help Exibe esta mensagem de ajuda e sai
+-v --version Exibe a Versão do programa e sai
+-c usuario Realiza a compilação e adiciona os programas ao pacote MADAGASCAR
+
+Exemplo de uso: 
+	bash$ $0 -c rodolfo
+"
 
 case "$1" in
 -h | --help) ## Exibir ajuda
@@ -67,6 +68,22 @@ case "$1" in
 -c) ## Compilar e adicionar programas ao MADAGASCAR
 	
 	exec 28> "$ERRO"
+
+	## Modificação para alterar a pasta por linha de comandos
+	## se não for fornecido o usuário em $2, utilize a pasta PADRÃO
+	if [ -n "$2" ] 
+	then
+		# Pasta do usuário dentro do pacote MADAGASCAR
+		USER="$TOP/user/$2"
+
+		# Verificar se o usuário possui diretório na instalação MADAGASCAR
+		if [ ! -d "$USER" ]
+		then
+			echo -e "Usuário \033[31m$2\033[m NÃO encontrado!"
+			echo -e "Endereço consultado:\n$USER"
+			exit 10
+		fi
+	fi
 
 	# Mover para a pasta de usuário e rodar o scons
 	if cd "$USER" 2> /dev/null
