@@ -71,8 +71,6 @@ case "$1" in
 			exit 2 
 		fi
 
-		set -xv
-
 		## Verificar o formato do nome do programa
 		echo "$2" | grep -qs "^M*" # Começa com M maiúsculo ?
 		echo "$2" | grep -qs ".*\.c" # Tem a extensão '.c' ?
@@ -100,7 +98,14 @@ case "$1" in
 		sed -i "6s/^.*$/$NOME/" "$USER/SConstruct"
 
 		## Fazer a compilação
-		comp -c testes
+		if comp -c testes
+		then
+
+			[ "$3" == '-sv' ] && {
+				scons view
+			}
+
+		fi
 
 	fi
 
