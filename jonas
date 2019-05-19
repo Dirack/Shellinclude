@@ -18,6 +18,9 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 # Verificar se o usuário passou parâmetros para o programa
 if [ -z "$1" ]
 then
@@ -26,29 +29,25 @@ then
 	exit 1
 fi
 
-MENSAGEM_USO="
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo \$HOME/.aliases.sh Adicione a linha abaixo ao seu arquivo $HOME/.bashrc source $HOME/.aliases.sh"
+PARAMETROS="-h --help::Exibe este menu e sai 
+-v --version::Exibe a versão do programa e sai 
+-a ::Gera atalho para a pasta atual (alias)
+-c ::Gera comando personalizado (alias)
+-l --list::Exibe a lista de aliases já cadastrados"
+EXEMPLO_DE_USO="~$"
 
-USO: $(basename "$0") [-h | -V | -a | -c | -l] 
-
- -h --help exibe este menu e sai 
-
- -V --version exibe a versão do programa e sai 
- 
- -a gera atalho para a pasta atual (alias)
-
- -c gera comando personalizado (alias)
-
- -l --list exibe a lista de aliases já cadastrados
-"
 case "$1" in
 
 	-h | --help)
 
-		echo "$MENSAGEM_USO"
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 		;;
 
-	-V | --version)
+	-v | --version)
 		
 		echo Programa: $(basename "$0")
 		head $HOME/bin/jonas | grep '# Versão' | tr -d \#

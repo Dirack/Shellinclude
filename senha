@@ -17,25 +17,23 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 # Versão deste programa
 VERSAO="Versão 1.0"
 
 # Senha a ser escondida e exibida
 SENHA="" #Sua senha do servidor aqui!
 
-MENSAGEM_USO="
-$(basename $0) [-h | -v | -s | -e ]
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a Versão do programa e sai
--s Mostra a senha nos arquivos de programas da pasta atual
--e Esconde a senha dos arquivos de programas da pasta atual
-
-* Basta cadastrar os arquivos a serem alterados 
-em um arquivo .senha na pasta atual.
-
-Exemplo de uso: 
-	bash$ $0 -s # Exibe as senhas nos arquivos
-	bash$ $0 -e # Esconde as senhas nos arquivos
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Esconder a senha do servidor que está em alguns arquivos PHP antes de salvar no git. Exibir a senha do servidor nos arquivos quando necessário testar. Armazene a sua senha na variável SENHA e cadastre os arquivos PHP em um arquivo '.senha' na mesma pasta."
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a Versão do programa e sai
+-s ::Mostra a senha nos arquivos de programas da pasta atual
+-e ::Esconde a senha dos arquivos de programas da pasta atual"
+EXEMPLO_DE_USO="~$ $(basename $0) -s # Exibe as senhas nos arquivos
+	~$ $(basename $0) -e # Esconde as senhas nos arquivos
 "
 
 # Verificar se o usuário forneceu algum parâmetro
@@ -47,7 +45,8 @@ Exemplo de uso:
 
 case "$1" in
 -h | --help) ## Exibir ajuda
-	echo -e "$MENSAGEM_USO"
+	clear
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;
 

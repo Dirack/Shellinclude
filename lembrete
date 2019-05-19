@@ -14,6 +14,9 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 VERSAO="Versão 1.0"
 
 # Verificar se o usuário passou algum parâmetro pela linha de comandos
@@ -29,23 +32,21 @@ VERSAO="Versão 1.0"
 	touch $HOME/.post
 }
 
-MENSAGEM_USO="
-$(basename $0) [ -h | -v | -a | -l ]
-
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a versão do programa e sai
--a --add adicionar lembretes
--l --list listar lembretes
--r -- remove remover lembretes
-
-Exemplo:
-	bash~$ $0 -a tag -m \"Mensagem\" # Adicionar lembrete tag=Mensagem
-	bash~$ $0 -l tag # Procurar por lembrete chamado 'tag'
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Armazenar lembretes e idéias no arquivo $HOME/.post"
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-a --add::Adicionar lembretes
+-l --list::Listar lembretes
+-r --remove::Remover lembretes"
+EXEMPLO_DE_USO="~$ $0 -a tag -m \"Mensagem\" # Adicionar lembrete tag=Mensagem
+	~$ $0 -l tag # Procurar por lembrete chamado 'tag'
 "
 
 case "$1" in
 	-h | --help) # Exibir ajuda
-		echo "$MENSAGEM_USO"
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 	;;
 
