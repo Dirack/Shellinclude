@@ -2,8 +2,12 @@
 #
 # comp (Shell Script)
 #
-# Objetivo: Realizar a compilação e adicionar programas ao
-# pacote de processamento sísmico MADAGASCAR.
+# Objetivo: Compilar e adicionar programas escritos em linguagem C
+# ao pacote de processamento sísmico MADAGASCAR.
+# 
+# IMPORTANTE: Depende do pacote MADAGASCAR instalado para funcionar!
+#
+#	      -MADAGASCAR é um pacote open source de processamento sísmico (http://www.ahay.org/wiki/Main_Page)
 # 
 # Site: http://www.dirackslouge.online
 #
@@ -12,129 +16,116 @@
 # Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0)
 #	       Rodolfo A. C. Neves 11/05/2019 (modificada 2.0)
 # 
-# email: rodolfo_profissional@hotmail.com
+# email (manutenção): rodolfo_profissional@hotmail.com
 # 
 # Licença: Software de uso livre e código aberto.
 
-# Saída padrão de erro do programa
-ERRO="/tmp/erro.txt"
-
-# Verificar se o usuário forneceu algum parâmetro
-[ -z "$1" ] && {
-	exec 28> "$ERRO"
-	echo "O usuário não forneceu nenhum parâmetro!" 
-	echo "Digite $0 -h para obter ajuda!" 
-	date >&28
-	echo "ERRO(1): Usuário não forneceu parâmetros ao programa" >&28	
-	exit 1 
-}
-
 #----------------{ Configuração de variáveis }-----------------------------#
-#	Ao mudar o endereço da pasta na variável USER, o programa pode 
-#	ser adaptado para a compilação de programas de outro usuário.
 
-# Diretório principal do pacote MADAGASCAR
-TOP="/home/dirack/Downloads/madagascar-2.0-1/madagascar-2.0"
+# Diretório principal da sua instalação do pacote MADAGASCAR
+PASTA_PRINCIPAL_MADAGASCAR="$HOME/Downloads/madagascar-2.0-1/madagascar-2.0"
 
-# Pasta PADRÃO do usuário rodolfo dentro do pacote MADAGASCAR
-USER="$TOP/user/rodolfo"
+# Seu diretório de usuário dentro do pacote MADAGASCAR
+PASTA_USUARIO_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/rodolfo"
  
 # Versão deste programa
 VERSAO="Versão 2.0"
 
+OPCAO="$1"
+PASTA_USUARIO_FORNECIDA="$2"
+
 #--------------------------------------------------------------------------#
 
-MENSAGEM_USO="
-$(basename $0) [-h | -v | -c ]
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a Versão do programa e sai
--c usuario Realiza a compilação e adiciona os programas ao pacote MADAGASCAR
+# Verificar se o usuário forneceu algum parâmetro ao programa
+[ -z "$OPCAO" ] && {
+	echo -e "\033[31m$(basename $0): ERRO(1): O usuário não forneceu nenhum parâmetro!\033[m" 
+	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda!\033[m" 	
+	exit 1 
+}
 
-Exemplo de uso: 
-	bash$ $0 -c rodolfo
+MENSAGEM_AJUDA="
+\033[00;01mNOME\033[m
+\t$(basename $0) [-h | -v | -c ]
+\033[00;01mDESCRIÇÃO\033[m
+\tCompila e adiciona programas escritos em linguagem C ao pacote de processamento sísmico MADAGASCAR.
+\033[00;01mPARÂMETROS\033[m
+\t\033[00;01m-h --help\033[m Exibe esta mensagem de ajuda e sai
+\t\033[00;01m-v --version\033[m Exibe a Versão do programa e sai
+\t\033[00;01m-c pastaDeUsuario\033[m Compila programas de uma pasta de usuário específica do pacote MADAGASCAR
+\033[00;01mEXEMPLO DE USO\033[m
+	~$ $(basename $0) -c rodolfo
 "
 
-case "$1" in
+case "$OPCAO" in
 -h | --help) ## Exibir ajuda
-	echo -e "$MENSAGEM_USO"
+	clear
+	echo -e "$MENSAGEM_AJUDA"
 	exit 0
 ;;
 
--v | --version) ## Exibir versão
-	echo "$VERSAO"
+-v | --version) ## Exibir versão deste programa
+	echo -e "\033[00;01m$VERSAO\033[m"
 	exit 0
 ;;
 
 -c) ## Compilar e adicionar programas ao MADAGASCAR
-	
-	exec 28> "$ERRO"
 
-	## Modificação para alterar a pasta por linha de comandos
-	## se não for fornecido o usuário em $2, utilize a pasta PADRÃO
-	if [ -n "$2" ] 
+	# Foi fornecida uma pasta de usuário a este programa?
+	# Sim, troque o nome em $PASTA_USUARIO_MADAGASCAR
+	# Não, utilize a pasta $PASTA_USUARIO_MADAGASCAR como foi definida
+	if [ -n "$PASTA_USUARIO_FORNECIDA" ] 
 	then
-		# Pasta do usuário dentro do pacote MADAGASCAR
-		USER="$TOP/user/$2"
 
-		# Verificar se o usuário possui diretório na instalação MADAGASCAR
-		if [ ! -d "$USER" ]
+		PASTA_USUARIO_FORNECIDA="$PASTA_PRINCIPAL_MADAGASCAR/user/$PASTA_USUARIO_FORNECIDA"
+
+		# Verificar se a pasta fornecida é um diretório de 
+		# usuário presente na instalação MADAGASCAR
+		if [ ! -d "$PASTA_USUARIO_FORNECIDA" ]
 		then
-			echo -e "Usuário \033[31m$2\033[m NÃO encontrado!"
-			echo -e "Endereço consultado:\n$USER"
-			exit 10
+			echo -e "\033[31m$(basename $0): ERRO(2): Pasta de usuário $PASTA_USUARIO_FORNECIDA NÃO encontrada!\033[m"
+			exit 2
 		fi
+
+		PASTA_USUARIO_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/$2"
+
+	else
+
+		echo -e "\033[35mNenhuma pasta de usuário fornecida a este programa\033[m"
+		echo -e "\033[35mcompilando $PASTA_USUARIO_MADAGASCAR ...\033[m"
+
 	fi
+
+	echo -e "\033[35mcompilando $PASTA_USUARIO_MADAGASCAR ...\033[m"
 
 	# Mover para a pasta de usuário e rodar o scons
-	if cd "$USER" 2> /dev/null
-	then 
-		echo -e "\033[35mCompilando conteúdo de $USER\033[m"
-	else
-		echo -e "\033[31mDiretório $USER não encontrado!\033[m"
-		date >&28
-		echo "ERRO(4) diretório $USER não encontrado!" >&28
-		exit 4
-	fi
-
-	# Informar o usuário se ocorrer erro de compilação
-	# direcionar a saída de erro para 'erro.txt'
-	if scons 2>&28
+	if cd "$PASTA_USUARIO_MADAGASCAR" && scons
 	then
-
+		# Informar o usuário se ocorrer erro de compilação
 		echo -e "\033[35mCompilação realizada com sucesso!\033[m"
 
-		# Conseguiu compilar?
-		# Adicione os programas ao pacote MADAGASCAR
-		cd "$TOP" # Mover para o diretório principal
+		# Mover para o diretório principal do MADAGASCAR
+		cd "$PASTA_PRINCIPAL_MADAGASCAR"
 
-		if sudo scons install 2>&28 # Instalar
+		# Adicione o programa ao pacote MADAGASCAR
+		if sudo scons install
 		then
 			echo -e "\033[35mInstalação realizada com sucesso!\033[m"
 		else
-			echo -e "\033[31mERRO durante a instalação!\033[m"
-			date >&28
-			echo "ERRO(5): erro de instalação !" >&28
-			cat "$ERRO"
+			echo -e "\033[31m$(basename $0): ERRO(5): Erro durante a instalação!\033[m"
 			exit 5
 		fi	
 
 	else
-		date >&28 
-		echo "ERRO(2): Erro de compilação em $USER" >&28
-		echo -e "\033[31mErro de compilação em $USER!!!\033[m"
-		cat "$ERRO"
+		echo "\033[31m$(basename $0): ERRO(2): Erro de compilação em $PASTA_USUARIO_MADAGASCAR\033[m"
 		exit 2
 	fi
 
 	exit 0
 ;;
 
-*) ## Usuário forneceu parâmetro desconhecido
-	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
-	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
-	exec 28> "$ERRO"
-	date >&28
-	echo "ERRO(2): Usuário forneceu \$1=$1 parâmetro desconhecido ao programa" >&28
+*) ## Usuário forneceu parâmetro desconhecido ao programa
+	echo -e "\033[31m$(basename $0): ERRO(3): Opção $OPCAO desconhecida!\033[m"
+	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
 	exit 3
 ;;
 esac
