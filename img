@@ -19,6 +19,9 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
@@ -44,24 +47,21 @@ formataNomePasta(){
 
 PASTA_FORNECIDA_USUARIO=$(formataNomePasta "$PASTA_FORNECIDA_USUARIO")
 
-#--------------------------------------------------------------------------#
-
-MENSAGEM_AJUDA="
-\033[00;01mNOME\033[m
-\t$(basename $0) [-h | -v | -i | -r ]
-\033[00;01mDESCRIÇÃO\033[m
-\tConverte arquivos .vpl ( arquivos de imagem do MADAGASCAR) em imagens .jpeg
-\033[00;01mPARÂMETROS\033[m
-\t\033[00;01m-h --help\033[m Exibe esta mensagem de ajuda e sai
-\t\033[00;01m-v --version\033[m Exibe a Versão do programa e sai
-\t\033[00;01m-i\033[m Converte os arquivos .vpl de uma pasta específica em imagens jpeg
-\t\033[00;01m-r\033[m Remove os arquivos .jpeg de uma pasta específica
-\033[00;01mEXEMPLO DE USO\033[m
-	~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
+NOME_PROGRAMA="$(basename $0)" 
+DESCRICAO="Converte arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens '.jpeg'."
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a Versão do programa e sai
+-i ::Converte os arquivos .vpl de uma pasta específica em imagens jpeg
+-r ::Remove os arquivos .jpeg de uma pasta específica"
+EXEMPLO_DE_USO="~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
 	~$ $(basename $0) -i /home/user # Converte arquivos .vpl da pasta /home/user
 	~$ $(basename $0) -r # Remove os arquivos .jpeg da pasta atual
 	~$ $(basename $0) -r /home/user # Remove os arquivos .jpeg da pasta /home/user
 "
+
+#--------------------------------------------------------------------------#
+
+
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$OPCAO" ] && {
 	echo -e "\033[31m$(basename $0): ERRO(1): O usuário não forneceu nenhum parâmetro!\033[m" 
@@ -103,7 +103,7 @@ verificarSeTemJpegNaPasta(){
 case "$OPCAO" in
 -h | --help) ## Exibir ajuda
 	clear
-	echo -e "$MENSAGEM_AJUDA"
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;
 

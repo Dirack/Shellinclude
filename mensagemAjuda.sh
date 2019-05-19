@@ -67,20 +67,23 @@ exibirMensagemAjudaProgramaFormatada(){
 	TABELA_PARAMETROS="$3"
 	EXEMPLO_DE_USO="$4"
 
-	TABELA_PARAMETROS=$(formatarTabelaParametros "$TABELA_PARAMETROS")
+	#set -xv
 
-	LISTA_OPCOES=$(echo "$TABELA_PARAMETROS" | cut -d" " -f1 | paste -s -d" | ")	
+	LISTA_OPCOES=$(echo "$TABELA_PARAMETROS" | cut -d" " -f1 | sed 's/^/ /' | sed 's/$/ /' | paste -s -d"|")
 
-	MENSAGEM_AJUDA="
-	\033[00;01mNOME\033[m
-	\t$NOME_PROGRAMA [$LISTA_OPCOES]
-	\033[00;01mDESCRIÇÃO\033[m
-	\t$DESCRICAO
-	\033[00;01mPARÂMETROS\033[m
-	\t$TABELA_PARAMETROS
-	\033[00;01mEXEMPLO DE USO\033[m
-	\t$EXEMPLO_DE_USO
-	"
+	#exit 0
+
+	TABELA_PARAMETROS=$(formatarTabelaParametros "$TABELA_PARAMETROS")	
+
+MENSAGEM_AJUDA="\033[00;01mNOME\033[m
+\t$NOME_PROGRAMA [$LISTA_OPCOES]
+\033[00;01mDESCRIÇÃO\033[m
+\t$DESCRICAO
+\033[00;01mPARÂMETROS\033[m
+$TABELA_PARAMETROS
+\033[00;01mEXEMPLO DE USO\033[m
+\t$EXEMPLO_DE_USO
+"
 
 	echo -e "$MENSAGEM_AJUDA"
 

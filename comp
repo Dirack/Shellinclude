@@ -20,6 +20,9 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Diretório principal da sua instalação do pacote MADAGASCAR
@@ -34,6 +37,13 @@ VERSAO="Versão 2.0"
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
 
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Compila e adiciona programas escritos em linguagem C ao pacote de processamento sísmico MADAGASCAR."
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a Versão do programa e sai
+-c pastaDeUsuario::Compila programas de uma pasta de usuário específica do pacote MADAGASCAR"
+EXEMPLO_DE_USO="~$ $(basename $0) -c rodolfo"
+
 #--------------------------------------------------------------------------#
 
 # Verificar se o usuário forneceu algum parâmetro ao programa
@@ -43,23 +53,11 @@ PASTA_USUARIO_FORNECIDA="$2"
 	exit 1 
 }
 
-MENSAGEM_AJUDA="
-\033[00;01mNOME\033[m
-\t$(basename $0) [-h | -v | -c ]
-\033[00;01mDESCRIÇÃO\033[m
-\tCompila e adiciona programas escritos em linguagem C ao pacote de processamento sísmico MADAGASCAR.
-\033[00;01mPARÂMETROS\033[m
-\t\033[00;01m-h --help\033[m Exibe esta mensagem de ajuda e sai
-\t\033[00;01m-v --version\033[m Exibe a Versão do programa e sai
-\t\033[00;01m-c pastaDeUsuario\033[m Compila programas de uma pasta de usuário específica do pacote MADAGASCAR
-\033[00;01mEXEMPLO DE USO\033[m
-	~$ $(basename $0) -c rodolfo
-"
 
 case "$OPCAO" in
 -h | --help) ## Exibir ajuda
 	clear
-	echo -e "$MENSAGEM_AJUDA"
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;
 

@@ -25,6 +25,9 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Diretório principal da sua instalação do pacote MADAGASCAR
@@ -36,23 +39,18 @@ PASTA_TESTES_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/testes"
 # Versão deste programa
 VERSAO="Versão 1.0"
 
-#--------------------------------------------------------------------------#
-
-MENSAGEM_AJUDA="
-\033[00;01mNOME\033[m
-\t$(basename $0) [-h | -v | -c ]
-\033[00;01mDESCRIÇÃO\033[m
-\tTestador de programas desenvolvidos em linguagem C para o pacote de processamento sísmico MADAGASCAR. Este programa move uma cópia do código fonte escolhido para a pasta de testes no pacote MADAGASCAR. Compila o código e adiciona o programa ao pacote MADAGASCAR para ser testado.
-\033[00;01mPARÂMETROS\033[m
-\t\033[00;01m-h --help\033[m Exibe esta mensagem de ajuda e sai
-\t\033[00;01m-v --version\033[m Exibe a Versão do programa e sai
-\t\033[00;01m-c nomeDoPrograma\033[m Compilar e instalar o programa no pacote MADAGASCAR
-\t\033[00;01m-c nomeDoPrograma -sv\033[m Compilar, instalar e 'scons view' na pasta atual
-\033[00;01mEXEMPLO DE USO\033[m
-	~$ $(basename $0) -c teste.c
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Testador de programas desenvolvidos em linguagem C para o pacote de processamento sísmico MADAGASCAR. Este programa move uma cópia do código fonte escolhido para a pasta de testes no pacote MADAGASCAR. Compila o código e adiciona o programa ao pacote MADAGASCAR para ser testado."
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a Versão do programa e sai
+-c nomeDoPrograma::Compilar e instalar o programa no pacote MADAGASCAR
+-c nomeDoPrograma -sv::Compilar, instalar e 'scons view' na pasta atual"
+EXEMPLO_DE_USO="~$ $(basename $0) -c teste.c
 
 	~$ $(basename $0) -c teste.c -sv
 "
+
+#--------------------------------------------------------------------------#
 
 OPCAO="$1"
 NOME_PROGRAMA_TESTADO="$2"
@@ -61,7 +59,7 @@ SCONS_VIEW_PASTA_ATUAL="$3"
 case "$OPCAO" in
 -h | --help) ## Exibir ajuda
 	clear
-	echo -e "$MENSAGEM_AJUDA"
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;
 
