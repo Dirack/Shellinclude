@@ -3,7 +3,7 @@
 # backup (Shell Script) 
 # 
 # Objetivo: Fazer backup de um arquivo ou de uma lista
-# de arquivos.
+# de arquivos em um arquivo zipado na pasta atual.
 # 
 # Site: http://www.dirackslouge.online
 # 
@@ -15,21 +15,25 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+#----------------{ Configuração de variáveis }-----------------------------#
+
 VERSAO="Versão 1.0"
 
-MENSAGEM_USO="
-$(basename $0) [-h | -v | -a | -l ]
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Fazer backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual"
+PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
+-v --version::Exibe a Versão do programa e sai
+-a ::Faz backup de um arquivo fornecido pelo usuário
+-l --list::Faz backup de uma lista de arquivos fornecida pelo usuário"
+EXEMPLO_DE_USO="~$0 -a arquivo.txt 
+~$ $0 -a arq1.txt arq2.txt arq3.txt # Mais de um arquivo pode ser informado
+~$ $0 -l lista.txt #O arquivo lista deve conter endereços válidos de arquivos"
 
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a Versão do programa e sai
--a Faz backup de um arquivo fornecido pelo usuário
--l --list Faz backup de uma lista de arquivos fornecida pelo usuário
+#--------------------------------------------------------------------------#
 
-Exemplo de uso: 
-	bash$ $0 -a arquivo.txt 
-	bash$ $0 -a arq1.txt arq2.txt arq3.txt # Mais de um arquivo pode ser informado
-	bash$ $0 -l lista.txt #O arquivo lista deve conter endereços válidos de arquivos
-"
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$1" ] && {
 	echo "O usuário não forneceu nenhum parâmetro!"
@@ -40,7 +44,8 @@ Exemplo de uso:
 
 case "$1" in
 -h | --help) ## Exibir ajuda
-	echo "$MENSAGEM_USO"
+	clear
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;
 
