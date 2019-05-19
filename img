@@ -2,9 +2,12 @@
 #
 # img (Shell Script)
 #
-# Objetivo: Converter arquivos .vpl 
-# (imagens do pacote de processamento sísmico MADAGASCAR)
+# Objetivo: Converter arquivos .vpl ( arquivos de imagem do MADAGASCAR)
 # em imagens .jpeg
+# 
+# IMPORTANTE: Depende do pacote MADAGASCAR instalado para funcionar!
+#
+#	      -MADAGASCAR é um pacote open source de processamento sísmico (http://www.ahay.org/wiki/Main_Page)
 # 
 # Site: http://www.dirackslouge.online
 #
@@ -21,36 +24,91 @@
 # Versão deste programa
 VERSAO="Versão 2.0"
 
+# Opção passada pelo usuário
+OPCAO="$1"
+
+# Pasta fornecida pelo usuário
+PASTA_FORNECIDA_USUARIO="$2"
+
+# O endereço de um diretório deve terminar com /
+# Se o usuário esqueceu de colocar a / 
+# adicione o caractere ao final do nome da pasta
+formataNomePasta(){
+
+	[ ! $(echo "$1" | rev | cut -c1) == "/" ] && {
+
+		echo "$1/"
+
+	}
+}
+
+PASTA_FORNECIDA_USUARIO=$(formataNomePasta "$PASTA_FORNECIDA_USUARIO")
+
 #--------------------------------------------------------------------------#
 
-MENSAGEM_USO="
-$(basename $0) [-h | -v | -i | -r ]
--h --help Exibe esta mensagem de ajuda e sai
--v --version Exibe a Versão do programa e sai
--i Converte os arquivos .vpl de uma pasta em imagens jpeg
--r Remove os arquivos .jpeg de uma pasta
-
-Exemplo de uso: 
-	bash$ $0 -i # Converte arquivos .vpl da pasta atual
-	bash$ $0 -i /home/user # Converte arquivos .vpl da pasta /home/user
-	bash$ $0 -r # Remove os arquivos .jpeg da pasta atual
-	bash$ $0 -r /home/user # Remove os arquivos .jpeg da pasta /home/user
+MENSAGEM_AJUDA="
+\033[00;01mNOME\033[m
+\t$(basename $0) [-h | -v | -i | -r ]
+\033[00;01mDESCRIÇÃO\033[m
+\tConverte arquivos .vpl ( arquivos de imagem do MADAGASCAR) em imagens .jpeg
+\033[00;01mPARÂMETROS\033[m
+\t\033[00;01m-h --help\033[m Exibe esta mensagem de ajuda e sai
+\t\033[00;01m-v --version\033[m Exibe a Versão do programa e sai
+\t\033[00;01m-i\033[m Converte os arquivos .vpl de uma pasta específica em imagens jpeg
+\t\033[00;01m-r\033[m Remove os arquivos .jpeg de uma pasta específica
+\033[00;01mEXEMPLO DE USO\033[m
+	~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
+	~$ $(basename $0) -i /home/user # Converte arquivos .vpl da pasta /home/user
+	~$ $(basename $0) -r # Remove os arquivos .jpeg da pasta atual
+	~$ $(basename $0) -r /home/user # Remove os arquivos .jpeg da pasta /home/user
 "
 # Verificar se o usuário forneceu algum parâmetro
-[ -z "$1" ] && {
-	echo "O usuário não forneceu nenhum parâmetro!" 
-	echo "Digite $0 -h para obter ajuda!" 
+[ -z "$OPCAO" ] && {
+	echo -e "\033[31m$(basename $0): ERRO(1): O usuário não forneceu nenhum parâmetro!\033[m" 
+	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda!\033[m" 
 	exit 1 
 }
 
-case "$1" in
+# Verificar se há arquivos .vpl a converter
+verificarSeTemVplNaPasta(){
+
+	PASTA=$( formataNomePasta "$1")
+	
+	[ ! -f "$PASTA"*.vpl ] && {
+
+			echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .vpl na pasta $PASTA\033[m"
+			exit 8
+
+	}
+
+	return 0
+
+}
+
+# Verificar se há arquivos .jpeg a remover em uma pasta
+verificarSeTemJpegNaPasta(){
+
+	PASTA=$( formataNomePasta "$1")
+
+	[ ! -f "$PASTA"*.jpeg ] && {
+
+		echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .jpeg na pasta $PASTA\033[m"
+		exit 8
+
+	}
+
+	return 0
+}
+
+case "$OPCAO" in
 -h | --help) ## Exibir ajuda
-	echo -e "$MENSAGEM_USO"
+	clear
+	echo -e "$MENSAGEM_AJUDA"
 	exit 0
 ;;
 
 -v | --version) ## Exibir versão
-	echo "$VERSAO"
+	echo -e "\033[00;01m$VERSAO\033[m"
 	exit 0
 ;;
 
@@ -58,18 +116,23 @@ case "$1" in
 
 	# Se o usuário não forneceu uma pasta, converta
 	# arquivos .vpl da pasta atual
-	if [ -z "$2" ]
+	if [ -z "$PASTA_FORNECIDA_USUARIO" ]
 	then
-		# Armazene os arquivos da pasta atual em um arquivo
-		# temporário
-		ls -1 *.vpl > /tmp/lista.txt
-
-		# Obtenha a imagem jpeg a partir dos arquivos em ARQ
-		while read linha
-		do
-			< "$linha" jpegpen bgcolor=w > "$linha.jpeg"
 		
-		done < /tmp/lista.txt
+		# Tem .vpl na pasta atual?
+		verificarSeTemVplNaPasta "$PWD"
+
+		# Armazene os arquivos .vpl da pasta atual 
+		# em um arquivo temporário
+		ls -1 *.vpl > /tmp/lista-temporaria-arquivos.txt
+
+		# Obtenha a imagem jpeg de cada arquivo na lista dos arquivos
+		while read LINHA_LISTA_TEMPORARIA
+		do
+			< "$LINHA_LISTA_TEMPORARIA" jpegpen bgcolor=w > \
+			$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".jpeg"
+		
+		done < /tmp/lista-temporaria-arquivos.txt
 
 		exit 0
 
@@ -78,60 +141,62 @@ case "$1" in
 	else
 
 		# Verifique se o endereço fornecido existe
-		[ -d "$2" ] || {
+		[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
 
-			echo "Diretório $2 não encontrado"
+			echo -e "\033[31m$(basename $0): ERRO(4): Diretório $PASTA_FORNECIDA_USUARIO não encontrado\033[m"
 			exit 4		
 		}
 
-		# Armazene os arquivos da pasta atual em um arquivo
-		# temporário
-		ls -1 $2 | grep ".vpl$" > /tmp/lista.txt
+		# Tem .vpl na pasta fornecida?
+		verificarSeTemVplNaPasta "$PASTA_FORNECIDA_USUARIO"
 
-		# Obtenha a imagem jpeg a partir dos arquivos em ARQ
-		while read linha
+		# Liste os arquivos da pasta
+		# em um arquivo temporário
+		ls -1 "$PASTA_FORNECIDA_USUARIO" | grep ".vpl$" > /tmp/lista-temporaria-arquivos.txt
+
+		# Obtenha a imagem jpeg a partir dos arquivos .vpl na lista
+		while read LINHA_LISTA_TEMPORARIA
 		do
 	
-			# Verifique se o arquivo existe antes de converter
-			[ -f "$2${linha}" ] || {
-
-				echo "Arquivo $2${linha} não encontrado"
-				exit 5	
-			}
-			
 			# Converter de .vpl para jpeg
-			< "$2${linha}" jpegpen bgcolor=w > "$2${linha}.jpeg"
+			< "$PASTA_FORNECIDA_USUARIO${LINHA_LISTA_TEMPORARIA}" jpegpen bgcolor=w > \
+			"$PASTA_FORNECIDA_USUARIO"$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".jpeg"
 		
-		done < /tmp/lista.txt
+		done < /tmp/lista-temporaria-arquivos.txt
 
 		exit 0
 	fi
 ;;
 
 -r) ## Remover arquivos jpeg de uma pasta
+
 	
 	# Se o usuário não forneceu uma pasta, apague
 	# arquivos .jpeg da pasta atual
-	if [ -z "$2" ]
+	if [ -z "$PASTA_FORNECIDA_USUARIO" ]
 	then
+
+		# Tem .JPEG na pasta atual?
+		verificarSeTemJpegNaPasta "$PWD"
+
 		# Remover arquivos?
 		echo "Pasta atual: $PWD"
-		read -p "Remover arquivos .jpeg da pasta atual? (y/n)" RESP
+		read -p "Remover arquivos .jpeg da pasta atual? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
 
 		# Usuário desistiu?
-		if [ "$RESP" = "n" ]
+		if [ "$RESPOSTA_REMOVER_ARQUIVOS" = "n" ]
 		then
 			echo "Remoção abortada! Nenhum arquivo removido"
 			exit 0
 			
-		elif [ "$RESP" = "y" ]
+		elif [ "$RESPOSTA_REMOVER_ARQUIVOS" = "y" ]
 		then
 			rm *.jpeg
 			echo "Arquivos .jpeg removidos com sucesso!"
 			exit 0
 
 		else
-			echo "Opção $RESP desconhecida! Abortada a execução"
+			echo -e "\033[31m$(basename $0): ERRO(6): Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução\033[m"
 			exit 6
 		fi
 
@@ -140,35 +205,39 @@ case "$1" in
 	else
 
 		# Verifique se o endereço fornecido existe
-		[ -d "$2" ] || {
+		[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
 
-			echo "Diretório $2 não encontrado"
+			echo -e "\033[031m$(basename $0): ERRO(4): Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado\033[m"
 			exit 4		
 		}
 
+		# Tem .JPEG na pasta fornecida?
+		verificarSeTemJpegNaPasta "$PASTA_FORNECIDA_USUARIO"
+
 		# Remover arquivos?
 		echo "Pasta escolhida: $2"
-		read -p "Remover arquivos .jpeg da pasta? (y/n)" RESP
+		read -p "Remover arquivos .jpeg da pasta? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
 
-		# Usuário desistiu?
-		if [ "$RESP" = "n" ]
+		# Usuário desistiu de remover os arquivos?
+		if [ "$RESPOSTA_REMOVER_ARQUIVOS" = "n" ]
 		then
-			echo "Remoção abortada! Nenhum arquivo removido de $2"
+			echo "Remoção abortada! Nenhum arquivo removido de $PASTA_FORNECIDA_USUARIO"
 			exit 0
 			
-		elif [ "$RESP" = "y" ]
+		elif [ "$RESPOSTA_REMOVER_ARQUIVOS" = "y" ]
 		then
 
 			# Verifique se há algum .jpeg na pasta para ser removido
-			rm "$2"*.jpeg && {
-				echo "Arquivos .jpeg removidos de $2 com sucesso!"
+			rm "$PASTA_FORNECIDA_USUARIO"*.jpeg && {
+				echo "Arquivos .jpeg removidos de $PASTA_FORNECIDA_USUARIO com sucesso!"
 			} || {
-				echo "Arquivos .jpeg não foram encontrados em $2"
+				echo -e "\033[31m$(basename $0): ERRO(7): Arquivos .jpeg não foram encontrados em $PASTA_FORNECIDA_USUARIO\033[m"
+				exit 7
 			}
 			exit 0
 
 		else
-			echo "Opção $RESP desconhecida! Abortada a execução"
+			echo -e "\033[31m$(basename $0): ERRO(6): Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução\033[m"
 			exit 6
 		fi
 
@@ -178,8 +247,8 @@ case "$1" in
 ;;
 
 *) ## Usuário forneceu parâmetro desconhecido
-	echo -e "\033[31mERRO: Opção $1 desconhecida!\033[m"
-	echo "\033[31mDigite $0 -h para obter ajuda\033[m"
+	echo -e "\033[31m$(basename $0): ERRO(3): Opção $OPCAO desconhecida!\033[m"
+	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
 	exit 3
 ;;
 esac
