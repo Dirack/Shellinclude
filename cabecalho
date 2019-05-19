@@ -2,8 +2,9 @@
 #
 # cabecalho 
 #
-# Objetivo: Gerar um cabeçalho para um arquivo de programa em uma
-# determinada linguagem de programação.
+# Objetivo: Gerar o cabeçalho para um arquivo de programa de uma
+# determinada linguagem de programação com objetivo, nome do programa,
+# programador e etc.
 #
 # Site: http://www.dirackslounge.online
 #
@@ -24,6 +25,8 @@
 #
 # Licença: software de uso livre e código aberto.
 
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
 
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]
@@ -55,29 +58,16 @@ fi
 
 
 ## Variável que armazena mensagem de ajuda
-MENSAGEM_USO="
-$(basename $0)
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-sh ::Cabeçalho para um programa em shell script
+-sci ::Cabeçalho para um programa do scilab
+-c ::Cabeçalho para um programa em C
+-c++ ::Cabeçalho para um programa em C++"
+EXEMPLO_DE_USO="$(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh"
 
-Gera cabeçalho para um arquivo de programa em uma
-Linguagem escolhida.
-
-Opções: [ -h | -V | -sh | -sci | -c | -c++ ]
-
--h --help exibe essa tela de ajuda e sai
-
--V --version exibe a versão do programa e sai
-
--sh (Cabeçalho para um programa em shell script)
-
--sci (Cabeçalho para um programa do scilab)
-
--c (Cabeçalho para um programa em C)
-
--c++ (Cabeçalho para um programa em C++)
-
-Exemplo: $0 -sh Arquivo.sh (Cabeçalho para Arquivo.sh)
-
-"
 
 ## variável que armazena o cabeçalho padronizado
 HEAD="Interpretador\n\nNomeDoPrograma\n\nObjetivo:\n\nSite:\n\nVersão\n\n\
@@ -86,7 +76,8 @@ Programador: Seu nome aqui!\t $(date +%d/%m/%Y)\n\nemail:\n\nFuncionamento:\n\
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
-		echo "$MENSAGEM_USO"
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 		;;
 
