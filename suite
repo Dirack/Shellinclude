@@ -10,8 +10,7 @@
 # 
 # IMPORTANTE: Depende do programa 'comp' e do MADAGASCAR instalado para funcionar!
 #
-#	      -comp é um programa da pasta da biblioteca Shell Script (https://github.com/Dirack/Shell-Script)
-		
+#	      -comp é um programa da pasta da biblioteca Shell Script (https://github.com/Dirack/Shell-Script)		
 #
 #	      -MADAGASCAR é um pacote open source de processamento sísmico (http://www.ahay.org/wiki/Main_Page)
 #
@@ -27,6 +26,9 @@
 
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
 
 #----------------{ Configuração de variáveis }-----------------------------#
 
@@ -73,15 +75,13 @@ case "$OPCAO" in
 	if [ -z "$NOME_PROGRAMA_TESTADO" ] 
 	then
 
-		echo -e "\033[31m$(basename $0): ERRO(1): Um nome de programa deve ser fornecido!\033[m"
-		exit 1
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "Um nome de programa deve ser fornecido!"
 	else
 
 		## Verificar se o programa existe no endereço fornecido
 		if [ ! -f "$NOME_PROGRAMA_TESTADO" ] 
 		then
-			echo -e "\033[31m$(basename $0): ERRO(2):  Programa $NOME_PROGRAMA_TESTADO não encontrado!\033[m"
-			exit 2 
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "Programa $NOME_PROGRAMA_TESTADO não encontrado!"
 		fi
 
 		## Verificar o formato do nome do programa
@@ -91,12 +91,7 @@ case "$OPCAO" in
 		if [ "$?" -ne "0" ] 
 		then
 
-			echo -e "\033[031m$(basename $0): ERRO(3): Os nomes dos programas devem seguir o padrão\033[m"
-			echo -e "\033[34mM\033[mnome\033[34m.c\033[m"			
-			echo -e "\033[31ma primeira letra M maiúsculo\033[m"
-			echo -e "\033[31ma extensão .c\033[m"
-
-			exit 3
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "Os nomes dos programas devem seguir o padrão 'Mnome.c', primeira letra M maiúsculo e a extensão .c"
 
 		fi
 		
@@ -127,8 +122,6 @@ case "$OPCAO" in
 ;;
 
 *) ## Usuário forneceu uma opção desconhecida
-	echo -e "\033[31m$(basename $0): ERRO(4): Opção $OPCAO desconhecida!\033[m"
-	echo "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
-	exit 4
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "Opção $OPCAO desconhecida!\nDigite $(basename $0) -h para obter ajuda"
 ;;
 esac
