@@ -69,11 +69,11 @@ exibirMensagemAjudaProgramaFormatada(){
 
 	TABELA_PARAMETROS=$(formatarTabelaParametros "$TABELA_PARAMETROS")
 
-	
+	LISTA_OPCOES=$(echo "$TABELA_PARAMETROS" | cut -d" " -f1 | paste -s -d" | ")	
 
 	MENSAGEM_AJUDA="
 	\033[00;01mNOME\033[m
-	\t$NOME_PROGRAMA [-h | -v | -c ]
+	\t$NOME_PROGRAMA [$LISTA_OPCOES]
 	\033[00;01mDESCRIÇÃO\033[m
 	\t$DESCRICAO
 	\033[00;01mPARÂMETROS\033[m
