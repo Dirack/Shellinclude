@@ -42,7 +42,11 @@ formataNomePasta(){
 
 		echo "$1/"
 
+		return 0
+
 	}
+
+	echo "$1"
 }
 
 PASTA_FORNECIDA_USUARIO=$(formataNomePasta "$PASTA_FORNECIDA_USUARIO")
