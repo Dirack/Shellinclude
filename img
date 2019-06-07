@@ -77,8 +77,10 @@ EXEMPLO_DE_USO="~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
 verificarSeTemVplNaPasta(){
 
 	PASTA=$( formataNomePasta "$1")
+
+	TEMARQUIVOVPL=$(find $PASTA -name '*.vpl')	
 	
-	[ ! -f "$PASTA"*.vpl ] && {
+	[ -z "$TEMARQUIVOVPL" ] && {
 
 			echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .vpl na pasta $PASTA\033[m"
 			exit 8
@@ -91,6 +93,7 @@ verificarSeTemVplNaPasta(){
 
 # Verificar se há arquivos .jpeg a remover em uma pasta
 verificarSeTemJpegNaPasta(){
+
 
 	PASTA=$( formataNomePasta "$1")
 
