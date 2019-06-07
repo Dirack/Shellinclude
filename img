@@ -218,12 +218,13 @@ case "$OPCAO" in
 			echo -e "\033[031m$(basename $0): ERRO(4): Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado\033[m"
 			exit 4		
 		}
+	
 
 		# Tem .JPEG na pasta fornecida?
 		verificarSeTemJpegNaPasta "$PASTA_FORNECIDA_USUARIO"
 
 		# Remover arquivos?
-		echo "Pasta escolhida: $2"
+		echo "Pasta escolhida: $PASTA_FORNECIDA_USUARIO"
 		read -p "Remover arquivos .jpeg da pasta? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
 
 		# Usuário desistiu de remover os arquivos?
