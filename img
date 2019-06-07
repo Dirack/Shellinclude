@@ -94,10 +94,11 @@ verificarSeTemVplNaPasta(){
 # Verificar se há arquivos .jpeg a remover em uma pasta
 verificarSeTemJpegNaPasta(){
 
-
 	PASTA=$( formataNomePasta "$1")
 
-	[ ! -f "$PASTA"*.jpeg ] && {
+	TEMARQUIVOVPL=$(find $PASTA -name '*.jpeg')	
+	
+	[ -z "$TEMARQUIVOVPL" ] && {
 
 		echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .jpeg na pasta $PASTA\033[m"
 		exit 8
