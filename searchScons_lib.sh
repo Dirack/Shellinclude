@@ -27,7 +27,7 @@ updateListaScons(){
 	# Baixar lista de links
 	lynx --source $SITE_MADAGASCAR | sed -n '/class="external text"/p' | sed -n '/paper_html/p' > "$LISTA_LINKS_PAPERS"
 
-	# Limpar caracteres HTML
-	sed -i 's/[^.]*href="//g;s/">/$/g;s/<[^>]*>//g' "$LISTA_LINKS_PAPERS"
+	# Limpar caracteres HTML e separar em campos separados por '$' Link$Assunto$Autor
+	sed -i 's/[^.]*href="//g;s/">/$/g;s/<\/a>/$/g;s/<\/i>.*$//g;s/<[^>]*>//g' "$LISTA_LINKS_PAPERS"
 
 }

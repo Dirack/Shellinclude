@@ -147,7 +147,7 @@ case "$OPCAO" in
 		}
 	}
 
-	cat "$LISTA_LINKS_PAPERS" | cut -d"$" -f2 | grep -i --color "$2"
+	cat "$LISTA_LINKS_PAPERS" | cut -d"$" -f2 | grep -i "$2" > tmp.txt 
 
 
 ;;
