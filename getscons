@@ -26,9 +26,6 @@ source mensagemAjuda.sh
 # Biblioteca de funções para formatar a mensagem de erro
 source mensagemErro.sh
 
-#Biblioteca de funções para buscar SConstruct's no site do Madagascar
-source searchScons_lib.sh
-
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
@@ -38,6 +35,7 @@ VERSAO="Versão 1.0"
 OPCAO="$1"
 
 # Listagem dos links dos papers do Madagascar armazenados
+LINK_PAPERS="https://raw.githubusercontent.com/gpgeof/Lista-papers-madagascar/master/linksScons.txt"
 LISTA_LINKS_PAPERS="/tmp/linksScons.txt"
 
 NOME_PROGRAMA="$(basename $0)" 
@@ -129,7 +127,7 @@ case "$OPCAO" in
 
 -u | --update) ## Atualizar lista de links dos papers do Madagascar
 
-	updateListaScons "$LISTA_LINKS_PAPERS"
+	wget "$LINK_PAPERS" > "$LISTA_LINKS_PAPERS"
 
 	exit 0
 ;;
@@ -139,15 +137,32 @@ case "$OPCAO" in
 	## Banco de dados com os links e assuntos dos papers existe?
 	[ -f "$LISTA_LINKS_PAPERS" ] || {
 
-		updateListaScons "$LISTA_LINKS_PAPERS"
+		wget "$LINK_PAPERS" > "$LISTA_LINKS_PAPERS"
 		[ "$?" -ne "0" ] && {
 			SITE_MADAGASCAR="http://www.ahay.org/wiki/Reproducible_Documents"
-			MENSAGEMERRO="Não conseguiu realizar o download da listagem de links em $SITE_MADAGASCAR"
+			MENSAGEMERRO="Não conseguiu realizar o download da listagem de links em $LINKS_PAPERS"
 			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 		}
 	}
 
-	cat "$LISTA_LINKS_PAPERS" | cut -d"$" -f2 | grep -i "$2" > tmp.txt 
+	cat "$LISTA_LINKS_PAPERS" | grep -i "$2" > tmp.txt
+
+	while read linha
+	do	
+		PAPER=$(echo "$linha" | cut -d"$" -f2)
+		AUTOR=$(echo "$linha" | cut -d"$" -f3)
+		LINK_PAPER=$(echo "$linha" | cut -d"$" -f1)
+
+		echo -e "\033[00;01mPAPER\033[m"
+		echo -e "\t$PAPER"
+		echo -e "\033[00;01mAUTOR\033[m"
+		echo -e "\t$AUTOR" 
+		echo -e "\033[00;01mLINK\033[m"
+		echo -e "\t$LINK_PAPER"
+		echo -e "\033[00;01mSCONSTRUCTS\033[m"
+		echo -e "\t$SCONSTRUCTS"
+
+	done < tmp.txt
 
 
 ;;
