@@ -28,6 +28,6 @@ updateListaScons(){
 	lynx --source $SITE_MADAGASCAR | sed -n '/class="external text"/p' | sed -n '/paper_html/p' > "$LISTA_LINKS_PAPERS"
 
 	# Limpar caracteres HTML
-	sed -i 's/[^.]*href="//g;s/">/§/g;s/<[^>]*>//g' "$LISTA_LINKS_PAPERS"
+	sed -i 's/[^.]*href="//g;s/">/$/g;s/<[^>]*>//g' "$LISTA_LINKS_PAPERS"
 
 }

@@ -137,12 +137,17 @@ case "$OPCAO" in
 -s) ## Pesquisar por um assunto nos papers
 
 	## Banco de dados com os links e assuntos dos papers existe?
-	[ -f "$LISTA_LINKS_PAPERS" ] && {
+	[ -f "$LISTA_LINKS_PAPERS" ] || {
 
-
+		updateListaScons "$LISTA_LINKS_PAPERS"
+		[ "$?" -ne "0" ] && {
+			SITE_MADAGASCAR="http://www.ahay.org/wiki/Reproducible_Documents"
+			MENSAGEMERRO="Não conseguiu realizar o download da listagem de links em $SITE_MADAGASCAR"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+		}
 	}
 
-	grep -
+	cat "$LISTA_LINKS_PAPERS" | cut -d"$" -f2 | grep -i --color "$2"
 
 
 ;;
