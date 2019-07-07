@@ -20,14 +20,14 @@ SITE_MADAGASCAR="http://www.ahay.org/wiki/Reproducible_Documents"
 # e armazenar em um arquivo txt fornecido
 updateListaScons(){
 
-	TMP="$1"
+	LISTA_LINKS_PAPERS="$1"
 
-	echo "Atualizando listagem dos papers do MADAGASCAR em $TMP..."
+	echo "Atualizando listagem dos papers do MADAGASCAR em $LISTA_LINKS_PAPERS..."
 
 	# Baixar lista de links
-	lynx --source $SITE_MADAGASCAR | sed -n '/class="external text"/p' | sed -n '/paper_html/p' > "$TMP"
+	lynx --source $SITE_MADAGASCAR | sed -n '/class="external text"/p' | sed -n '/paper_html/p' > "$LISTA_LINKS_PAPERS"
 
 	# Limpar caracteres HTML
-	sed -i 's/[^.]*href="//g;s/">/§/g;s/<[^>]*>//g' "$TMP"
+	sed -i 's/[^.]*href="//g;s/">/§/g;s/<[^>]*>//g' "$LISTA_LINKS_PAPERS"
 
 }
