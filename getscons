@@ -26,6 +26,9 @@ source mensagemAjuda.sh
 # Biblioteca de funções para formatar a mensagem de erro
 source mensagemErro.sh
 
+#Biblioteca de funções para buscar SConstruct's no site do Madagascar
+source searchScons_lib.sh
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
@@ -34,14 +37,19 @@ VERSAO="Versão 1.0"
 # Opção passada pelo usuário
 OPCAO="$1"
 
+# Links dos papers do Madagascar
+TMP="/tmp/linksScons.txt"
+
 NOME_PROGRAMA="$(basename $0)" 
 DESCRICAO="Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual"
 PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
 -v --version::Exibe a Versão do programa e sai
--l <link>::Baixa o SConstruct da página <link> para a pasta atual"
-EXEMPLO_DE_USO="~$ $(basename $0) -l <link> # Baixa o SConstruct de <link> para a pasta atual
-<link> deve ser um endereço do site MADAGASCAR que contenha um SConstruct.
-Exemplo http://www.ahay.org/RSF/book/rsf/rsf/sfawefd.html
+-l <link>::Baixa o SConstruct da página <link> para a pasta atual
+-u --update::Atualiza o banco de dados de links em $TMP
+-s <subject>::Pesquisa papers com o assunto <subject>"
+EXEMPLO_DE_USO="~$ $(basename $0) -l <link> # Baixa o SConstruct do <link> para a pasta atual
+\t~$ $(basename $0) --update # Atualiza a listagem dos links em $TMP
+\t~$ $(basename $0) -s 'diffraction' # Pesquisa paper sobre 'diffraction'
 "
 #--------------------------------------------------------------------------#
 
@@ -119,6 +127,12 @@ case "$OPCAO" in
 	
 ;;
 
+--update) ## Atualizar lista de links dos papers do Madagascar
+
+	updateListaScons "$TMP"
+
+	exit 0
+;;
 
 *) ## Usuário forneceu parâmetro desconhecido
 	MENSAGEMERRO="Opção $OPCAO desconhecida!\nDigite $(basename $0) -h para obter ajuda!"
