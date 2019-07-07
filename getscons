@@ -2,7 +2,7 @@
 #
 # getscons (Shell Script)
 #
-# Depende do programa linx para funcionar. Utilize sudo apt-get install lynx para intalar.
+# Depende do programa linx para funcionar. Utilize 'sudo apt-get install lynx' para intalar.
 #
 # Objetivo: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual
 # no formato correto do SConstruct.
