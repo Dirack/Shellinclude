@@ -28,18 +28,92 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]
 then
-	echo "ERRO: Usuário não ofereceu parâmetros ao programa!"
-	echo "digite $0 -h para obter ajuda"
-	exit 1
-elif [ -z "$2" -a "$1" != "-h" -a "$1" != "--help" ]
-then
-	echo "ERRO: Usuário não ofereceu o nome do arquivo!"
-	echo "digite $0 -h para obter ajuda"
-	exit 2
-fi	
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+# Versão deste programa
+VERSAO="Versão 2.0"
+
+# Armazena variáveis template para exibir no cabeçalho
+CONFIG="./.config/cabecalho.config.txt"
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+--config :: Configurar variáveis template para o cabeçalho
+--list :: Lista todas as variáveis configuradas
+-sh ::Cabeçalho para um programa em shell script
+-sci ::Cabeçalho para um programa do scilab
+-c ::Cabeçalho para um programa em C
+-c++ ::Cabeçalho para um programa em C++"
+EXEMPLO_DE_USO="~$ $(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh
+\t~$ $(basename $0) --config user.programador=dirack # Configurar o nome do programador no cabeçalho"
+
+#set -xv
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	--list) ## Listar variáveis em .config/cabecalho.config.txt
+
+		if [ -f "$CONFIG" ]
+		then
+			sed -n '/^#/!p' "$CONFIG"
+		else
+			touch "$CONFIG"
+		fi
+
+		exit 0
+
+	;;
+
+	--config) ## Configurar variáveis de template do cabeçalho
+
+		## Usuário passou parâmetro para --config?
+		[ -z "$2" ] && {
+
+			MENSAGEMERRO="--config precisa de mais parâmetros!\nDigite $(basename $0) -h para obter ajuda!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+		}
+
+		VARIAVEL_FORNECIDA="$2"
+
+		if [ -f "$CONFIG" ]
+		then
+			echo "$VARIAVEL_FORNECIDA" >> "$CONFIG"
+		else
+			touch "$CONFIG"
+			echo "$2" >> "$CONFIG"
+		fi
+	;;
+esac
+
+# Usuário forneceu um nome para o arquivo a ser criado?
+[ -z "$2" ] && {
+	MENSAGEMERRO="Usuário não ofereceu o nome do arquivo!\nDigite $(basename $0) -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+}
+
+# Arquivo que será criado
+ARQUIVO_CRIADO="$2"
 
 # Verificar se o usuário forneceu o nome 
 # de um arquivo que já existe.
@@ -56,36 +130,23 @@ else
 	file="$2"
 fi
 
+# Verificar se há um template de cabeçalho
+# definido em .config/cabecalho.config.txt
+[ -f "$CONFIG" ] && {
 
-## Variável que armazena mensagem de ajuda
-NOME_PROGRAMA="$(basename $0)"
-DESCRICAO="Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc."
-PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
--v --version::Exibe a versão do programa e sai
--sh ::Cabeçalho para um programa em shell script
--sci ::Cabeçalho para um programa do scilab
--c ::Cabeçalho para um programa em C
--c++ ::Cabeçalho para um programa em C++"
-EXEMPLO_DE_USO="$(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh"
+	TMP=$(sed '/^#/!p' "$CONFIG")
+	PROGRAMADOR=$(echo "$TMP" | grep "user.programador" | cut -d"=" -f2)
+	SITE=$(echo "$TMP" | grep "user.site" | cut -d"=" -f2)
+	EMAIL=$(echo "$TMP" | grep "user.email" | cut -d"=" -f2)
+	LICENSA=$(echo "$TMP" | grep "user.licensa" | cut -d"=" -f2)
 
+}
 
 ## variável que armazena o cabeçalho padronizado
-HEAD="Interpretador\n\nNomeDoPrograma\n\nObjetivo:\n\nSite:\n\nVersão\n\n\
-Programador: Seu nome aqui!\t $(date +%d/%m/%Y)\n\nemail:\n\nFuncionamento:\n\
-\nLicença: Software de uso livre e código aberto."
+HEAD="Interpretador\n\n$ARQUIVO_CRIADO\n\nObjetivo:\n\nSite:$SITE\n\nVersão 1.0\n\n\
+Programador: $PROGRAMADOR $(date +%d/%m/%Y)\n\nEmail:$EMAIL\n\nLicença: $LICENSA."
 
 case "$1" in
-	-h | --help) ## Exibe a ajuda
-		clear
-		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
-		exit 0
-		;;
-
-	-V | --version) ## Exibe a versão do programa
-		head $HOME/bin/cabecalho | grep '# Versão' | tr -d \#
-		exit 0
-		;;
-
 	-sh)	## cabeçalho para shell script
 		echo -e "$HEAD" | sed 's/Interpretador/!\/bin\/bash/;s/^/# /g' >> "$file"
 		;;
@@ -100,10 +161,10 @@ case "$1" in
 		echo -e "$HEAD" | sed 's/^/* /g;' >> "$file"
 		echo -e "*/" >> "$file"
 		;;
-		
+
 	*)
-		echo "Opção $1 desconhecida!"
-		echo "Digite cabecalho -h para obter ajuda"
+		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 esac
 
 # Se o arquivo existe
@@ -116,4 +177,3 @@ then
 fi
 
 exit 0
-
