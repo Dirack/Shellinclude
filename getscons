@@ -127,7 +127,8 @@ case "$OPCAO" in
 
 -u | --update) ## Atualizar lista de links dos papers do Madagascar
 
-	wget "$LINK_PAPERS" > "$LISTA_LINKS_PAPERS"
+	wget "$LINK_PAPERS" 
+	mv $(basename "$LISTA_LINKS_PAPERS") "$LISTA_LINKS_PAPERS"
 
 	exit 0
 ;;
@@ -137,7 +138,9 @@ case "$OPCAO" in
 	## Banco de dados com os links e assuntos dos papers existe?
 	[ -f "$LISTA_LINKS_PAPERS" ] || {
 
-		wget "$LINK_PAPERS" > "$LISTA_LINKS_PAPERS"
+		wget "$LINK_PAPERS" 
+		mv $(basename "$LISTA_LINKS_PAPERS") "$LISTA_LINKS_PAPERS"
+
 		[ "$?" -ne "0" ] && {
 			SITE_MADAGASCAR="http://www.ahay.org/wiki/Reproducible_Documents"
 			MENSAGEMERRO="Não conseguiu realizar o download da listagem de links em $LINKS_PAPERS"
@@ -145,13 +148,14 @@ case "$OPCAO" in
 		}
 	}
 
-	cat "$LISTA_LINKS_PAPERS" | grep -i "$2" > tmp.txt
+	cat "$LISTA_LINKS_PAPERS" | grep -i "$2" > scons_tmp.txt
 
 	while read linha
 	do	
 		PAPER=$(echo "$linha" | cut -d"$" -f2)
 		AUTOR=$(echo "$linha" | cut -d"$" -f3)
 		LINK_PAPER=$(echo "$linha" | cut -d"$" -f1)
+		SCONSTRUCTS=$(echo "$linha" | cut -d"$" -f4 | tr "," "\n \t")
 
 		echo -e "\033[00;01mPAPER\033[m"
 		echo -e "\t$PAPER"
@@ -160,9 +164,11 @@ case "$OPCAO" in
 		echo -e "\033[00;01mLINK\033[m"
 		echo -e "\t$LINK_PAPER"
 		echo -e "\033[00;01mSCONSTRUCTS\033[m"
-		echo -e "\t$SCONSTRUCTS"
+		echo -e "$SCONSTRUCTS"
 
-	done < tmp.txt
+	done < scons_tmp.txt
+
+	rm scons_tmp.txt
 
 
 ;;
