@@ -41,8 +41,28 @@ fi
 # Versão deste programa
 VERSAO="Versão 2.0"
 
+# Função para criar arquivo de configuração se não existir
+criarPastaArquivosConfig(){
+
+	ARQUIVO_CONFIG="$1"
+	PASTA="$(dirname $1)"
+
+	# Diretório de configuração existe?
+	[ -d "$PASTA" ] || {
+		mkdir "$PASTA"
+		echo '# Arquivo de configuração do programa cabecalho - NÃO alterar!' >> "$ARQUIVO_CONFIG"
+		return 0
+	}
+
+	# Pasta existe, mas sem arquivo de configuração?
+	[ -f "$ARQUIVO_CONFIG" ] || {
+		echo '# Arquivo de configuração do programa cabecalho - NÃO alterar!' >> "$ARQUIVO_CONFIG"
+		return 0
+	}
+}
+
 # Armazena variáveis template para exibir no cabeçalho
-CONFIG="./.config/cabecalho.config.txt"
+CONFIG="$(dirname $0)/.config/cabecalho.config.txt"
 
 ## Variáveis que armazenam mensagem de ajuda do programa
 NOME_PROGRAMA="$(basename $0)"
@@ -78,7 +98,7 @@ case "$1" in
 		then
 			sed -n '/^#/!p' "$CONFIG"
 		else
-			touch "$CONFIG"
+			criarPastaArquivosConfig "$CONFIG"
 		fi
 
 		exit 0
@@ -112,7 +132,7 @@ case "$1" in
 				exit 0
 			fi
 		else
-			touch "$CONFIG"
+			criarPastaArquivosConfig "$CONFIG"
 			echo "$2" >> "$CONFIG"
 			exit 0
 		fi
