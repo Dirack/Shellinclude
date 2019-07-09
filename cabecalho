@@ -23,6 +23,13 @@
 #			-php (Script PHP)
 #			-html-php (Página HTML com php)
 #			-f90 (Fortran 90)
+#			-mf90 (Módulo Fortran 90)
+#			-tex (Arquivo LaTeX)
+#			-py (Python)
+#			-html (Página HTML)
+#			-js (JavaScript)
+#			-css (Folha de estilo CSS)
+#			-java (Classe Java)
 #
 # Exemplo de uso: cabecalho -sh arquivo.sh (Gera o arquivo.sh com o cabeçalho padronizado)
 #
@@ -64,6 +71,16 @@ criarPastaArquivosConfig(){
 	}
 }
 
+verificarSeArquivoExiste(){
+
+	ARQUIVO="$1"
+
+	[ -f "$ARQUIVO" ] && {
+		return 1
+	}
+	return 0
+}
+
 # Armazena variáveis template para exibir no cabeçalho
 CONFIG="$(dirname $0)/.config/cabecalho.config.txt"
 
@@ -78,6 +95,16 @@ PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -sci ::Cabeçalho para um programa do scilab
 -c ::Cabeçalho para um programa em C
 -c++ ::Cabeçalho para um programa em C++
+-tex ::Cabeçalho LaTeX
+-py :: Cabeçalho Python
+-f90 :: Cabeçalho Fortran 90
+-mf90 :: Cabeçalho Módulo Fortran 90
+-html :: Página HTML
+-js :: JavaScript
+-css :: Folha de estilo CSS
+-java :: Classe Java
+-php :: Script PHP
+-html-php :: Página HTML com PHP
 -m <objetivo>::Fornecer o Objetivo ao cabeçalho do arquivo"
 EXEMPLO_DE_USO="~$ $(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh
 \t~$ $(basename $0) -sh Arquivo.sh -m <objetivo> # Adiciona o <objetivo> ao cabeçalho do arquivo
@@ -142,30 +169,6 @@ case "$1" in
 	;;
 esac
 
-# Usuário forneceu um nome para o arquivo a ser criado?
-[ -z "$2" ] && {
-	MENSAGEMERRO="Usuário não ofereceu o nome do arquivo!\nDigite $(basename $0) -h para obter ajuda"
-	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
-}
-
-# Arquivo que será criado
-ARQUIVO_CRIADO="$2"
-
-# Verificar se o usuário forneceu o nome 
-# de um arquivo que já existe.
-# Se sim, faça uma cópia. 
-# $control é uma chave para informar
-# ao programa que o arquivo existe
-if [ -f "$2" ] 
-then
-	echo "O arquivo existe! Fazendo uma cópia..."
-	control="1"
-	file="$2"
-	mv "$2" "$2.bak" #cópia .bak
-else
-	file="$2"
-fi
-
 # Verificar se há um template de cabeçalho
 # definido em .config/cabecalho.config.txt
 [ -f "$CONFIG" ] && {
@@ -178,9 +181,31 @@ fi
 
 }
 
+# Usuário forneceu um nome para o arquivo a ser criado?
+[ -z "$2" ] && {
+	MENSAGEMERRO="Usuário não ofereceu o nome do arquivo!\nDigite $(basename $0) -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+}
+
+# Arquivo que será criado
+file="$2"
+ARQUIVO_CRIADO="$2"
+
 ## variável que armazena o cabeçalho padronizado
 DATA=$(date +%d/%m/%Y)
 HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENSA."
+
+# Verificar se o usuário forneceu o nome 
+# de um arquivo que já existe.
+# Se sim, faça uma cópia.
+verificarSeArquivoExiste "$file"
+
+if [ "$?" -ne "0" ] 
+then
+	echo "O arquivo existe! Fazendo uma cópia..."
+	mv "$2" "$2.bak" #cópia .bak
+	EXISTE="1"
+fi
 
 [ "$3" == "-m" -a -n "$4" ] && {
 	HEAD=$(echo "$HEAD" | sed "s/Objetivo:/Objetivo: $4/")
@@ -193,7 +218,7 @@ case "$1" in
 	;;
 
 	-sci) ## cabeçalho para script do scilab
-		echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;s/§/Scilab/' >> "$file"
+		echo -e "$HEAD" | sed 's/^/\/\/ /g;s/§/Scilab/' >> "$file"
 		echo -e "clc\nclear\nclose" >> "$file"
 	;;
 		
@@ -212,19 +237,13 @@ case "$1" in
 
 	-tex)	## cabeçalho para LateX
 		echo "%" >> "$file"
-		echo -e "$HEAD" | sed 's/^/% /' | sed 's/§/LateX/' >> "$file"
+		echo -e "$HEAD" | sed 's/^/% /' | sed 's/§/LaTeX/' >> "$file"
 	;;
 
 	-py)	## cabeçalho para python
 		echo "# coding: utf-8" >> "$file"
 		echo "#" >> "$file"
 		echo -e "$HEAD" | sed 's/^/# /' | sed 's/§/Python/' >> "$file"
-	;;
-
-	-mk) ## cabeçalho arquivo Makefile
-
-		echo -e "$HEAD" | sed 's/(§)//' | sed 's/^/# /' >> "$file"
-
 	;;
 
 	-f90) ## cabeçalho arquivo Fortran 90
@@ -290,7 +309,7 @@ esac
 # Se o arquivo existe
 # Copie o resto do arquivo
 # para o cabeçalho
-if [ "$control" = "1" ] 
+if [ "$EXISTE" = "1" ] 
 then
 	echo -e "\n" >> "$file"
 	cat "$file.bak" >> "$file"
