@@ -20,6 +20,9 @@
 #			-sci (scilab)
 #			-c (linguagem C)
 #			-c++ (linguagem C++)
+#			-php (Script PHP)
+#			-html-php (Página HTML com php)
+#			-f90 (Fortran 90)
 #
 # Exemplo de uso: cabecalho -sh arquivo.sh (Gera o arquivo.sh com o cabeçalho padronizado)
 #
@@ -177,7 +180,7 @@ fi
 
 ## variável que armazena o cabeçalho padronizado
 DATA=$(date +%d/%m/%Y)
-HEAD="Interpretador\n\n$ARQUIVO_CRIADO\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENSA."
+HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENSA."
 
 [ "$3" == "-m" -a -n "$4" ] && {
 	HEAD=$(echo "$HEAD" | sed "s/Objetivo:/Objetivo: $4/")
@@ -185,19 +188,99 @@ HEAD="Interpretador\n\n$ARQUIVO_CRIADO\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.
 
 case "$1" in
 	-sh)	## cabeçalho para shell script
-		echo -e "$HEAD" | sed 's/Interpretador/#!\/bin\/bash/;/bin/!s/^/# /g' >> "$file"
-		;;
+		echo -e '#!/bin/bash\n#' >> "$file"
+		echo -e "$HEAD" | sed '/bin/!s/^/# /g;s/§/Shell Script/' >> "$file"
+	;;
 
 	-sci) ## cabeçalho para script do scilab
-		echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;' >> "$file"
+		echo -e "$HEAD" | sed '1,2d;s/^/\/\/ /g;s/§/Scilab/' >> "$file"
 		echo -e "clc\nclear\nclose" >> "$file"
-		;;
+	;;
 		
-	-c | -c++) ## cabeçalho para C e C++
+	-c) ## cabeçalho para C
 		echo -e "/*" >> "$file"
-		echo -e "$HEAD" | sed 's/^/* /g;' >> "$file"
+		echo -e "$HEAD" | sed 's/^/* /g;s/§/C/' >> "$file"
 		echo -e "*/" >> "$file"
-		;;
+	;;
+
+	-c++) ## cabeçalho para C++
+		echo -e "/*" >> "$file"
+		echo -e "$HEAD" | sed 's/^/* /g;s/§/C++/' >> "$file"
+		echo -e "*/" >> "$file"
+
+	;;
+
+	-tex)	## cabeçalho para LateX
+		echo "%" >> "$file"
+		echo -e "$HEAD" | sed 's/^/% /' | sed 's/§/LateX/' >> "$file"
+	;;
+
+	-py)	## cabeçalho para python
+		echo "# coding: utf-8" >> "$file"
+		echo "#" >> "$file"
+		echo -e "$HEAD" | sed 's/^/# /' | sed 's/§/Python/' >> "$file"
+	;;
+
+	-mk) ## cabeçalho arquivo Makefile
+
+		echo -e "$HEAD" | sed 's/(§)//' | sed 's/^/# /' >> "$file"
+
+	;;
+
+	-f90) ## cabeçalho arquivo Fortran 90
+		echo -e "PROGRAM $(basename $2 .f90)\n!" >> "$file"
+		echo -e "$HEAD" | sed 's/^/! /' | sed 's/§/Fortran 90/' >> "$file"
+		echo -e "IMPLICIT NONE\n\nEND PROGRAM" >> "$file"
+	;;
+
+	-mf90) ## cabeçalho módulo Fortran 90
+		echo -e "MODULE $(basename $2 .f90)\n!" >> "$file"
+		echo -e "$HEAD" | sed 's/^/! /' | sed 's/§/Fortran 90/' >> "$file"
+		echo -e "IMPLICIT NONE\n\nCONTAINS\n\nEND MODULE" >> "$file"
+	;;
+
+
+	-html)	## cabeçalho HTML
+
+		HEAD=$(echo -e "$HEAD" | sed 's/^/\t/;s/§/HTML/')
+		CABECALHO_HTML="<!doctype html>\n<!--\n$HEAD\n-->\n<head>"
+		echo -e "$CABECALHO_HTML" >> "$file"
+		echo -e "\t<meta charset=\"utf-8\">"  >> "$file"
+		echo -e "\t<title></title>"  >> "$file"
+		echo -e "\t<link type=\"text/css\" rel=\"stylesheet\" href=\" \">"  >> "$file"
+		echo -e "\t<script type=\"text/javascript\" src=\" \"></script>"  >> "$file"
+		echo -e "</head>\n<body>\n\n</body>\n</html>"  >> "$file"
+	;;
+
+	-js) ## Cabeçalho JavaScript
+		echo -e "/*\n$HEAD\n*/" | sed '/*/!s/^/\t /;s/§/JavaScript/' >> "$file"
+	;;
+
+	-css) ## Cabeçalho CSS
+		echo -e "/*\n$HEAD\n*/" | sed '/*/!s/^/\t /;s/§/CSS/' >> "$file"
+	;;
+
+	-java) ## Cabeçalho Java
+		echo -e "/*\n$HEAD\n*/" | sed '/*/!s/^/\t /;s/§/Java/' >> "$file"
+	;;
+
+	-php) ## Cabeçalho Script PHP
+		echo '<?php' >> "$file"
+		echo -e "/*\n$HEAD\n*/\n\n" | sed '/*/!s/^/\t /;s/§/PHP/' >> "$file"
+		echo '?>' >> "$file"
+	;;
+
+	-html-php) ## Cabeçalho Página HTML com PHP
+	
+		HEAD=$(echo -e "$HEAD" | sed 's/^/\t/;s/§/PHP/')
+		CABECALHO_HTML="<!doctype html>\n<!--\n$HEAD\n-->\n<head>"
+		echo -e "$CABECALHO_HTML" >> "$file"
+		echo -e "\t<meta charset=\"utf-8\">"  >> "$file"
+		echo -e "\t<title></title>"  >> "$file"
+		echo -e "\t<link type=\"text/css\" rel=\"stylesheet\" href=\" \">"  >> "$file"
+		echo -e "\t<script type=\"text/javascript\" src=\" \"></script>"  >> "$file"
+		echo -e "</head>\n<body>\n<?php\n\n?>\n</body>\n</html>"  >> "$file"
+	;;
 
 	*)
 		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
