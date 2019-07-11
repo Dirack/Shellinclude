@@ -1,0 +1,105 @@
+.TH GETSCONS 1 "JULY 10 2019" "Version 0.0.1" "GETSCONS Manual de uso"
+
+.SH NOME
+getscons - Baixar e formatar arquivo SConstruct do site oficial do Madagascar.
+Listar todos os papers da aba 'Reproducible Documents' e seus respectivos SConstruct's.
+
+.SH RESUMO
+.B getscons
+[\-h] [\-\-help] [-v] [\-\-version] [\-l] [\-u] [\-\-update] [\-s]
+
+.SH DESCRIÇÃO
+.PP
+GETSCONS é um auxiliar de pesquisa de papers no site oficial do MADAGASCAR
+buscando um determinado assunto nas descrições disponíveis no site.
+Ao utilizar este programa você pode baixar diretamente um SConstruct já formatado,
+através do terminal, fornecendo ao programa um link de uma página do site do MADAGASCAR 
+que contenha algum SConstruct.
+
+.SH OPÇÕES
+GETSCONS aceita as seguintes opções:
+.TP 8
+.B  \-h, \-\-help
+Exibe a mensagem de ajuda do programa e sai.
+.TP 8
+.B \-v, \-\-version
+Exibe a versão do programa.
+.TP 8
+.B \-l <link>
+Baixa o SConstruct da página <link> para a pasta atual.
+Este SConstruct já terá o nome e formato padrão de Script
+do MADAGASCAR.
+.TP 8
+.B \-u, \-\-update
+Atualiza a lista de papers do Madagascar na sua máquina.
+.TP 8
+.B \-s <subject>
+Pesquisa na lista de papers disponível no site por um determinado
+assunto <subject>.
+
+.SH EXEMPLOS DE USO
+.PP
+Baixar o SConstruct da página <link> para a pasta atual.
+
+	~$ getscons -l <link>
+.PP
+Atualizar a listagem dos links dos papers para o programa getscons.
+
+	~$ getscons --update
+
+.PP
+Pesquisar papers sobre o assunto 'diffraction'.
+
+	~$ getscons -s 'diffraction'
+
+.SH AMBIENTE
+GETSCONS armazena uma lista com os links para os papers disponíveis no site do 
+MADAGASCAR em /tmp/linksScons.txt e utiliza esta listagem para procurar pelos
+assuntos dos papers. Ao pesquisar um paper específico, o programa procura no
+site do MADAGASCAR por todos os scripts SConstruct's associados com aquele
+paper e exibe a lista ao usuário.
+
+.SH FILES
+GETSCONS é instalado na pasta /shellinclude, se a instalação é feita através do apt-get.
+Outros usuários podem preferir instalar o programa no seu diretório de preferência, o que
+não afetará a sua usabilidade, desde que este diretório esteja definido na sua $PATH.
+
+GETSCONS precisa de conexão com a internet para poder baixar e listar os scripts
+do MADAGASCAR. Este gera automaticamente a lista em /tmp/linksScons.txt, mas o usuário
+pode forçar a atualização da lista com a opção \-\-update.
+
+Esta listagem de papers do MADAGASCAR é feita pelo Grupo de Programação Aplicada à Geofísica (GPGEOF)
+e fica disponível no github. O programa getscons baixa esta lista do diretório do GPGEOF
+no github e a atualiza na máquina do usuário.
+
+.SH SUGESTÕES E 'BUG REPORTS'
+Qualquer bug encontrado deve ser reportado para o repositório do
+Github da Biblioteca Shell Script na aba 'issues' em:
+
+	https://github.com/Dirack/Shell-Script/issues
+
+E deve-se notificar por email o responsável pela manutenção do código:
+
+	rodolfo_profissional@hotmail.com (Rodolfo Dirack).
+
+Quando reportar um bug é importante explicitar em que situação este foi produzido
+para que possa ser reproduzido pelo autor, a versão do programa e toda informação
+relevante será bem vinda.
+
+.SH AUTORES
+Rodolfo A. C. Neves (Dirack), e o Grupo de Programação Aplicada à Geofísica (GPGEOF).
+
+Contato:
+
+-Página no github (Dirack) https://github.com/Dirack
+
+-Página no github (GPGEOF) https://github.com/gpgeof.
+
+.SH VEJA TAMBÉM
+Visite o nosso canal de divulgação científica no Youtube (Geofisicando) em:
+
+	https://www.youtube.com/channel/UCi5XD5PCQtPrIRD0H_GJvag
+
+Site oficial do MADAGASCAR:
+
+	http://www.ahay.org/wiki/Main_Page
