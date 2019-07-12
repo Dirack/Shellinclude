@@ -14,37 +14,43 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
-arquivoExiste(){
+#barraDeProgresso(){
 
-	local ARQUIVO="$1"
+	#set -xv
 
-	[ -z "$ARQUIVO" ] && {
-		return 0
-	}
+	TOTAL_ITERACOES="$1" # Valor que equivale a 100%
+	ITERACAO_ATUAL="$2" # Valor atual
 
-	if [ -f "$ARQUIVO" ]
-	then
-		return 1
-	else
-		return 0
-	fi
-}
+	PORCENTAGEM_CONCLUIDA=$((100*ITERACAO_ATUAL/TOTAL_ITERACOES))
 
-diretorioExiste(){
+	NUMERO_PASSOS=$((PORCENTAGEM_CONCLUIDA/2))
 
-	local DIRETORIO="$1"
+	#echo "$NUMERO_PASSOS"
+	 
+	#exit 0
+	#clear
 
-	[ -z "$DIRETORIO" ] && {
-		return 0
-	}
+	ESCALA=".................................................."
+	TAM=$(echo "${#ESCALA}")
+	echo -ne "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m"
 
-	if [ -d "$DIRETORIO" ]
-	then
-		return 1
-	else
-		return 0
-	fi
-}
+	#sleep 0.5
+	#exit 0
+	#[ $1 -le 520 ] && exit
+
+	#i=`echo "$1/520" | bc`
+	#perc=`echo "2*$i" | bc`
+
+	for k in $(seq "$NUMERO_PASSOS" -1 1)
+	do
+
+	PASSO="$PASSO""#"
+
+	done
+
+	echo -e "\033[2G$PASSO"
+
+#}
 
 
 
