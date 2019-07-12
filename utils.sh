@@ -14,7 +14,7 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
-#barraDeProgresso(){
+barraDeProgresso(){
 
 	[ "$#" -lt "2" ] && {
 		echo "ERRO: A função depende de no mínimo 2 parâmetros!"
@@ -33,8 +33,8 @@
 
 	ESCALA=".................................................."
 
-	clear
-	echo -e "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m"
+	ESCALA=$(echo -e "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m")
+	echo -e "\033[1;1H$ESCALA\n"
 
 	[ "$PORCENTAGEM_CONCLUIDA" -lt "2" ] && exit 0
 
@@ -49,7 +49,7 @@
 	echo -e "\033[1;2H$PASSO"
 	sleep 0.1
 
-#}
+}
 
 
 
