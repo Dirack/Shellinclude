@@ -21,8 +21,13 @@ source ./utils.sh
 	echo "testabfovnsd..."
 	echo "Descompactando arquivo txgv...."
 
+	carregandoON
+
 for i in $(seq 1 1 100)
 do
-	barraDeProgresso 100 "$i" &
-	sleep 0.2
+	#barraDeProgresso 100 "$i" &
+	sleep 0.1
 done
+	echo "fim..."
+	carregandoOFF
+

@@ -14,6 +14,8 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
+export VAR="ON"
+
 barraDeProgresso(){
 
 	[ "$#" -lt "2" ] && {
@@ -52,6 +54,35 @@ barraDeProgresso(){
 
 }
 
+carregandoON(){
+	carregando &
+	CHAVETMPCARREG=$(echo "$!")
+	return 0
+}
+
+carregandoOFF(){
+	kill -9 "$CHAVETMPCARREG"
+	return 0
+}
+
+carregando(){
+
+	PASSO=""
+	i="0"
+	
+	while :
+	do
+		i=$((i+1))
+		PASSO="$PASSO""."
+		echo -ne "\033[s\033[2B\033[1G\033[00;01;32mCARREGANDO${PASSO}\033[m\033[u"
+		sleep 0.5
+		[ "$i" -gt "4" ] && {
+			echo -ne "\033[s\033[2B\033[1G\033[00;01;32mCARREGANDO     \033[m\033[u"
+			PASSO=""
+			i="0"
+		}
+	done
+}
 
 
 
