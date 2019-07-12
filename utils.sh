@@ -33,6 +33,7 @@
 
 	ESCALA=".................................................."
 
+	clear
 	echo -e "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m"
 
 	[ "$PORCENTAGEM_CONCLUIDA" -lt "2" ] && exit 0
@@ -45,7 +46,8 @@
 
 	done
 
-	echo -e "\033[2G$PASSO"
+	echo -e "\033[1;2H$PASSO"
+	sleep 0.1
 
 #}
 
