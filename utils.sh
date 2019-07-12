@@ -16,35 +16,32 @@
 
 #barraDeProgresso(){
 
-	#set -xv
+	[ "$#" -lt "2" ] && {
+		echo "ERRO: A função depende de no mínimo 2 parâmetros!"
+		exit 1
+	}
 
-	TOTAL_ITERACOES="$1" # Valor que equivale a 100%
-	ITERACAO_ATUAL="$2" # Valor atual
+	[ "$1" -lt "$2" ] && {
+		echo "ERRO: O número total de iterações não pode ser menor que a iteração atual!"
+		exit 2
+	}
 
+	TOTAL_ITERACOES="$1"
+	ITERACAO_ATUAL="$2"
 	PORCENTAGEM_CONCLUIDA=$((100*ITERACAO_ATUAL/TOTAL_ITERACOES))
-
 	NUMERO_PASSOS=$((PORCENTAGEM_CONCLUIDA/2))
 
-	#echo "$NUMERO_PASSOS"
-	 
-	#exit 0
-	#clear
-
 	ESCALA=".................................................."
-	TAM=$(echo "${#ESCALA}")
-	echo -ne "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m"
 
-	#sleep 0.5
-	#exit 0
-	#[ $1 -le 520 ] && exit
+	echo -e "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m"
 
-	#i=`echo "$1/520" | bc`
-	#perc=`echo "2*$i" | bc`
+	[ "$PORCENTAGEM_CONCLUIDA" -lt "2" ] && exit 0
+
 
 	for k in $(seq "$NUMERO_PASSOS" -1 1)
 	do
 
-	PASSO="$PASSO""#"
+		PASSO="$PASSO""#"
 
 	done
 
