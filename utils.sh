@@ -33,9 +33,9 @@ barraDeProgresso(){
 	local PASSO=""
 
 	local ESCALA=".................................................."
-	clear
+	#clear
 	ESCALA=$(echo "\033[35m[$ESCALA]  $PORCENTAGEM_CONCLUIDA% \033[m")
-	echo -ne "\033[80;1H$ESCALA\r"
+	echo -ne "\033[s\033[23;1H$ESCALA\033[u"
 	#echo ""
 
 	[ "$PORCENTAGEM_CONCLUIDA" -lt "2" ] && return 0
@@ -48,8 +48,9 @@ barraDeProgresso(){
 
 	done
 
-	echo -ne "\033[80;2H$PASSO\r"
-	echo -ne "\033[1;1H\r"
+	echo -ne "\033[s\033[23;2H$PASSO\033[u"
+	#echo -ne "\033[1;1H\r"
+	#echo ""
 	return 0
 
 }
