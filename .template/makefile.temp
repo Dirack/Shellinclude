@@ -1,24 +1,19 @@
 
-# Escreva as dependências abaixo
-SRC = 
-
-# Programa principal abaixo
-MAINSRC = 
-
-CC = gfortran
-DEP = $(SRC:.f90=.o)
-MAIN = $(MAINSRC:.f90=.x)
+SRC = §main§
+CC = §compilador§
+DEP = $(SRC:§extensao§=§extensaoObjeto§)
+MAIN = $(SRC:§extensao§=§extensaoBinario§)
 
 all:	$(DEP) run
 
 run:	$(MAIN)
-	$<
+	§run§
 
-%.o:	%.f90
-	$(CC) -c $<
+%§extensaoObjeto§:	%§extensao§
+	§compilacaoObjeto§
 
-%.x:	%.f90
-	$(CC) $(DEP) $< -o $@
+%§extensaoBinario§:	%§extensao§
+	§compilacaoBinario§
 
 clean:	
 	rm $(DEP)

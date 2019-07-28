@@ -249,7 +249,6 @@ case "$1" in
 	-f90) ## cabeçalho arquivo Fortran 90
 		echo -e "PROGRAM $(basename $2 .f90)\n!" >> "$file"
 		echo -e "$HEAD" | sed 's/^/! /' | sed 's/§/Fortran 90/' >> "$file"
-		echo -e "IMPLICIT NONE\n\nEND PROGRAM" >> "$file"
 	;;
 
 	-mf90) ## cabeçalho módulo Fortran 90

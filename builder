@@ -23,6 +23,7 @@ source mensagemAjuda.sh
 source mensagemErro.sh
 
 # Biblioteca de funções para construir arquivos com o programa builder
+# Módulo simples para programas sem dependências
 source builder_lib.sh
 
 ## Verificar se o usuário forneceu $1 e $2
@@ -67,7 +68,18 @@ esac
 	exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 }
 
-ARQUIVO="$2"
+# Usuário forneceu um nome para o arquivo a ser criado?
+[ -z "$3" -a -z "$4" ] && {
+	MENSAGEMERRO="Usuário não ofereceu uma descrição ao arquivo após o parâmetro -m!\nDigite $(basename $0) -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+}
+
+[ "$3" != "-m" ] && {
+	MENSAGEMERRO="Sintaxe incorreta do parâmetro -m!\nDigite $(basename $0) -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+}
+
+ARQUIVO_PRINCIPAL="$2"
 
 [ "$3" == "-m" -a -n "$4" ] && {
 	OBJETIVO="$4"
@@ -75,23 +87,54 @@ ARQUIVO="$2"
 
 case "$1" in
 	-sh)
-		buildShellScript "$ARQUIVO" "$OBJETIVO"
+		buildShellScript "$ARQUIVO_PRINCIPAL" "$OBJETIVO"
 		exit 0
 	;;
 
 	-f90)
-		buildFortran
-		exit 0
+		buildFortran "$ARQUIVO_PRINCIPAL" "$OBJETIVO"
+		FAZERMAKEFILE="1"
+		COMPILADOR="gfortran"
+		EXT=".f90"
+		EXT_OBJ=".o"
+		EXT_BIN=".x"
+		CO='$(CC) -c $<'
+		CBIN='$(CC) $(DEP) -o $@'
+		RUN="$(dirname $ARQUIVO_PRINCIPAL)\/$<"
+	;;
+
+	-java)
+
+		ARQUIVO_PRINCIPAL=$(echo "$ARQUIVO_PRINCIPAL" | cut -d"." -f1)
+		ARQUIVO="${ARQUIVO}.java"
+
+		buildJava "$ARQUIVO_PRINCIPAL" "$OBJETIVO"
+		FAZERMAKEFILE="1"
+		COMPILADOR="javac"
+		EXT=".java"
+		EXT_OBJ=".class"
+		EXT_BIN=".class"
+		CO='§null§'
+		CBIN='$(CC) $<'
+		RUN='java $(MAIN:.class=)'
 	;;
 
 	*)
 		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
-		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 	;;
 esac
 
+[ -z "$FAZERMAKEFILE" ] && {
+	exit 0
+}
 
+[ "$#" -le "4" ] && {
 
+	buildSimpleMakefile "$ARQUIVO_PRINCIPAL" "$OBJETIVO" "$COMPILADOR" "$EXT" "$EXT_OBJ" "$EXT_BIN" "$CO" "$CBIN" "$RUN"
+	exit 0	
+
+}
 
 
 

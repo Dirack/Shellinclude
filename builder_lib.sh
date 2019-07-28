@@ -19,8 +19,8 @@ buildShellScript(){
 	local ARQUIVO="$1"
 	local OBJETIVO="$2"
 
-	./cabecalho -sh "$ARQUIVO" -m "$OBJETIVO"
-	cat .template/shellScript.temp >> "$ARQUIVO" 
+	$(dirname $0)/cabecalho -sh "$ARQUIVO" -m "$OBJETIVO"
+	cat $(dirname $0)/.template/shellScript.temp >> "$ARQUIVO" 
 
 	return 0
 
@@ -28,33 +28,75 @@ buildShellScript(){
 
 buildFortran(){
 
-	local ARQUIVO=$(echo "$ARQUIVO" | cut -d"." -f1)
+	local ARQUIVO=$(echo "$1" | cut -d"." -f1)
 	local OBJETIVO="$2"
 
-	local MODULO=$(echo "$ARQUIVO" | cut -d"." -f1)
-	MODULO="${MODULO}_lib.f90"
 	ARQUIVO="${ARQUIVO}.f90"
-	TMP="${ARQUIVO}_tmp.bd"
-	TMPMOD="${MODULO}_tmp.bd"
-	TMPMAKE="${ARQUIVO}_make_tmp.bd"
 
-	./cabecalho -f90 "$TMP" -m "$OBJETIVO"
-	sed -n '1,/IMPLICIT NONE/p' "$TMP" >> "$ARQUIVO"
-	cat .template/fortran.temp >> "$ARQUIVO"
-
-	./cabecalho -mf90 "$TMPMOD" -m "$OBJETIVO"
-	sed -n '1,/IMPLICIT NONE/p' "$TMP" >> "${MODULO}"
-	cat .template/fortran_mod.temp >> "${MODULO}"
-
-	./cabecalho -sh "$TMPMAKE" -m "$OBJETIVO"
-	sed -i 's/(Shell Script)//' "$TMPMAKE"
-	cat .template/makefile.temp >> "$TMPMAKE"
-	cp "$TMPMAKE" "$(dirname $ARQUIVO)/Makefile"
-
-	rm "$TMP" "$TMPMOD" "$TMPMAKE"
+	$(dirname $0)/cabecalho -f90 "$ARQUIVO" -m "$OBJETIVO"
+	cat $(dirname $0)/.template/fortran.temp >> "$ARQUIVO"
 
 	return 0
+}
 
+buildJava(){
+
+	# TODO no nome da classe a primeira letra tem que ser maiúscula
+
+	local ARQUIVO=$(echo "$1" | cut -d"." -f1)
+	local OBJETIVO="$2"
+
+	CLASS="$ARQUIVO"
+	ARQUIVO="${ARQUIVO}.java"
+
+	$(dirname $0)/cabecalho -java "$ARQUIVO" -m "$OBJETIVO"
+	cat $(dirname $0)/.template/java.temp >> "$ARQUIVO"
+	sed -i "s/§main§/$CLASS/" "$ARQUIVO"
+
+	return 0
+}
+
+buildSimpleMakefile(){
+
+	ARQUIVO_PRINCIPAL="$1"
+	DIRETORIO="$(dirname $ARQUIVO_PRINCIPAL)"
+	MAKEFILE="$DIRETORIO/Makefile"
+	OBJETIVO="$2"
+	COMPILADOR="$3"
+	EXTENSAO="$4"
+	EXTENSAO_OBJETO="$5"
+	EXTENSAO_BINARIO="$6"
+	COMANDO_OBJETO="$7"
+	COMANDO_BINARIO="$8"
+	COMANDO_RUN="$9"
+
+	$(dirname $0)/cabecalho -sh "$MAKEFILE" -m "$OBJETIVO"
+	cat $(dirname $0)/.template/makefile.temp >> "$MAKEFILE"
+	sed -i '1d' "$MAKEFILE"
+	sed -i "s/^.*(Shell Script).*$/# MAKEFILE/" "$MAKEFILE"
+	sed -i "s/§main§/${ARQUIVO_PRINCIPAL}${EXTENSAO}/" "$MAKEFILE"
+	sed -i "s/§compilador§/$COMPILADOR/" "$MAKEFILE"
+	sed -i "s/§extensao§/$EXTENSAO/" "$MAKEFILE"
+
+	if [ "$EXTENSAO_OBJETO" == "§null§" -o "$COMANDO_OBJETO" == "§null§" ] 
+	then
+		sed -i '/§extensaoObjeto§:/d' "$MAKEFILE"
+		sed -i "s/§extensaoObjeto§/$EXTENSAO_OBJETO/" "$MAKEFILE"
+		sed -i '/§compilacaoObjeto§/d' "$MAKEFILE"
+		#sed -i "/MAIN/s/§extensaoBinario§//" "$MAKEFILE"
+		
+	else
+		sed -i "s/§extensaoObjeto§/$EXTENSAO_OBJETO/" "$MAKEFILE"
+		sed -i "s/§compilacaoObjeto§/$COMANDO_OBJETO/" "$MAKEFILE"
+		sed -i "s/§extensaoBinario§/$EXTENSAO_BINARIO/" "$MAKEFILE"
+	fi
+
+	sed -i "s/§extensaoBinario§/$EXTENSAO_BINARIO/" "$MAKEFILE"
+	sed -i "s/§compilacaoBinario§/$COMANDO_BINARIO/" "$MAKEFILE"
+	sed -i "s/§run§/$COMANDO_RUN/" "$MAKEFILE"
+
+	return 0
+	
 }
 
 
