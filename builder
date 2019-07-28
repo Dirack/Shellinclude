@@ -26,6 +26,9 @@ source mensagemErro.sh
 # Módulo simples para programas sem dependências
 source builder_lib.sh
 
+# Módulo para programas com dependências
+source builder_deplib.sh
+
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]
 then
@@ -136,11 +139,45 @@ esac
 
 }
 
+if echo "$@" | grep -w "\-dep" >/dev/null
+then
+	DEPENDENCIAS=$(echo "$@"| sed 's/^.*\[//;s/\]//;s/^ //;s/ $//')
+	NUM_DEPENDENCIAS=$(echo "$DEPENDENCIAS" | tr " " "\n" | wc -l)
 
+	for i in $(seq "$NUM_DEPENDENCIAS")
+	do
 
+		a=$(echo "$DEPENDENCIAS" | cut -d" " -f"$i")
 
+		case "$1" in
+			-sh)
+				depShellScript "$ARQUIVO_PRINCIPAL" "$OBJETIVO"
+				exit 0
+			;;
 
+			-f90)
+				depFortran "$a" "$OBJETIVO"
+				DEPENDENCIAS_FMT="$DEPENDENCIAS_FMT ${a}_lib.f90"
+			;;
 
+			-java)
+
+				ARQUIVO_PRINCIPAL=$(echo "$ARQUIVO_PRINCIPAL" | cut -d"." -f1)
+				ARQUIVO="${ARQUIVO}.java"
+
+				depJava "$ARQUIVO_PRINCIPAL" "$OBJETIVO"
+			;;
+
+		esac
+
+		
+
+	done
+
+fi
+
+depMakefile "$ARQUIVO_PRINCIPAL" "$OBJETIVO" "$COMPILADOR" "$EXT" "$EXT_OBJ" "$EXT_BIN" "$CO" "$CBIN" "$RUN" "$DEPENDENCIAS_FMT"
+exit 0
 
 
 

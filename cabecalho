@@ -254,7 +254,6 @@ case "$1" in
 	-mf90) ## cabeçalho módulo Fortran 90
 		echo -e "MODULE $(basename $2 .f90)\n!" >> "$file"
 		echo -e "$HEAD" | sed 's/^/! /' | sed 's/§/Fortran 90/' >> "$file"
-		echo -e "IMPLICIT NONE\n\nCONTAINS\n\nEND MODULE" >> "$file"
 	;;
 
 
