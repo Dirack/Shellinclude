@@ -1,0 +1,25 @@
+
+# Escreva as dependências abaixo
+SRC = 
+
+# Programa principal abaixo
+MAINSRC = 
+
+CC = gfortran
+DEP = $(SRC:.f90=.o)
+MAIN = $(MAINSRC:.f90=.x)
+
+all:	$(DEP) run
+
+run:	$(MAIN)
+	$<
+
+%.o:	%.f90
+	$(CC) -c $<
+
+%.x:	%.f90
+	$(CC) $(DEP) $< -o $@
+
+clean:	
+	rm $(DEP)
+	rm $(MAIN)
