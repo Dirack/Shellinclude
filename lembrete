@@ -18,7 +18,7 @@
 source mensagemAjuda.sh 
 
 VERSAO="Versão 1.0"
-SEPARADOR="§"
+SEPARADOR=":"
 ARQUIVO_LEMBRETES="$HOME/.post"
 
 # Verificar se o usuário passou algum parâmetro pela linha de comandos
@@ -76,7 +76,10 @@ case "$1" in
 		
 		# Campos do arquivo $HOME/.post
 		# tag:lembrete:data:hora
-		echo "$2${SEPARADOR}$4${SEPARADOR}$(date +%d-%m-%Y)${SEPARADOR}$(date +%H-%M-%S)" >> "$ARQUIVO_LEMBRETES"
+		# Usa uma máscara '§' para o caractere ':'
+		MSG="$4"
+		MSG=$(echo "$MSG" | sed 's/:/§/g')
+		echo "$2${SEPARADOR}$MSG${SEPARADOR}$(date +%d-%m-%Y)${SEPARADOR}$(date +%H-%M-%S)" >> "$ARQUIVO_LEMBRETES"
 		
 		echo "lembrete cadastrado com sucesso!"
 		exit 0
@@ -108,7 +111,7 @@ case "$1" in
 			LEMBRETE=$(echo "$TMP" | cut -d"${SEPARADOR}" -f1)
 			DATA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f3 | tr '-' '/')
 			HORA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f4 | tr '-' ':')
-			MSG=$(echo "$TMP" | cut -d"${SEPARADOR}" -f2)
+			MSG=$(echo "$TMP" | cut -d"${SEPARADOR}" -f2 | sed 's/§/:/g')
 			echo "LEMBRETE= $LEMBRETE"
 			echo "DATA= $DATA"
 			echo "HORA= $HORA"
