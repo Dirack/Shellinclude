@@ -8,7 +8,7 @@
 #
 # Site: http://www.dirackslounge.online
 #
-# Versão 2.0
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 27/12/2018
 #
@@ -49,7 +49,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Versão 2.0"
+VERSAO="Versão 1.0"
 
 # Função para criar arquivo de configuração se não existir
 criarPastaArquivosConfig(){
