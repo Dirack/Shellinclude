@@ -42,8 +42,7 @@ NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Enviar email pelo terminal."
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -v --version::Exibe a versão do programa e sai
--e :: Enviar email
-"
+-e ::Enviar email"
 EXEMPLO_DE_USO="~$ $(basename $0) -e # Enviar email
 "
 
@@ -67,13 +66,13 @@ case "$1" in
 		read -p "Email origem: " DE
 		[ $? -ne 0 ] && exit
 
-		read -p "Senha: " XPS
+		echo -n "Senha: "; read -s XPS; echo " "
 		[ $? -ne 0 ] && exit
 
 		read -p "Assunto: " ASSUNTO
 		[ $? -ne 0 ] && exit
 
-		cat << EOF > "$TMP"
+cat << EOF > "$TMP"
 
 
 
@@ -83,9 +82,12 @@ case "$1" in
 # PARA: $PARA
 # ASSUNTO: $ASSUNTO
 
-		EOF
+EOF
+
+		vi "$TMP"
 
 		MENSAGEM=$(cat $TMP | sed -n '/^#/! p' | sed 's/$/<br>/' )
+		echo "Enviando email ..."
 
 		## envie o arquivo por email
 		sendemail -f \
