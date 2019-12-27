@@ -18,6 +18,8 @@
 source mensagemAjuda.sh 
 
 VERSAO="Versão 1.0"
+SEPARADOR="§"
+ARQUIVO_LEMBRETES="$HOME/.post"
 
 # Verificar se o usuário passou algum parâmetro pela linha de comandos
 [ -z "$1" ] && {
@@ -28,12 +30,12 @@ VERSAO="Versão 1.0"
 
 # Verificar se o arquivo de banco de dados exite
 # Se não, crie
-[ -f "$HOME/.post" ] || {
-	touch $HOME/.post
+[ -f "$ARQUIVO_LEMBRETES" ] || {
+	touch "$ARQUIVO_LEMBRETES"
 }
 
 NOME_PROGRAMA="$(basename $0)"
-DESCRICAO="Armazenar lembretes e idéias no arquivo $HOME/.post"
+DESCRICAO="Armazenar lembretes e idéias no arquivo $ARQUIVO_LEMBRETES"
 PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
 -v --version::Exibe a versão do programa e sai
 -a --add::Adicionar lembretes
@@ -66,7 +68,7 @@ case "$1" in
 		}
 		
 		# Verificar se lembrete já existe
-		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+		existe=$(cut -d"${SEPARADOR}" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
 		[ -z "$existe" ] || {
 			echo "ERRO: lembrete já cadastrado!"
 			exit 2
@@ -74,7 +76,7 @@ case "$1" in
 		
 		# Campos do arquivo $HOME/.post
 		# tag:lembrete:data:hora
-		echo "$2:$4:$(date +%d-%m-%Y):$(date +%H-%M-%S)" >> $HOME/.post
+		echo "$2${SEPARADOR}$4${SEPARADOR}$(date +%d-%m-%Y)${SEPARADOR}$(date +%H-%M-%S)" >> "$ARQUIVO_LEMBRETES"
 		
 		echo "lembrete cadastrado com sucesso!"
 		exit 0
@@ -85,14 +87,14 @@ case "$1" in
 		# Se nenhuma chave específica for passada, mostre todos
 		[ -z "$2" ] && {
 			echo "Lembretes cadastrados: "
-			cut -d":" -f1 $HOME/.post
+			cut -d"${SEPARADOR}" -f1 "$ARQUIVO_LEMBRETES"
 
 			echo -e "\n*Digite $0 -l NomeDoLembrete para exibir um lembrete específico."
 			exit 0
 		}
 
 		# Se uma chave específica for passada, procure
-		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+		existe=$(cut -d"${SEPARADOR}" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
 
 		# Se o lembrete NÃO foi encontrado, informe ao usuário
 		if [ -z "$existe" ] 
@@ -102,11 +104,11 @@ case "$1" in
 		else
 
 		# Se o lembrete foi encontrado, exiba o lembrete ao usuário
-			TMP=$(grep "$2" $HOME/.post)
-			LEMBRETE=$(echo "$TMP" | cut -d":" -f1)
-			DATA=$(echo "$TMP" | cut -d":" -f3 | tr '-' '/')
-			HORA=$(echo "$TMP" | cut -d":" -f4 | tr '-' ':')
-			MSG=$(echo "$TMP" | cut -d":" -f2)
+			TMP=$(grep "$2" $ARQUIVO_LEMBRETES)
+			LEMBRETE=$(echo "$TMP" | cut -d"${SEPARADOR}" -f1)
+			DATA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f3 | tr '-' '/')
+			HORA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f4 | tr '-' ':')
+			MSG=$(echo "$TMP" | cut -d"${SEPARADOR}" -f2)
 			echo "LEMBRETE= $LEMBRETE"
 			echo "DATA= $DATA"
 			echo "HORA= $HORA"
@@ -128,16 +130,16 @@ case "$1" in
 		}
 
 		# Verificar se lembrete já existe
-		existe=$(cut -d":" -f1 $HOME/.post | grep -x "$2")
+		existe=$(cut -d"$SEPARADOR" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
 
 		if [ -z "$existe" ] 
 		then
 			echo "ERRO: lembrete NÃO encontrado!"
 			exit 2
 		else
-			linha=$(grep -n "$2" $HOME/.post | cut -d":" -f1)
+			linha=$(grep -n "$2" $ARQUIVO_LEMBRETES | cut -d"$SEPARADOR" -f1)
 			echo $linha
-			sed -i "${linha}d" $HOME/.post			
+			sed -i "${linha}d" $ARQUIVO_LEMBRETES		
 			echo "lembrete $2 apagado!"
 			exit 0
 		fi
