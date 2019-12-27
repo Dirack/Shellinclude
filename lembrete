@@ -133,16 +133,14 @@ case "$1" in
 		}
 
 		# Verificar se lembrete já existe
-		existe=$(cut -d"$SEPARADOR" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
+		existe=$(cut -d"$SEPARADOR" -f1 $ARQUIVO_LEMBRETES | grep -nx "$2" | cut -d":" -f1)
 
 		if [ -z "$existe" ] 
 		then
 			echo "ERRO: lembrete NÃO encontrado!"
 			exit 2
 		else
-			linha=$(grep -n "$2" $ARQUIVO_LEMBRETES | cut -d"$SEPARADOR" -f1)
-			echo $linha
-			sed -i "${linha}d" $ARQUIVO_LEMBRETES		
+			sed -i "${existe}d" $ARQUIVO_LEMBRETES		
 			echo "lembrete $2 apagado!"
 			exit 0
 		fi
