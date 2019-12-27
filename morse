@@ -1,0 +1,113 @@
+#!/bin/bash
+#
+# morse (Shell Script)
+# 
+# Objetivo: Enviar email pelo terminal.
+# IMPORTANTE: Depende do programa sendemail instalado!
+# 
+# Versão 1.0
+# 
+# Site: http://www.dirackslounge.online
+# 
+# Programador: Rodolfo A. C. Neves (Dirack) 27/10/2019
+# 
+# Email: rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
+## Verificar se o usuário forneceu $1 e $2
+if [ -z "$1" ]
+then
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+VERSAO="Versão 1.0"
+TMP="$(mktemp)"
+trap  INTERRUPT SIGINT SIGTERM EXIT
+
+INTERRUPT(){
+	rm -f $TMP
+	exit 1
+}
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Enviar email pelo terminal."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-e :: Enviar email
+"
+EXEMPLO_DE_USO="~$ $(basename $0) -e # Enviar email
+"
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	-e) ## Enviar email
+
+		read -p "Email destino: " PARA
+		[ $? -ne 0 ] && exit
+
+		read -p "Email origem: " DE
+		[ $? -ne 0 ] && exit
+
+		read -p "Senha: " XPS
+		[ $? -ne 0 ] && exit
+
+		read -p "Assunto: " ASSUNTO
+		[ $? -ne 0 ] && exit
+
+		cat << EOF > "$TMP"
+
+
+
+# Esta é uma mensagem de email que vc pode editar
+# Todas as linhas iniciadas com '#' serão ignoradas
+# DE: $DE
+# PARA: $PARA
+# ASSUNTO: $ASSUNTO
+
+		EOF
+
+		MENSAGEM=$(cat $TMP | sed -n '/^#/! p' | sed 's/$/<br>/' )
+
+		## envie o arquivo por email
+		sendemail -f \
+		"$DE" -t \
+		"$PARA" -o message-charset="utf-8" \
+		message-content-type="html" -u \
+		"$ASSUNTO" -m \
+		"$MENSAGEM" \
+		-s smtp-mail.outlook.com:587 -xu \
+		"$DE" -xp "$XPS"
+
+		if [ "$?" -eq "0" ]
+		then
+			echo "Email enviado com sucesso às $(date +%H:%M:%S)"
+			exit 0
+		else
+			echo "Falha ao enviar email às $(date +%H:%M:%S)"
+			exit 3
+		fi
+	;;
+	
+	*)
+		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+esac			
