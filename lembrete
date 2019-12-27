@@ -96,8 +96,8 @@ case "$1" in
 			exit 0
 		}
 
-		# Se uma chave específica for passada, procure
-		existe=$(cut -d"${SEPARADOR}" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
+		# Se uma chave específica for passada, procure o lembrete e a linha
+		existe=$(cut -d"${SEPARADOR}" -f1 $ARQUIVO_LEMBRETES | grep -nx "$2" | cut -d":" -f1)
 
 		# Se o lembrete NÃO foi encontrado, informe ao usuário
 		if [ -z "$existe" ] 
@@ -107,7 +107,7 @@ case "$1" in
 		else
 
 		# Se o lembrete foi encontrado, exiba o lembrete ao usuário
-			TMP=$(grep "$2" $ARQUIVO_LEMBRETES)
+			TMP=$(sed -n "${existe}p" $ARQUIVO_LEMBRETES)
 			LEMBRETE=$(echo "$TMP" | cut -d"${SEPARADOR}" -f1)
 			DATA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f3 | tr '-' '/')
 			HORA=$(echo "$TMP" | cut -d"${SEPARADOR}" -f4 | tr '-' ':')
