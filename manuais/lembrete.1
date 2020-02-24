@@ -1,0 +1,106 @@
+.TH LEMBRETE 1 "24 FEV 2019" "Versão 1.0" "LEMBRETE Manual de uso"
+
+.SH NOME
+lembrete - Armazenar lembretes e idéias do usuário.
+
+.SH RESUMO
+.B lembrete
+[\-h] [\-\-help] [-v] [\-\-version] [\-a] [\-\-add]
+[\-l] [\-\-list] [\-r] [\-\-remove] 
+
+.SH DESCRIÇÃO
+.PP
+LEMBRETE é um auxiliar para a memória, ideal para armazenar idéias,
+números de telefone e pequenas listas de tarefas.
+
+.SH OPÇÕES
+LEMBRETE aceita as seguintes opções:
+.TP 8
+.B  \-h, \-\-help
+Exibe a mensagem de ajuda do programa e sai.
+.TP 8
+.B \-v, \-\-version
+Exibe a versão do programa e sai.
+.TP 8
+.B \-a, \-\-add
+Adicionar novo lembrete.
+.TP 8
+.B \-l, \-\-list
+Listar todos os lembretes ou um lembrete específico.
+.TP 8
+.B \-r, \-\-remove
+Remover lembrete.
+
+.SH EXEMPLOS DE USO
+.PP
+Adicionar um lembrete <tag> com a mensagem <Mensagem>.
+
+	~$ lembrete -a tag -m "Mensagem"
+.PP
+Listar um lembrete específico.
+
+	~$ lembrete -l tag
+.PP
+Listar todos os lembretes.
+
+	~$ lembrete -l
+
+.PP
+Remover lembrete.
+
+	~$ lembrete -r tag
+
+
+.SH AMBIENTE
+LEMBRETE armazena os lembretes no arquivo $HOME/.post, na seguinte disposição
+de colunas (separadas pelo caractere ':'):
+.PP
+.TP 8
+.B Coluna 1
+Lembrete - Etiqueta para o lembrete.
+.TP 8
+.B Coluna 2
+Mensagem cadastrada para àquele lembrete.
+.TP 8
+.B Coluna 3
+Data.
+.TP 8
+.B Coluna 4
+Hora
+
+.SH FILES
+LEMBRETE é instalado na pasta /shellinclude, e precisa de permissão de execução.
+Outros usuários podem preferir instalar o programa no seu diretório de preferência, o que
+não afetará a sua usabilidade, desde que este diretório esteja na sua $PATH.
+
+LEMBRETE gera um arquivo $HOME/.post, um arquivo de texto simples de configuração
+onde ficam guardados os lembretes cadastrados.
+
+.SH SUGESTÕES E 'BUG REPORTS'
+Qualquer bug encontrado deve ser reportado para o repositório do
+Github da Biblioteca Shell Script na aba 'issues' em:
+
+	https://github.com/Dirack/Shellinclude/issues
+
+E deve-se notificar por email o responsável pela manutenção do código:
+
+	rodolfo_profissional@hotmail.com (Rodolfo Dirack).
+
+Quando reportar um bug é importante explicitar em que situação este foi produzido
+para que possa ser reproduzido pelo autor, a versão do programa e toda informação
+relevante será bem vinda.
+
+.SH AUTORES
+Rodolfo A. C. Neves (Dirack), e o Grupo de Programação Aplicada à Geofísica (GPGEOF).
+
+Contato:
+
+-Página no github (Dirack) https://github.com/Dirack
+
+-Página no github (GPGEOF) https://github.com/gpgeof.
+
+.SH VEJA TAMBÉM
+Visite o nosso canal de divulgação científica no Youtube (Geofisicando) em:
+
+	https://www.youtube.com/channel/UCi5XD5PCQtPrIRD0H_GJvag
+
