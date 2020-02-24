@@ -1,7 +1,13 @@
 # Shellinclude
-> Programas e utilitários desenvolvidos em Shell Script para auxiliar em tarefas do cotidiano no linux ubuntu.
+> Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
-Descrição 2 parágrafos
+Estes programas em Shell Script representam a caixa de ferramentas padrão do meu dia-a-dia como programador. Estes
+ajudam a fazer tarefas rotineiras como escrever um cabeçalho padronizado para os arquivos fonte dos programas em
+diferentes linguagens de programação, baixar scripts SConstruct do site do projeto Madagascar ou gerar lembretes
+personalizados.
+
+Estes scripts também podem ser utilizados como templates para outros scripts do Shell, pois a sua interface pode ser
+reutilizada para o desenvolvimento em Shell bastando readaptar as opções e flags dos programas.
 
 ## Instalação
 
