@@ -1,0 +1,81 @@
+.TH BACKUP 1 "24 FEV 2020" "Versão 1.0" "BACKUP Manual de uso"
+
+.SH NOME
+backup - Fazer backup de um arquivo ou de uma lista 
+de arquivos em um arquivo zipado na pasta atual
+
+.SH RESUMO
+.B backup
+[\-h] [\-\-help] [-v] [\-\-version] [\-a]
+[\-l] [\-\-list]
+
+.SH DESCRIÇÃO
+.PP
+BACKUP é um auxiliar para backup de arquivos no linux.
+
+.SH OPÇÕES
+BACKUP aceita as seguintes opções:
+.TP 8
+.B  \-h, \-\-help
+Exibe a mensagem de ajuda do programa e sai.
+.TP 8
+.B \-v, \-\-version
+Exibe a versão do programa e sai.
+.TP 8
+.B \-a
+Faz o backup de arquivo fornecido pelo usuário.
+.TP 8
+.B \-l, \-\-list
+Faz o backup de uma lista de arquivos fornecidos ao programa 
+em um arquivo de texto.
+
+.SH EXEMPLOS DE USO
+.PP
+Fazer backup de 'arquivo.txt'.
+
+	~$ backup -a arquivo.txt 
+.PP
+Fazer backup de mais de um arquivo.
+
+	~$ backup -a arq1.txt arq2.txt arq3.txt
+.PP
+Fazer backup de uma lista de arquivos.
+
+	~$ backup -l lista.txt
+
+.SH AMBIENTE
+BACKUP é uma interface em shell para o programa 'tar' nativo do unix. 
+
+.SH FILES
+BACKUP é instalado na pasta /shellinclude, e precisa de permissão de execução.
+Outros usuários podem preferir instalar o programa no seu diretório de preferência, o que
+não afetará a sua usabilidade, desde que este diretório esteja na sua $PATH.
+
+.SH SUGESTÕES E 'BUG REPORTS'
+Qualquer bug encontrado deve ser reportado para o repositório do
+Github da Biblioteca Shell Script na aba 'issues' em:
+
+	https://github.com/Dirack/Shellinclude/issues
+
+E deve-se notificar por email o responsável pela manutenção do código:
+
+	rodolfo_profissional@hotmail.com (Rodolfo Dirack).
+
+Quando reportar um bug é importante explicitar em que situação este foi produzido
+para que possa ser reproduzido pelo autor, a versão do programa e toda informação
+relevante será bem vinda.
+
+.SH AUTORES
+Rodolfo A. C. Neves (Dirack), e o Grupo de Programação Aplicada à Geofísica (GPGEOF).
+
+Contato:
+
+-Página no github (Dirack) https://github.com/Dirack
+
+-Página no github (GPGEOF) https://github.com/gpgeof.
+
+.SH VEJA TAMBÉM
+Visite o nosso canal de divulgação científica no Youtube (Geofisicando) em:
+
+	https://www.youtube.com/channel/UCi5XD5PCQtPrIRD0H_GJvag
+
