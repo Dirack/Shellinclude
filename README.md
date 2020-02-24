@@ -1,5 +1,8 @@
+
 # Shellinclude
 > Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
+
+<img src="https://github.com/Dirack/Shellinclude/blob/master/imagens/superuser-superhero.jpg" width="200">
 
 Os programas da Shellinclude representam a caixa de ferramentas padrão do meu dia-a-dia como programador. 
 Estes scripts me ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos 
@@ -9,6 +12,8 @@ baixar scripts SConstruct do site do projeto Madagascar ou produzir lembretes pe
 Os scripts da Shellinclude também podem ser utilizados como templates por outros programadores,
 pois a sua interface é facilmente adaptável e pode ser reutilizada para o 
 desenvolvimento em Shell Script alterando as opções e flags dos programas.
+
+[Para mais informações visite o nosso wiki!](https://github.com/Dirack/Shellinclude/wiki)
 
 ## Instalação
 
