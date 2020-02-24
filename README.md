@@ -33,7 +33,27 @@ a um diretório listado na sua variável de ambiente $PATH ou adicionar a seguin
 PATH="$PATH:/caminhoParaShellinclude/Shellinclude"
 ```
 
-Dependências: sendemail, pacote Madagascar e lynx.
+## Dependências: 
+
+* sendemail: Possibilita enviar emails pelo terminal. Utilizado pelo programa _morse_.
+
+* Madagascar: Pacote de processamento símico open source. Roda através de scripts SConstruct baixados e formatados
+pelo programa _getscons_ e instalados pelo programa _comp_.
+
+* lynx: Permite baixar dados da internet pelo terminal. Utilizado por _getscons_ para baixar os scripts do Madagascar.
+
+## Instalação das dependências
+
+```shell
+~$ sudo apt-get install sendemail # Instalar sendemail
+~$ sudo apt-get install lynx # instalar lynx
+```
+
+A instalação do pacote Madagascar é mais complexa, e pode ser encontrada na página oficial do pacote de processamento 
+sísmico em [ahay.org](http://www.ahay.org/wiki/Installation).
+
+
+## Lista de Programas
 
 * backup: Objetivo: Fazer backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
 * cabecalho: Objetivo: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa,programador e etc.
