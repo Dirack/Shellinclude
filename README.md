@@ -55,32 +55,20 @@ sísmico em [ahay.org](http://www.ahay.org/wiki/Installation).
 
 ## Lista de Programas
 
-* backup: Objetivo: Fazer backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
-* cabecalho: Objetivo: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa,programador e etc.
-* comp: Compilar e adicionar programas escritos em linguagem C ao pacote de processamento sísmico MADAGASCAR.
+* backup: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
+* cabecalho: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc.
+* comp: Compilar e adicionar programas escritos em linguagem C a versão local do pacote de processamento sísmico MADAGASCAR.
 * getscons: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual no formato correto do SConstruct.
-* img: Converter arquivos .vpl ( arquivos de imagem do MADAGASCAR) em imagens .jpeg
-* jonas: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh. Adicione a linha abaixo ao seu arquivo $HOME/.bashrc.
-
-source $HOME/.aliases.sh
- 
+* img: Converter arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
+* jonas: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh.  
 * lembrete: Armazenar lembretes e idéias no arquivo $HOME/.post
 * morse: Enviar email pelo terminal.
+* lipsum: Gerar texto aleatório (dummy text).
 
-## Exemplo de uso
+## Exemplos de uso
 
-Alguns exemplos interessantes e úteis sobre como seu projeto pode ser utilizado. Adicione blocos de códigos e, se necessário, screenshots.
-
-_Para mais exemplos, consulte a [Wiki][wiki]._ 
-
-## Configuração para Desenvolvimento
-
-Descreva como instalar todas as dependências para desenvolvimento e como rodar um test-suite automatizado de algum tipo. Se necessário, faça isso para múltiplas plataformas.
-
-```sh
-make install
-npm test
-```
+Alguns exemplos interessantes e úteis sobre como este projeto pode ser utilizado estão disponíveis em nosso
+_[Wiki](https://github.com/Dirack/Shellinclude/wiki)._ 
 
 ## Histórico de lançamentos
 
@@ -90,7 +78,7 @@ npm test
 * [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
     * Versão Beta com os principais scripts
 
-## Meta
+## Sobre
 
 Rodolfo Dirack – [@dirack](https://github.com/Dirack) – rodolfo_profissional@hotmail.com
 
