@@ -1,20 +1,36 @@
 # Shellinclude
 > Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
-Estes programas em Shell Script representam a caixa de ferramentas padrão do meu dia-a-dia como programador. Estes
-ajudam a fazer tarefas rotineiras como escrever um cabeçalho padronizado para os arquivos fonte dos programas em
-diferentes linguagens de programação, baixar scripts SConstruct do site do projeto Madagascar ou gerar lembretes
-personalizados.
+Os programas da Shellinclude representam a caixa de ferramentas padrão do meu dia-a-dia como programador. 
+Estes scripts me ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos 
+fonte dos programas que desenvolvo em diferentes linguagens de programação, 
+baixar scripts SConstruct do site do projeto Madagascar ou produzir lembretes personalizados.
 
-Estes scripts também podem ser utilizados como templates para outros scripts do Shell, pois a sua interface pode ser
-reutilizada para o desenvolvimento em Shell bastando readaptar as opções e flags dos programas.
+Os scripts da Shellinclude também podem ser utilizados como templates por outros programadores,
+pois a sua interface é facilmente adaptável e pode ser reutilizada para o 
+desenvolvimento em Shell Script alterando as opções e flags dos programas.
 
 ## Instalação
 
-Linux:
+Para instalar a Shellinclude basta fornecer permissão de execução aos scripts com _chmod_, assim:
 
-```sh
-npm install my-crazy-module --save
+```shell
+~$ chmod u+x script.sh
+```
+
+E você poderá chamar os scripts como qualquer outro Shell Script, fornecendo o caminho para o script ao
+terminal do bash. Exemplo, executando um script do shell em um diretório qualquer:
+
+```śhell
+~$ /diretorio/script.sh # Se o script estiver na pasta diretório
+~$ ./script # Se o script estiver na pasta atual em que foi aberto o terminal do bash
+```
+
+Você também pode chamar os scripts da Shellinclude como se fosse um comando nativo do _bash_. Basta adicionar os scripts
+a um diretório listado na sua variável de ambiente $PATH ou adicionar a seguinte linha ao final do seu arquivo _.bashrc_:
+
+```shell
+PATH="$PATH:/caminhoParaShellinclude/Shellinclude"
 ```
 
 Dependências: sendemail, pacote Madagascar e lynx.
