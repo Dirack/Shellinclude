@@ -11,10 +11,10 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 2.0
+# Versão 1.0
 #
-# Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0)
-#	       Rodolfo A. C. Neves 11/05/2019 (modificada 2.0)
+# Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0 - Beta)
+#	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.0)
 # 
 # email (manutenção): rodolfo_profissional@hotmail.com
 # 
@@ -100,6 +100,12 @@ case "$OPCAO" in
 		exit 3
 
 	fi
+
+	# Verificar se um SConstruct de compilação existe na pasta
+	[ -f "$PASTA_USUARIO_MADAGASCAR/SConstruct" ] || {
+		echo -e "\033[31m ERRO(4): Um SConstruct para a compilação de programas não foi encontrado na pasta $PASTA_USUARIO_MADAGASCAR!\033[m"
+		exit 4
+	}
 
 	echo -e "\033[35mcompilando $PASTA_USUARIO_MADAGASCAR ...\033[m"
 
