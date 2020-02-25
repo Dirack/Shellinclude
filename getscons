@@ -2,7 +2,7 @@
 #
 # getscons (Shell Script)
 #
-# Depende do programa linx para funcionar. Utilize 'sudo apt-get install lynx' para intalar.
+# Depende do programa lynx para funcionar. Utilize 'sudo apt-get install lynx' para instalar.
 #
 # Objetivo: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual
 # no formato correto do SConstruct.
@@ -34,20 +34,13 @@ VERSAO="Versão 1.0"
 # Opção passada pelo usuário
 OPCAO="$1"
 
-# Listagem dos links dos papers do Madagascar armazenados
-LINK_PAPERS="https://raw.githubusercontent.com/gpgeof/Lista-papers-madagascar/master/linksScons.txt"
-LISTA_LINKS_PAPERS="/tmp/linksScons.txt"
-
 NOME_PROGRAMA="$(basename $0)" 
 DESCRICAO="Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual"
 PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
 -v --version::Exibe a Versão do programa e sai
 -l <link>::Baixa o SConstruct da página <link> para a pasta atual
--u --update::Atualiza o banco de dados de links em $LISTA_LINKS_PAPERS
--s <subject>::Pesquisa papers com o assunto <subject>"
+"
 EXEMPLO_DE_USO="~$ $(basename $0) -l <link> # Baixa o SConstruct do <link> para a pasta atual
-\t~$ $(basename $0) --update # Atualiza a listagem dos links em $LISTA_LINKS_PAPERS
-\t~$ $(basename $0) -s 'diffraction' # Pesquisa paper sobre 'diffraction'
 "
 #--------------------------------------------------------------------------#
 
@@ -123,54 +116,6 @@ case "$OPCAO" in
 	
 	exit 0
 	
-;;
-
--u | --update) ## Atualizar lista de links dos papers do Madagascar
-
-	wget "$LINK_PAPERS" 
-	mv $(basename "$LISTA_LINKS_PAPERS") "$LISTA_LINKS_PAPERS"
-
-	exit 0
-;;
-
--s) ## Pesquisar por um assunto nos papers
-
-	## Banco de dados com os links e assuntos dos papers existe?
-	[ -f "$LISTA_LINKS_PAPERS" ] || {
-
-		wget "$LINK_PAPERS" 
-		mv $(basename "$LISTA_LINKS_PAPERS") "$LISTA_LINKS_PAPERS"
-
-		[ "$?" -ne "0" ] && {
-			SITE_MADAGASCAR="http://www.ahay.org/wiki/Reproducible_Documents"
-			MENSAGEMERRO="Não conseguiu realizar o download da listagem de links em $LINKS_PAPERS"
-			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
-		}
-	}
-
-	cat "$LISTA_LINKS_PAPERS" | grep -i "$2" > scons_tmp.txt
-
-	while read linha
-	do	
-		PAPER=$(echo "$linha" | cut -d"$" -f2)
-		AUTOR=$(echo "$linha" | cut -d"$" -f3)
-		LINK_PAPER=$(echo "$linha" | cut -d"$" -f1)
-		SCONSTRUCTS=$(echo "$linha" | cut -d"$" -f4 | tr "," "\n \t")
-
-		echo -e "\033[00;01mPAPER\033[m"
-		echo -e "\t$PAPER"
-		echo -e "\033[00;01mAUTOR\033[m"
-		echo -e "\t$AUTOR" 
-		echo -e "\033[00;01mLINK\033[m"
-		echo -e "\t$LINK_PAPER"
-		echo -e "\033[00;01mSCONSTRUCTS\033[m"
-		echo -e "$SCONSTRUCTS"
-
-	done < scons_tmp.txt
-
-	rm scons_tmp.txt
-
-
 ;;
 
 *) ## Usuário forneceu parâmetro desconhecido
