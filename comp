@@ -26,10 +26,10 @@ source mensagemAjuda.sh
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Diretório principal da sua instalação do pacote MADAGASCAR
-PASTA_PRINCIPAL_MADAGASCAR="$HOME/Downloads/madagascar-2.0-1/madagascar-2.0"
+PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 
 # Seu diretório de usuário dentro do pacote MADAGASCAR
-PASTA_USUARIO_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/rodolfo"
+PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
 VERSAO="Versão 1.0"
@@ -42,7 +42,7 @@ DESCRICAO="Compila e adiciona programas escritos em linguagem C ao pacote de pro
 PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
 -v --version::Exibe a Versão do programa e sai
 -c pastaDeUsuario::Compila programas de uma pasta de usuário específica do pacote MADAGASCAR"
-EXEMPLO_DE_USO="~$ $(basename $0) -c rodolfo"
+EXEMPLO_DE_USO="~$ $(basename $0) -c pastaDeUsuario"
 
 #--------------------------------------------------------------------------#
 
