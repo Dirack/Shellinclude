@@ -32,7 +32,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$HOME/Downloads/madagascar-2.0-1/madagascar-2.0"
 PASTA_USUARIO_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/rodolfo"
  
 # Versão deste programa
-VERSAO="Versão 2.0"
+VERSAO="Versão 1.0"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
