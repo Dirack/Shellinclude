@@ -77,11 +77,12 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
-* 1.1 (Em desenvolvimento)
-    * Programa lipsum para gerar texto aleatório
+* v1.1 (Em desenvolvimento)
     * Versão estável em desenvolvimento`
 * [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
     * Versão Beta com os principais scripts
+
+[Visualize o histórico de modificações detalhado](https://github.com/Dirack/Shellinclude/wiki/Hist%C3%B3rico-de-vers%C3%B5es)
 
 ## Sobre
 
