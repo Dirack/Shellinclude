@@ -95,8 +95,9 @@ case "$OPCAO" in
 
 	else
 
-		echo -e "\033[35mNenhuma pasta de usuário fornecida a este programa\033[m"
-		echo -e "\033[35mcompilando $PASTA_USUARIO_MADAGASCAR ...\033[m"
+		echo -e "\033[31m$(basename $0): ERRO(3): Nenhuma pasta de usuário foi fornecida a este programa!\033[m"
+		echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
+		exit 3
 
 	fi
 
