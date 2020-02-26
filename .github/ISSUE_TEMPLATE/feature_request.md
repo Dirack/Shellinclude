@@ -7,16 +7,23 @@ assignees: Dirack
 
 ---
 
-:tada: **Feature request**
+:tada: **Solicitar nova Feature**
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Sua solicitação de nova feature está relacionada a algum problema?**
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+Uma clara e concisa descrição de qual problema é. 
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**Descreva qual a solução que você gostaria**
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+Uma clara e concisa descrição sobre oque você quer que aconteça.
+
+
+**Descreva as alternativas de solução que você considera**
+
+Uma clara e concisa descrição das alternativas de soluções ou features que você considerou
+para o problema proposto
+
+**Adione contexto**
+
+Adicione o contexto ao qual sua nova feature se aplica e, se necessário
+adicione imagens descritivas aqui.

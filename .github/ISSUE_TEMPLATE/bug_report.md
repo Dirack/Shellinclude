@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Criar um bug report de alguma funcionalidade
 title: "[BUG]"
 labels: bug
 assignees: Dirack
@@ -9,25 +9,31 @@ assignees: Dirack
 
 :bug:  Bug report
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Descreva o bug**
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Uma descrição clara e concisa  sobre o que é este bug.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Como reproduzir o bug**
+
+Passos para reproduzir o bug:
+1. Vá para '...'
+2. Clickar em '....'
+3. Scroll down para '....'
+4. Veja o erro
+
+**Comportamento esperado**
+
+Uma descrição clara e concisa do que você espera que aconteça.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Version [e.g. 22]
+Se necessário, adicione screenshots que ajudem a explicar o problema.
 
-**Additional context**
-Add any other context about the problem here.
+**Desktop (Complete a descrição a seguir):**
+
+ - SO: [e.g. iOS]
+ - Versão [e.g. 22]
+
+**Adicione contexto**
+
+Adicione mais informação relevante sobre o problema e o contexto.
