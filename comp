@@ -23,6 +23,9 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 # Verificar se a variável RSFSRC está setada
 [ -z "$RSFSRC" ] && {
 	echo -e "\033[31m$(basename $0): AVISO: A variável RSFSRC não está setada!\033[m" 	
