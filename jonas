@@ -21,12 +21,14 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 # Verificar se o usuário passou parâmetros para o programa
 if [ -z "$1" ]
 then
-	echo "ERRO: Usuário não passou nenhum parâmetro!"
-	echo "Digite $0 -h para obter ajuda"
-	exit 1
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 fi
 
 NOME_PROGRAMA="$(basename $0)"
@@ -62,8 +64,8 @@ case "$1" in
 
 		# Verificar se algum nome foi passado ao atalho
 		[ -z "$nome" ] && {
-			echo "ERRO: Usuário não deu nenhum nome ao atalho!"
-			exit 1
+			MENSAGEMERRO="Usuário não deu nenhum nome ao atalho!"			
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 		}
 	 
 		# Guarda a localização atual, substitua os espaços por '\ '
@@ -81,24 +83,24 @@ case "$1" in
 
 		# Verificar se algum apelido foi passado ao atalho
 		[ -z "$apelido" ] && {
-			echo "ERRO: Usuário não deu nenhum apelido ao atalho!"
-			exit 1
+			MENSAGEMERRO="Usuário não deu nenhum apelido ao atalho!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 		}
 
 		# Verificar se o alias já existe
 		 lista=$(cut -d" " -f2 $HOME/.aliases.sh | cut -d "=" -f1 | grep -x "$apelido") 
 
 		[ -n "$lista" ] && {
-			echo "O alias $apelido já está cadastrado!"
-			exit 2
+			MENSAGEMERRO="O alias $apelido já está cadastrado!"	
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 		}
 
 		read -p "Digite o comando: " comando
 
 		# Verificar se algum comando foi passado pelo usuário		
 		[ -z "$comando" ] && {
-			echo "ERRO: Usuário não passou nenhum comando!"
-			exit 1
+			MENSAGEMERRO="Usuário não passou nenhum comando!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 		}
 		
 		##escreva o comando no arquivo .aliases.sh
@@ -113,8 +115,7 @@ case "$1" in
 	;;
 
 	*)
-
-		echo -e "Opção $1 desconhecida!\nDigite $0 -h para obter ajuda."
-		exit 1
-		;;
+		MENSAGEMERRO="Opção $1 desconhecida!\nDigite $0 -h para obter ajuda."
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
+	;;
 esac
