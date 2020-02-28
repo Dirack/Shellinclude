@@ -5,7 +5,7 @@
 # Objetivo: Enviar email pelo terminal.
 # IMPORTANTE: Depende do programa sendemail instalado!
 # 
-# Versão 1.0
+# Versão 1.1
 # 
 # Site: http://www.dirackslounge.online
 # 
@@ -28,7 +28,7 @@ then
 	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 fi
 
-VERSAO="Versão 1.0"
+VERSAO="Versão 1.1"
 TMP="$(mktemp)"
 trap  INTERRUPT SIGINT SIGTERM EXIT
 

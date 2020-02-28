@@ -10,7 +10,7 @@
 # 
 # Site: http://www.dirackslounge.online
 # 
-# Versão 2.0
+# Versão 1.1
 # 
 # Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
 # 
@@ -23,6 +23,9 @@ source mensagemAjuda.sh
 
 # Biblioteca de funções para formatar a mensagem de erro
 source mensagemErro.sh
+
+# Versão atual do programa
+VERSAO="Versão 1.1"
 
 # Verificar se o usuário passou parâmetros para o programa
 if [ -z "$1" ]
@@ -51,8 +54,7 @@ case "$1" in
 
 	-v | --version)
 		
-		echo Programa: $(basename "$0")
-		head $HOME/bin/jonas | grep '# Versão' | tr -d \#
+		echo "$VERSAO"
 		exit 0
 		;;
 

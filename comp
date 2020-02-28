@@ -11,10 +11,10 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.0
+# Versão 1.1
 #
 # Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0 - Beta)
-#	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.0)
+#	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.1)
 # 
 # email (manutenção): rodolfo_profissional@hotmail.com
 # 
@@ -42,7 +42,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
-VERSAO="Versão 1.0"
+VERSAO="Versão 1.1"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
