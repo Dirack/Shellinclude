@@ -68,7 +68,6 @@ sísmico em [ahay.org](http://www.ahay.org/wiki/Installation).
 * jonas: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh.  
 * lembrete: Armazenar lembretes e idéias no arquivo $HOME/.post
 * morse: Enviar email pelo terminal.
-* lipsum: Gerar texto aleatório (dummy text).
 
 ## Exemplos de uso
 
