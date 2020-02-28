@@ -143,8 +143,9 @@ case "$OPCAO" in
 ;;
 
 *) ## Usuário forneceu parâmetro desconhecido ao programa
-	echo -e "\033[31m$(basename $0): ERRO(3): Opção $OPCAO desconhecida!\033[m"
-	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
-	exit 3
+
+	MENSAGEMERRO="Opção $OPCAO desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+	
+        exibirMensagemErroProgramaFormatada "$(basename $0)" "7" "$MENSAGEMERRO"
 ;;
 esac
