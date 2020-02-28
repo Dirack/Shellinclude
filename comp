@@ -126,13 +126,17 @@ case "$OPCAO" in
 		then
 			echo -e "\033[35mInstalação realizada com sucesso!\033[m"
 		else
-			echo -e "\033[31m$(basename $0): ERRO(5): Erro durante a instalação!\033[m"
-			exit 5
+
+			MENSAGEMERRO="Erro durante a instalação!"
+			
+        		exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 		fi	
 
 	else
-		echo "\033[31m$(basename $0): ERRO(2): Erro de compilação em $PASTA_USUARIO_MADAGASCAR\033[m"
-		exit 2
+
+		MENSAGEMERRO="Erro de compilação em $PASTA_USUARIO_MADAGASCAR"
+		
+        	exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
 	fi
 
 	exit 0
