@@ -17,15 +17,17 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 VERSAO="Versão 1.0"
 SEPARADOR=":"
 ARQUIVO_LEMBRETES="$HOME/.post"
 
 # Verificar se o usuário passou algum parâmetro pela linha de comandos
 [ -z "$1" ] && {
-	echo "Usuário não forneceu nenhum parâmetro!"
-	echo "Digite $0 -h para obter ajuda!"
-	exit 1
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 }
 
 # Verificar se o arquivo de banco de dados exite
@@ -61,17 +63,17 @@ case "$1" in
 
 		# Verificar se o usuário forneceu corretamente o comando
 		[ -z "$2" -o -z "$3" -o "$3" != "-m" -o -z "$4" ] && {
-			echo "ERRO: Sintaxe incorreta do comando!"
-			echo 'A sintaxe correta é:'
-			echo "$0 -a tag -m Mensagem"
-			exit 2
+
+			MENSAGEMERRO="Sintaxe incorreta do comando!\nA sintaxe correta é:\n$0 -a tag -m Mensagem"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 		}
 		
 		# Verificar se lembrete já existe
 		existe=$(cut -d"${SEPARADOR}" -f1 $ARQUIVO_LEMBRETES | grep -x "$2")
 		[ -z "$existe" ] || {
-			echo "ERRO: lembrete já cadastrado!"
-			exit 2
+
+			MENSAGEMERRO="Lembrete já cadastrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 		}
 		
 		# Campos do arquivo $HOME/.post
@@ -102,8 +104,8 @@ case "$1" in
 		# Se o lembrete NÃO foi encontrado, informe ao usuário
 		if [ -z "$existe" ] 
 		then 
-			echo "ERRO: lembrete NÃO encontrado!"
-			exit 2
+			MENSAGEMERRO="Lembrete NÃO encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 		else
 
 		# Se o lembrete foi encontrado, exiba o lembrete ao usuário
@@ -126,10 +128,9 @@ case "$1" in
 
 		# Verificar se o usuário forneceu corretamente o comando
 		[ -z "$2" ] && {
-			echo "ERRO: Sintaxe incorreta do comando!"
-			echo 'A sintaxe correta é:'
-			echo "$0 -r lembrete"
-			exit 2
+
+			MENSAGEMERRO="Sintaxe incorreta do comando!\nA sintaxe correta é:\n$0 -a tag -m Mensagem"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 		}
 
 		# Verificar se lembrete já existe
@@ -137,8 +138,8 @@ case "$1" in
 
 		if [ -z "$existe" ] 
 		then
-			echo "ERRO: lembrete NÃO encontrado!"
-			exit 2
+			MENSAGEMERRO="Lembrete NÃO encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
 		else
 			sed -i "${existe}d" $ARQUIVO_LEMBRETES		
 			echo "lembrete $2 apagado!"
@@ -149,8 +150,8 @@ case "$1" in
 	;;
 
 	*)
-		echo "ERRO: Opção $1 desconhecida!"
-		echo "Digite $0 para obter ajuda"
-		exit 1
+
+		MENSAGEMERRO="Opção $1 desconhecida!\nDigite $0 para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "7" "$MENSAGEMERRO"
 	;;
 esac
