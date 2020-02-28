@@ -18,6 +18,9 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 VERSAO="Versão 1.0"
@@ -36,9 +39,8 @@ EXEMPLO_DE_USO="~$0 -a arquivo.txt
 
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$1" ] && {
-	echo "O usuário não forneceu nenhum parâmetro!"
-	echo "Digite $0 -h para obter ajuda!"
-	exit 1 
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 }
 
 
@@ -59,8 +61,8 @@ case "$1" in
 	# O usuário forneceu um nome de arquivo?
 	[ -z "$2" ] && {
 	
-		echo "O usuário não forneceu um nome de arquivo!"
-		exit 2
+		MENSAGEMERRO="O usuário não forneceu um nome de arquivo!"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 	}
 	
 	# O usuário pode informar mais de um arquivo
@@ -68,10 +70,8 @@ case "$1" in
 	do
 		# Verificar se o arquivo existe
 		[ -f "$2" -o -d "$2" ] || {
-
-			echo "Arquivo ou diretório não encontrado!"
-			exit 2
-
+			MENSAGEMERRO="Arquivo ou diretório $2 não encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 		}
 
 		compactado="$2.$(date +%d-%m-%Y.%H-%M-%S).tar"
@@ -89,8 +89,8 @@ case "$1" in
 
 	     # Verificar se o usuário forneceu o nome do arquivo
 	     [ -z "$2" ] && {
-	     	echo "O usuário não forneceu o nome do arquivo!"
-		exit 2
+		MENSAGEMERRO="O usuário não forneceu um nome de arquivo!"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 	     }
 
 	     while read linha
@@ -98,8 +98,8 @@ case "$1" in
 	     
 		 # Verificar se o arquivo existe
 	     	[ -f "$linha" -o -d "$linha" ] || {
-			echo "Arquivo ou diretório $linha não encontrado!"
-			exit 2
+			MENSAGEMERRO="Arquivo ou diretório $linha não encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 	     	}
 
 		compactado="$linha.$(date +%d-%m-%Y.%H-%M-%S).tar"
@@ -114,9 +114,8 @@ case "$1" in
 ;;
 
 *)
-	echo "ERRO: Opção $1 desconhecida!"
-	echo "Digite $0 -h para obter ajuda"
-	exit 1
+	MENSAGEMERRO="ERRO: Opção $1 desconhecida!\nDigite $0 -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 ;;
 esac
 
