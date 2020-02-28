@@ -104,8 +104,9 @@ EOF
 			echo "Email enviado com sucesso às $(date +%H:%M:%S)"
 			exit 0
 		else
-			echo "Falha ao enviar email às $(date +%H:%M:%S)"
-			exit 3
+
+			MENSAGEMERRO="Falha ao enviar email às $(date +%H:%M:%S)"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 		fi
 	;;
 	
