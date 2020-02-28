@@ -43,7 +43,7 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.0
+# Versão 1.1
 #
 # Programador: Rodolfo A. C. Neves 19/05/2019 
 # 
