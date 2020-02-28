@@ -105,8 +105,9 @@ case "$OPCAO" in
 
 	# Verificar se um SConstruct de compilação existe na pasta
 	[ -f "$PASTA_USUARIO_MADAGASCAR/SConstruct" ] || {
-		echo -e "\033[31m ERRO(4): Um SConstruct para a compilação de programas não foi encontrado na pasta $PASTA_USUARIO_MADAGASCAR!\033[m"
-		exit 4
+
+		MENSAGEMERRO="Um SConstruct para a compilação de programas não foi encontrado na pasta $PASTA_USUARIO_MADAGASCAR!"
+        	exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 	}
 
 	echo -e "\033[35mcompilando $PASTA_USUARIO_MADAGASCAR ...\033[m"
