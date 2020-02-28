@@ -79,7 +79,7 @@ EXEMPLO_DE_USO="~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
 verificarSeTemVplNaPasta(){
 	PASTA=$( formataNomePasta "$1")
 
-	TEMARQUIVOVPL=$(find $PASTA -name '*.vpl')	
+	TEMARQUIVOVPL=$(find $PASTA -maxdepth 1 -name '*.vpl')	
 	
 	[ -z "$TEMARQUIVOVPL" ] && {
 		MENSAGEMERRO="Não há arquivos .vpl na pasta!"
