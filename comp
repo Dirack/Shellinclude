@@ -90,18 +90,17 @@ case "$OPCAO" in
 		# usuário presente na instalação MADAGASCAR
 		if [ ! -d "$PASTA_USUARIO_FORNECIDA" ]
 		then
-			echo -e "\033[31m$(basename $0): ERRO(2): Pasta de usuário $PASTA_USUARIO_FORNECIDA NÃO encontrada!\033[m"
-			exit 2
+			MENSAGEMERRO="Pasta de usuário $PASTA_USUARIO_FORNECIDA NÃO encontrada!"	
+        		exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 		fi
 
 		PASTA_USUARIO_MADAGASCAR="$PASTA_PRINCIPAL_MADAGASCAR/user/$2"
 
 	else
 
-		echo -e "\033[31m$(basename $0): ERRO(3): Nenhuma pasta de usuário foi fornecida a este programa!\033[m"
-		echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
-		exit 3
+		MENSAGEMERRO="Nenhuma pasta de usuário foi fornecida a este programa!"
 
+        	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 	fi
 
 	# Verificar se um SConstruct de compilação existe na pasta
