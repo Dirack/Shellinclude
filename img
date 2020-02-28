@@ -22,6 +22,9 @@
 # Biblioteca de funções para formatar a mensagem de ajuda
 source mensagemAjuda.sh 
 
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
@@ -68,27 +71,22 @@ EXEMPLO_DE_USO="~$ $(basename $0) -i # Converte arquivos .vpl da pasta atual
 
 # Verificar se o usuário forneceu algum parâmetro
 [ -z "$OPCAO" ] && {
-	echo -e "\033[31m$(basename $0): ERRO(1): O usuário não forneceu nenhum parâmetro!\033[m" 
-	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda!\033[m" 
-	exit 1 
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 }
 
 # Verificar se há arquivos .vpl a converter
 verificarSeTemVplNaPasta(){
-
 	PASTA=$( formataNomePasta "$1")
 
 	TEMARQUIVOVPL=$(find $PASTA -name '*.vpl')	
 	
 	[ -z "$TEMARQUIVOVPL" ] && {
-
-			echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .vpl na pasta $PASTA\033[m"
-			exit 8
-
+		MENSAGEMERRO="Não há arquivos .vpl na pasta!"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 	}
 
 	return 0
-
 }
 
 # Verificar se há arquivos .jpeg a remover em uma pasta
@@ -99,10 +97,8 @@ verificarSeTemJpegNaPasta(){
 	TEMARQUIVOVPL=$(find $PASTA -name '*.jpeg')	
 	
 	[ -z "$TEMARQUIVOVPL" ] && {
-
-		echo -e "\033[31m$(basename $0): ERRO(8): Não há arquivos .jpeg na pasta $PASTA\033[m"
-		exit 8
-
+		MENSAGEMERRO="Não há arquivos .jpeg na pasta!"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 	}
 
 	return 0
@@ -150,9 +146,8 @@ case "$OPCAO" in
 
 		# Verifique se o endereço fornecido existe
 		[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
-
-			echo -e "\033[31m$(basename $0): ERRO(4): Diretório $PASTA_FORNECIDA_USUARIO não encontrado\033[m"
-			exit 4		
+			MENSAGEMERRO="Diretório $PASTA_FORNECIDA_USUARIO não encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
 		}
 
 		# Tem .vpl na pasta fornecida?
@@ -204,8 +199,8 @@ case "$OPCAO" in
 			exit 0
 
 		else
-			echo -e "\033[31m$(basename $0): ERRO(6): Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução\033[m"
-			exit 6
+			MENSAGEMERRO="Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 		fi
 
 	# O usuário forneceu o endereço de uma pasta específica,
@@ -214,9 +209,8 @@ case "$OPCAO" in
 
 		# Verifique se o endereço fornecido existe
 		[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
-
-			echo -e "\033[031m$(basename $0): ERRO(4): Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado\033[m"
-			exit 4		
+			MENSAGEMERRO="Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
 		}
 	
 
@@ -240,14 +234,15 @@ case "$OPCAO" in
 			rm "$PASTA_FORNECIDA_USUARIO"*.jpeg && {
 				echo "Arquivos .jpeg removidos de $PASTA_FORNECIDA_USUARIO com sucesso!"
 			} || {
-				echo -e "\033[31m$(basename $0): ERRO(7): Arquivos .jpeg não foram encontrados em $PASTA_FORNECIDA_USUARIO\033[m"
-				exit 7
+				MENSAGEMERRO="Arquivos .jpeg não foram encontrados em $PASTA_FORNECIDA_USUARIO"
+				
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "7" "$MENSAGEMERRO"
 			}
 			exit 0
 
 		else
-			echo -e "\033[31m$(basename $0): ERRO(6): Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução\033[m"
-			exit 6
+				MENSAGEMERRO="Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução"	
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "8" "$MENSAGEMERRO"
 		fi
 
 		
@@ -256,8 +251,7 @@ case "$OPCAO" in
 ;;
 
 *) ## Usuário forneceu parâmetro desconhecido
-	echo -e "\033[31m$(basename $0): ERRO(3): Opção $OPCAO desconhecida!\033[m"
-	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda\033[m"
-	exit 3
+	MENSAGEMERRO="Opção $OPCAO desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "9" "$MENSAGEMERRO"
 ;;
 esac
