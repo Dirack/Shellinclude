@@ -58,9 +58,9 @@ EXEMPLO_DE_USO="~$ $(basename $0) -c pastaDeUsuario"
 
 # Verificar se o usuário forneceu algum parâmetro ao programa
 [ -z "$OPCAO" ] && {
-	echo -e "\033[31m$(basename $0): ERRO(1): O usuário não forneceu nenhum parâmetro!\033[m" 
-	echo -e "\033[31mDigite $(basename $0) -h para obter ajuda!\033[m" 	
-	exit 1 
+
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+        exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 }
 
 
