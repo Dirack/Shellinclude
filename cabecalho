@@ -108,7 +108,11 @@ PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -m <objetivo>::Fornecer o Objetivo ao cabeçalho do arquivo"
 EXEMPLO_DE_USO="~$ $(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh
 \t~$ $(basename $0) -sh Arquivo.sh -m <objetivo> # Adiciona o <objetivo> ao cabeçalho do arquivo
-\t~$ $(basename $0) --config user.programador=dirack # Configurar o nome do programador no cabeçalho"
+\t~$ $(basename $0) --config user.programador=<nome> # Configurar o nome do programador
+\t~$ $(basename $0) --config user.site=<url> # Configurar o site do programador
+u\t~$ $(basename $0) --config ser.email=<email> # Configurar o email do programador
+u\t~$ $(basename $0) --config ser.licenca=<licenca> # Configurar a licença de uso
+"
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
@@ -177,7 +181,7 @@ esac
 	PROGRAMADOR=$(echo "$TMP" | grep "user.programador" | cut -d"=" -f2)
 	SITE=$(echo "$TMP" | grep "user.site" | cut -d"=" -f2)
 	EMAIL=$(echo "$TMP" | grep "user.email" | cut -d"=" -f2)
-	LICENSA=$(echo "$TMP" | grep "user.licensa" | cut -d"=" -f2)
+	LICENCA=$(echo "$TMP" | grep "user.licenca" | cut -d"=" -f2)
 
 }
 
@@ -193,7 +197,7 @@ ARQUIVO_CRIADO="$2"
 
 ## variável que armazena o cabeçalho padronizado
 DATA=$(date +%d/%m/%Y)
-HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENSA."
+HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENCA."
 
 # Verificar se o usuário forneceu o nome 
 # de um arquivo que já existe.
