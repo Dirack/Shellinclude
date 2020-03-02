@@ -40,12 +40,12 @@ PATH="$PATH:/caminhoParaShellinclude/Shellinclude"
 
 ## Dependências: 
 
-* sendemail: Possibilita enviar emails pelo terminal. Utilizado pelo programa _morse_.
+* **sendemail**: Possibilita enviar emails pelo terminal. Utilizado pelo programa _morse_.
 
-* Madagascar: Pacote de processamento símico open source. Roda através de scripts SConstruct baixados e formatados
+* **Madagascar**: Pacote de processamento símico open source. Roda através de scripts SConstruct baixados e formatados
 pelo programa _getscons_ e instalados pelo programa _comp_.
 
-* lynx: Permite baixar dados da internet pelo terminal. Utilizado por _getscons_ para baixar os scripts do Madagascar.
+* **lynx**: Permite baixar dados da internet pelo terminal. Utilizado por _getscons_ para baixar os scripts do Madagascar.
 
 ## Instalação das dependências
 
@@ -60,14 +60,14 @@ sísmico em [ahay.org](http://www.ahay.org/wiki/Installation).
 
 ## Lista de Programas
 
-* backup: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
-* cabecalho: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc.
-* comp: Compilar e adicionar programas escritos em linguagem C a versão local do pacote de processamento sísmico MADAGASCAR.
-* getscons: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual no formato correto do SConstruct.
-* img: Converter arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
-* jonas: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh.  
-* lembrete: Armazenar lembretes e idéias no arquivo $HOME/.post
-* morse: Enviar email pelo terminal.
+* **backup**: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
+* **cabecalho**: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc.
+* **comp**: Compilar e adicionar programas escritos em linguagem C a versão local do pacote de processamento sísmico MADAGASCAR.
+* **getscons**: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual no formato correto do SConstruct.
+* **img**: Converter arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
+* **jonas**: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh.  
+* **lembrete**: Armazenar lembretes e idéias no arquivo $HOME/.post
+* **morse**: Enviar email pelo terminal.
 
 ## Exemplos de uso
 
