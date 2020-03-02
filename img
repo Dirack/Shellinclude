@@ -195,8 +195,13 @@ case "$OPCAO" in
 		elif [ "$RESPOSTA_REMOVER_ARQUIVOS" = "y" ]
 		then
 			rm *.jpeg
-			echo "Arquivos .jpeg removidos com sucesso!"
-			exit 0
+			[ $? -eq "0" ] && {
+				echo "Arquivos .jpeg removidos com sucesso!"
+				exit 0
+			}
+
+			echo "Não foram encontrados arquivos .jpeg na pasta!"
+			exit 1
 
 		else
 			MENSAGEMERRO="Opção $RESPOSTA_REMOVER_ARQUIVOS desconhecida! Abortada a execução!"
