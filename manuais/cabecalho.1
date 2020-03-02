@@ -88,10 +88,20 @@ Gerar cabeçalho com o objetivo do programa definido (Use aspas duplas).
 
 	~$ cabecalho -sh Arquivo.sh -m "Objetivo para este programa"
 .PP
-Configurar o nome do programador para utilizar em todos os cabeçalhos (Use aspas duplas).
+Configurar as variáveis de ambiente para utilizar em todos os cabeçalhos (Use aspas duplas).
 
 	~$ cabecalho --config user.programador="Rodolfo Dirack"
 
+	~$ cabecalho --config user.site="http://www.diracklounge.online"
+
+	~$ cabecalho --config user.email="rodolfo_profissional@hotmail.com"
+
+	~$ cabecalho --config user.licenca="GPL-3.0"
+
+.PP
+Exibir todas as variáveis de ambiente configuradas.
+
+	~$ cabecalho --list
 
 .SH AMBIENTE
 CABECALHO armazena as variáveis de ambiente para gerar os cabeçalhos
@@ -107,7 +117,7 @@ Site pessoal do autor do programa.
 .B user.email
 Email do responsável pela manutenção do código.
 .TP 8
-.B user.licensa
+.B user.licenca
 Licensa de uso.
 
 .SH FILES
