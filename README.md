@@ -76,8 +76,10 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
-* v1.1 (Em desenvolvimento)
-    * Versão estável em desenvolvimento`
+* v1.2
+    * Versão Beta em desenvolvimento
+* [v1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1)
+    * Versão Estável
 * [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
     * Versão Beta com os principais scripts
 
