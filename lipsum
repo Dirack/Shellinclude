@@ -67,8 +67,9 @@ CONFIG="$(dirname $0)/.lipsum/dummy.txt"
 NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Gerar texto aleatório para ser exibido no terminal"
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
--v --version::Exibe a versão do programa e sai"
-EXEMPLO_DE_USO="~$ $(basename $0)"
+-v --version::Exibe a versão do programa e sai
+-r --random::Gera texto aleatório no terminal"
+EXEMPLO_DE_USO="~$ $(basename $0) -r # Gera texto aleatório no terminal"
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
@@ -79,6 +80,12 @@ case "$1" in
 
 	-v | --version) ## Exibe a versão do programa
 		echo $VERSAO
+		exit 0
+	;;
+
+	-r | --random) ## Gerar texto aleatório
+
+		head -n 10 "$CONFIG"
 		exit 0
 	;;
 
