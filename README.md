@@ -78,6 +78,8 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 * v1.2
     * Versão Beta em desenvolvimento
+* [v1.1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.1)
+    * Versão Estável - Correção de bugs
 * [v1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1)
     * Versão Estável
 * [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
