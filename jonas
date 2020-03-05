@@ -27,6 +27,13 @@ source mensagemErro.sh
 # Versão atual do programa
 VERSAO="Versão 1.1"
 
+# Verificar se o arquivo de aliases está referenciado
+# no arquivo $HOME/.bashrc, se não estiver referencie
+grep -x -q 'source $HOME/.aliases.sh #Arquivo de aliases definidos pelo programa jonas NÃO EDITAR!' ~/.bashrc
+[ "$?" -ne "0" ] && {
+	echo 'source $HOME/.aliases.sh #Arquivo de aliases definidos pelo programa jonas NÃO EDITAR!' >> $HOME/.bashrc
+}
+
 # Verificar se o usuário passou parâmetros para o programa
 if [ -z "$1" ]
 then
