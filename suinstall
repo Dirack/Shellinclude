@@ -1,0 +1,131 @@
+#!/bin/bash
+#
+# suinstall (Shell Script)
+# 
+# Objetivo: Script de instalação do pacote de processamento símico Seismic Unix (SU).
+# Desenvolvido pelo Center for Wave Phenomena (CWP) da Colorado School of Mines (CSM).
+# 
+# Site: https://dirack.github.io
+# 
+# Versão 1.2
+# 
+# Programador: Felipe (Script original-0.1) ??/??/????
+# Email: felipel6403@gmail.com
+#
+# Programador: José Jésus (Atualização-1.0) 24/09/2019
+#	 
+#		-Atualização do endereço do link para download 
+#		-Depende do unzip instalado
+#
+# Programador: Rodolfo A C Neves (Dirack) (Atualização-1.2) 24/03/2020
+#		-Incorporação à biblioteca Shellinclude
+#
+# Email: rodolfo_profissional@hotmail.com
+# 
+# Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
+
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
+## Verificar se o usuário forneceu $1
+if [ -z "$1" ]
+then
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+# Versão deste programa
+VERSAO="Shellinclude - Versão 1.2"
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Script de instalação do pacote de processamento sísmico Seismic Unix (SU)."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-i --install::Instalar o seismic unix no diretório atual"
+
+EXEMPLO_DE_USO="~$ $(basename $0) -i # Instalar o SU"
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	-i | --install) ## Instalar o SU na pasta atual
+
+		# Instalação das dependências
+		DEPENDENCIAS="g++ gfortran libglu1-mesa libglu1-mesa-dev freeglut3 freeglut3-dev libxmu6 libxi6 libxi-dev libc6 libx11-dev libxt-dev libxm4 libxt6 x11proto-print-dev libmotif-dev"
+
+		echo "Instalando as dependências..."
+		for i in $DEPENDENCIAS
+		do
+			sudo apt-get install "$i"
+		done
+
+		# Definir CWPROOT e PATH
+		export CWPROOT=/home/$USER/$sunix
+		export PATH=$PATH:$CWPROOT/bin
+		
+		# DESCOMENTE:linha 30) DO ARQUIVO Makefile SE ELE NÃO RECONHECER A VARIÁVEL CWPROOT:
+		#        Adicione a variável CWPROOT=/home/$USER/$sunix no Makefile:
+		
+		# Adicionando CWPROOT e PATH ao arquivo .bashrc
+		echo "export CWPROOT=/home/$USER/$sunix"  >> ~/.bashrc
+		echo "export PATH=$PATH:$CWPROOT/bin" >> ~/.bashrc
+
+		# Antes de configurando o CWP-SU
+		echo "________________________________"
+		echo "Antes de configurando o CWP-SU:"
+		cd /home/$USER/$sunix/src
+		# Edite o arquivo para concordar com as necessidades do seu sistema:     
+		echo "_______________________________________________________________________________"
+		echo "Edite o arquivo para concordar com as necessidades do seu Sistema Operacional:"             
+		echo ""
+		# Antes de aplicar o make install: Entrar no Makefile.config:
+		echo "_____________________________________________________________________________"
+		echo "Escolha o tipo de Ordenação de Bytes adequada para seu Sistema Operacional:"
+		echo " "
+		read -p  'Digite:  first ---> big-endian  ou  last ---> tittle-endian  [first/last]? ' view
+		  if  [ $view = first ]; then 
+		    echo 'Força todos os dados SU para serem "big-endian" independentemente da arquitetura do processador.'
+		#   XDRFLAG=-DSUXDR  ---->  Forces all SU data to be big-endian.
+		  elif [ $view = last ]; then                   
+		#  #XDRFLAG=  ----> Forces all SU data to be tittle-endian.
+		    sed 's/XDRFLAG =  -DSUXDR/#XDRFLAG =/g' Makefile.config >> Temporary.config
+		    mv Temporary.config Makefile.config 
+		  fi
+	
+		# Instalar o CWP-SU: 
+		echo "make install - instalar CWP/SU standard..."
+		make install
+		echo "make xtinstall - instalar X-toolkit..."
+		make xtinstall
+		echo " make xminstall - instalar X-Motif..."
+		make xminstall
+		echo " make finstall - instalar biblioteca de Fortran..."
+		make finstall
+		echo " make mglinstall - instalar Mesa/Open GL..."
+		make mglinstall
+		echo " make sfinstall - instalar SFIO materials e SEGDREAD"
+		make sfinstall
+		echo "make utils - instalar itens da biblioteca cwputils para compilação:"
+		make utils
+	;;
+
+	*)
+		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+	;;
+esac
+
+
