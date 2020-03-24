@@ -78,8 +78,10 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 * v1.2
     * Versão Beta em desenvolvimento
+* [v1.1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.2)
+    * Versão Estável - Correção de bugs no programa cabecalho
 * [v1.1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.1)
-    * Versão Estável - Correção de bugs
+    * Versão Estável - Correção de bugs do prgrama jonas
 * [v1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1)
     * Versão Estável
 * [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
