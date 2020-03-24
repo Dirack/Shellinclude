@@ -1,0 +1,153 @@
+#!/bin/bash
+#
+# madagainstall (Shell Script)
+# 
+# Objetivo: Script de instalação do pacote de processamento sísmico Madagascar.
+# 
+# Site: https://dirack.github.io
+# 
+# Versão 1.2
+# 
+# Programador:  Murilo Santiago (Original-1.0) 23/03/2020
+#
+# Programador:	Rodolfo A C Neves (Dirack) (Atualização-1.2) 24/03/2020
+#		-Incorporação à biblioteca Shellinclude
+#
+# Email: rodolfo_profissional@hotmail.com
+# 
+# Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
+
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
+## Verificar se o usuário forneceu $1 e $2
+if [ -z "$1" ]
+then
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+# Versão deste programa
+VERSAO="Shellinclude - Versão 1.2"
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Script de instalação do pacote de processamento sísmico Madagascar."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-i --install::Instalar o Madagascar na pasta atual"
+EXEMPLO_DE_USO="~$ $(basename $0) -i # Instalação do Madagascar na pasta atual"
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	-i | --install) ## Instalar o pacote Madagascar na pasta atual
+		#!/bin/bash
+		#limpado o terminal:
+		clear
+		# diretorio de instalacao home
+		cd ${HOME}
+		#iniciando a instalacao:
+		echo ""
+		echo "========================================================================"
+		echo "	Instalação do madagascar-2.0.1 (UBUNTU 18.04)"
+		echo "========================================================================"
+		sleep 5
+		#criando diretorio de instalacao:
+		mkdir madagascar
+		mkdir rsfdata
+		echo ""
+		echo "========================================================================"
+		echo "	Criando diretorio de instalacao:"
+		echo "${PWD}"
+		echo "========================================================================" 
+		#sleep 20
+		#download:
+		echo ""
+		echo "========================================================================"
+		echo "	Baixando o madagascar:"
+		echo "========================================================================" 
+		echo ""
+		wget -c https://ufpr.dl.sourceforge.net/project/rsf/madagascar/madagascar-3.0/madagascar-3.0.1.tar.gz
+		#descompactando:
+		echo ""
+		echo "========================================================================"
+		echo "Descompactando o madagascar:"
+		echo "========================================================================"
+		#mv madagascar-3.0.1.tar.gz $HOME
+		tar -xzvf madagascar-3.0.1.tar.gz
+		# fazendo update antes da atualizacao dos repositorios
+		echo "========================================================================"
+		echo "	Digite a senha de super usuario, para atualizar os repositorios:"
+		echo "========================================================================"
+		if ! sudo apt-get update
+		then
+		echo "========================================================================"
+		echo "	Não foi possível atualizar os repositórios. Verifique seu arquivo /etc/apt/sources.list"
+		echo "========================================================================"
+		echo ""
+		exit 1
+		fi
+		echo "========================================================================"
+		echo "	Atualização feita com sucesso"
+		echo "========================================================================"
+		#pacotes necessarios para instalacao:
+		sudo apt-get install libxaw7-dev freeglut3-dev libnetpbm10-dev libgd-dev libplplot-dev \
+		libavcodec-dev libcairo2-dev libjpeg-dev swig python-dev python-numpy g++ gfortran \
+		libopenmpi-dev libfftw3-dev libsuitesparse-dev python-epydoc scons git emacs25
+		#entrando na pasta:
+		cd ${HOME}/madagascar-3.0
+		#configurando o madagascar:
+		echo ""
+		echo "========================================================================"
+		echo "	Configurando o madagascar para instalacao:"
+		echo "========================================================================"
+		echo ""
+		sleep 5
+		./configure --prefix=/home/$USER/madagascar
+		#sudo make install:
+		echo ""
+		echo "========================================================================"
+		echo "	sudo make install:"
+		echo "========================================================================"
+		echo ""
+		sudo make install
+		echo ""
+		echo "========================================================================"
+		echo "	Configurando o seu bash: "
+		echo "========================================================================"
+		echo ""
+		cd ${HOME}
+		#verificar futuramente uma nova iplementacao 
+		#source /home/$USER/madagascar/share/madagascar/etc/env.sh
+		#export PYTHONPATH=$PYTHONPATH:/home/$USER/madagascar/lib/python2.7/dist-packages/rsf:/home/$USER/madagascar/lib/python2.7/distpackages/rsf/recipes
+		export DATAPATH=/home/$USER/rsfdata/
+		#exportando para o .bashrc:
+		variable1="source /home/$USER/madagascar/share/madagascar/etc/env.sh"
+		echo $variable1 >> .bashrc
+		#variable2="export PYTHONPATH=$PYTHONPATH:/home/$USER/madagascar/lib/python2.7/dist-packages/rsf:/home/$USER/madagascar/lib/python2.7/distpackages/rsf/recipes"
+		#echo $variable2 >> .bashrc
+		variable3="export DATAPATH=/home/$USER/rsfdata/"
+		echo $variable3 >> .bashrc
+		echo ""
+		echo "========================================================================"
+		echo "Instalação finalizada com sucesso !!!"
+		echo "========================================================================"
+	;;
+
+	*)
+		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+esac
