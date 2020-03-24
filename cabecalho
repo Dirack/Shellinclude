@@ -130,7 +130,7 @@ case "$1" in
 
 		if [ -f "$CONFIG" ]
 		then
-			sed -n '/^#/!p' "$CONFIG"
+			sed -n '/^#/!p' "$CONFIG" | tr '§' '/'
 		else
 			criarPastaArquivosConfig "$CONFIG"
 		fi
@@ -149,7 +149,7 @@ case "$1" in
 		}
 
 		VARIAVEL_FORNECIDA=$(echo "$2" | cut -d"=" -f1)
-		VALOR_FORNECIDO=$(echo "$2" | cut -d"=" -f2)
+		VALOR_FORNECIDO=$(echo "$2" | cut -d"=" -f2 | tr "/" '§')
 
 		if [ -f "$CONFIG" ]
 		then
@@ -177,7 +177,7 @@ esac
 # definido em .config/cabecalho.config.txt
 [ -f "$CONFIG" ] && {
 
-	TMP=$(sed -n '/^#/!p' "$CONFIG")
+	TMP=$(sed -n '/^#/!p' "$CONFIG" | tr '§' '/')
 	PROGRAMADOR=$(echo "$TMP" | grep "user.programador" | cut -d"=" -f2)
 	SITE=$(echo "$TMP" | grep "user.site" | cut -d"=" -f2)
 	EMAIL=$(echo "$TMP" | grep "user.email" | cut -d"=" -f2)
