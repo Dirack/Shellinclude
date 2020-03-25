@@ -65,14 +65,19 @@ case "$1" in
                 fi
 
                 echo -e "Descompactando a versão 3.0 do pacote Madagascar...\n"
-                if tar -xzvf "$HOME/madagascar-3.0.1.tar.gz" -C "$HOME" &>/dev/null
-                then
-                        cd ${HOME}/madagascar-3.0
-                else
+		if [ "-f" "$HOME/madagascar-3.0" ]
+		then
+			echo -e "...Já existe uma versão descompactada do pacote Madagascar em $HOME\n"
+		else
+			if tar -xzvf "$HOME/madagascar-3.0.1.tar.gz" -C "$HOME" &>/dev/null
+			then
+				cd ${HOME}/madagascar-3.0
+			else
 
-                        MENSAGEMERRO="Ocorreu um erro inesperado ao descompactar o pacote em $HOME/madagascar-3.0"
-                        exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
-                fi
+				MENSAGEMERRO="Ocorreu um erro inesperado ao descompactar o pacote em $HOME/madagascar-3.0"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+			fi
+		fi
 
 		# Instalar dependências
 		DEPENDENCIAS="libxaw7-dev freeglut3-dev libnetpbm10-dev libgd-dev libplplot-dev libavcodec-dev libcairo2-dev libjpeg-dev swig python-dev python-numpy g++ gfortran libopenmpi-dev libfftw3-dev libsuitesparse-dev python-epydoc scons git emacs25"
@@ -81,7 +86,7 @@ case "$1" in
 		for i in $DEPENDENCIAS
 		do
 			echo "...Instalando $i"
-			sudo apt-get install -y "$i" &>/dev/null
+			sudo apt-get install -y "$i" 1>/dev/null
 		done
 		
 		# Configuração do madagascar
