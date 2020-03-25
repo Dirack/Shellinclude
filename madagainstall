@@ -71,7 +71,7 @@ case "$1" in
 		else
 			if tar -xzvf "$HOME/madagascar-3.0.1.tar.gz" -C "$HOME" &>/dev/null
 			then
-				cd ${HOME}/madagascar-3.0
+				echo "...Arquivo descompactado com sucesso em $HOME/madagascar-3.0"
 			else
 
 				MENSAGEMERRO="Ocorreu um erro inesperado ao descompactar o pacote em $HOME/madagascar-3.0"
@@ -91,7 +91,7 @@ case "$1" in
 		
 		# Configuração do madagascar
 		echo -e "Configurar o Madagascar para instalacao...\n"
-		./configure --prefix=$HOME/madagascar
+		$HOME/madagascar-3.0/configure --prefix=$HOME/madagascar
 
 		# Instalação do pacote Madagascar	
 		echo -e "Instalar o pacote Madagascar...\n"
