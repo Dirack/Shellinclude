@@ -99,6 +99,7 @@ case "$1" in
 		then
 			# Definição das variáveis de ambiente do Madagascar no .bashrc
 			export DATAPATH=$HOME/rsfdata/
+			source "$HOME/madagascar/share/madagascar/etc/env.sh"
 			echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> "$HOME/.bashrc"
 			echo "export DATAPATH=$HOME/rsfdata/" >> "$HOME/.bashrc"
 			source "$HOME/.bashrc"
