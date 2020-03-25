@@ -115,8 +115,8 @@ case "$1" in
 			}
 
 			source "$HOME/.bashrc"
-			echo "Testando a instalação..."
-			if sfspike n1=100 k1=30 | sfdisfil
+			echo "Testando a instalação... Rodando sfspike..."
+			if sfspike n1=20 k1=3 | sfdisfil
 			then
 				echo -e "...Instalação finalizada com sucesso! :)\n"
 				echo -e "Para utilizar o Madagascar neste terminal carregue as variáveis de ambiente com:\nsource $HOME/.bashrc\nOu abra um novo terminal...\n"
