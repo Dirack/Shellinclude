@@ -100,8 +100,18 @@ case "$1" in
 			# Definição das variáveis de ambiente do Madagascar no .bashrc
 			export DATAPATH=$HOME/rsfdata/
 			source "$HOME/madagascar/share/madagascar/etc/env.sh"
-			echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> "$HOME/.bashrc"
-			echo "export DATAPATH=$HOME/rsfdata/" >> "$HOME/.bashrc"
+
+			# Verificar se as variáveis de ambiente já estão setadas corretamente
+			grep -xq "source $HOME/madagascar/share/madagascar/etc/env.sh" "$HOME/.bashrc"
+			[ "$?" -ne "0" ] && {
+				echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> "$HOME/.bashrc"
+			}
+
+			grep -xq "export DATAPATH=$HOME/rsfdata/" "$HOME/.bashrc"
+			[ "$?" -ne "0" ] && {
+				echo "export DATAPATH=$HOME/rsfdata/" >> "$HOME/.bashrc"
+			}
+
 			source "$HOME/.bashrc"
 			echo "Testando a instalação..."
 			if sfspike n1=100 k1=30 | sfdisfil
