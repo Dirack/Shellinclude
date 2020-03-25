@@ -56,34 +56,49 @@ case "$1" in
 	-i | --install) ## Instalar o pacote Madagascar na pasta atual
 		
 		URL="https://ufpr.dl.sourceforge.net/project/rsf/madagascar/madagascar-3.0/madagascar-3.0.1.tar.gz"
-		echo "Baixando o pacote madagascar do servidor ${URL}..."
-		wget -c "$URL" > ${HOME}
+		echo -e "\nBaixando o pacote madagascar do servidor ${URL}...\n"
+                if [ -f "$HOME/madagascar-3.0.1.tar.gz" ]
+                then
+                        echo -e "...Já existe uma versão do pacote Madagascar em $HOME\n"
+                else
+                        wget -c "$URL" -P ${HOME} &>/dev/null
+                fi
 
-		tar -xzvf "~/madagascar-3.0.1.tar.gz"
+                echo -e "Descompactando a versão 3.0 do pacote Madagascar...\n"
+                if tar -xzvf "$HOME/madagascar-3.0.1.tar.gz" -C "$HOME" &>/dev/null
+                then
+                        cd ${HOME}/madagascar-3.0
+                else
 
-		cd ${HOME}/madagascar-3.0
+                        MENSAGEMERRO="Ocorreu um erro inesperado ao descompactar o pacote em $HOME/madagascar-3.0"
+                        exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+                fi
 
 		# Instalar dependências
 		DEPENDENCIAS="libxaw7-dev freeglut3-dev libnetpbm10-dev libgd-dev libplplot-dev libavcodec-dev libcairo2-dev libjpeg-dev swig python-dev python-numpy g++ gfortran libopenmpi-dev libfftw3-dev libsuitesparse-dev python-epydoc scons git emacs25"
 
-		echo "Instalar dependências..."
+		echo -e "Instalar dependências...\n"
 		for i in $DEPENDENCIAS
 		do
 			sudo apt-get install "$i"
 		done
 		
 		# Configuração do madagascar
-		echo "	Configurar o Madagascar para instalacao..."
+		echo -e "Configurar o Madagascar para instalacao...\n"
 		./configure --prefix=$HOME/madagascar
 
 		# Instalação do pacote Madagascar	
-		echo "Instalar o pacote Madagascar..."
-		sudo make install
-	
-		# Definição das variáveis de ambiente do Madagascar no .bashrc
-		export DATAPATH=$HOME/rsfdata/
-		echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> .bashrc
-		echo "export DATAPATH=$HOME/rsfdata/" >> .bashrc
+		echo -e "Instalar o pacote Madagascar...\n"
+		if sudo make install
+		then
+			# Definição das variáveis de ambiente do Madagascar no .bashrc
+			export DATAPATH=$HOME/rsfdata/
+			echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> .bashrc
+			echo "export DATAPATH=$HOME/rsfdata/" >> .bashrc
+		else
+			MENSAGEMERRO="Ocorreu um erro inesperado durante a instalação do pacote Madagascar!"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+		fi
 	;;
 
 	*)
