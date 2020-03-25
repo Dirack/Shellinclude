@@ -103,9 +103,10 @@ case "$1" in
 			echo "export DATAPATH=$HOME/rsfdata/" >> "$HOME/.bashrc"
 			source "$HOME/.bashrc"
 			echo "Testando a instalação..."
-			if sfspike n1=100 k1=30 | sfbandpass fhi=2 phase=y | sfwiggle clip=0.02 title="Welcome to Madagascar" | sfpen
+			if sfspike n1=100 k1=30 | sfdisfil
 			then
-				echo "...Instalação finalizada com sucesso! :)"
+				echo -e "...Instalação finalizada com sucesso! :)\n"
+				echo -e "Para utilizar o Madagascar neste terminal carregue as variáveis de ambiente com:\nsource $HOME/.bashrc\nOu abra um novo terminal..."
 			else
 				MENSAGEMERRO="Ocorreu um erro inesperado durante a instalação do pacote Madagascar!"
 				exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
