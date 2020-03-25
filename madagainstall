@@ -101,13 +101,23 @@ case "$1" in
 			export DATAPATH=$HOME/rsfdata/
 			echo "source $HOME/madagascar/share/madagascar/etc/env.sh" >> "$HOME/.bashrc"
 			echo "export DATAPATH=$HOME/rsfdata/" >> "$HOME/.bashrc"
+			source "$HOME/.bashrc"
+			echo "Testando a instalação..."
+			if sfspike n1=100 k1=30 | sfbandpass fhi=2 phase=y | sfwiggle clip=0.02 title="Welcome to Madagascar" | sfpen
+			then
+				echo "...Instalação finalizada com sucesso! :)"
+			else
+				MENSAGEMERRO="Ocorreu um erro inesperado durante a instalação do pacote Madagascar!"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+
+			fi
 		else
 			MENSAGEMERRO="Ocorreu um erro inesperado durante a instalação do pacote Madagascar!"
-			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "5" "$MENSAGEMERRO"
 		fi
 	;;
 
 	*)
 		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
-		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
 esac
