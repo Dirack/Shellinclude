@@ -38,8 +38,8 @@ NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Script de instalação do pacote de processamento sísmico Madagascar."
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -v --version::Exibe a versão do programa e sai
--i --install::Instalar o Madagascar na pasta atual"
-EXEMPLO_DE_USO="~$ $(basename $0) -i # Instalação do Madagascar na pasta atual"
+-i --install::Instalar o Madagascar na pasta $HOME"
+EXEMPLO_DE_USO="~$ $(basename $0) -i # Instalar o Madagascar"
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
