@@ -65,7 +65,7 @@ case "$1" in
                 fi
 
                 echo -e "Descompactando a versão 3.0 do pacote Madagascar...\n"
-		if [ "-f" "$HOME/madagascar-3.0" ]
+		if [ "-d" "$HOME/madagascar-3.0" ]
 		then
 			echo -e "...Já existe uma versão descompactada do pacote Madagascar em $HOME\n"
 		else
