@@ -54,12 +54,14 @@ pelo programa _getscons_ e instalados pelo programa _comp_.
 ~$ sudo apt-get install lynx # instalar lynx
 ```
 
-A instalação do pacote Madagascar é mais complexa, e pode ser encontrada na página oficial do pacote de processamento 
-sísmico em [ahay.org](http://www.ahay.org/wiki/Installation).
+A instalação do pacote Madagascar pode ser realizada através do script de instalação [madagainstall](https://github.com/Dirack/Shellinclude/blob/master/madagainstall) disponível a partir da versão 1.2 desta biblioteca.
+
+Para mais detalhes sobre a instalação do pacote Madagascar, consulte a página oficial do pacote em [ahay.org](http://www.ahay.org/wiki/Installation).
 
 
 ## Lista de Programas
 
+* **madagainstall**: Instalar o pacote de processamento sísmico Madagascar.
 * **backup**: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
 * **cabecalho**: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc.
 * **comp**: Compilar e adicionar programas escritos em linguagem C a versão local do pacote de processamento sísmico MADAGASCAR.
@@ -76,8 +78,8 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
-* v1.2
-    * Versão Beta em desenvolvimento
+* [v1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.2-beta.1)
+    * Versão Beta - Novo programa _madagainstall_
 * [v1.1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.2)
     * Versão Estável - Correção de bugs no programa cabecalho
 * [v1.1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.1)
