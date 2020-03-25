@@ -80,7 +80,8 @@ case "$1" in
 		echo -e "Instalar dependências...\n"
 		for i in $DEPENDENCIAS
 		do
-			sudo apt-get install "$i"
+			echo "...Instalando $i"
+			sudo apt-get install -y "$i" &>/dev/null
 		done
 		
 		# Configuração do madagascar
