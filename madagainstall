@@ -117,7 +117,9 @@ case "$1" in
 			if sfspike n1=100 k1=30 | sfdisfil
 			then
 				echo -e "...Instalação finalizada com sucesso! :)\n"
-				echo -e "Para utilizar o Madagascar neste terminal carregue as variáveis de ambiente com:\nsource $HOME/.bashrc\nOu abra um novo terminal..."
+				echo -e "Para utilizar o Madagascar neste terminal carregue as variáveis de ambiente com:\nsource $HOME/.bashrc\nOu abra um novo terminal...\n"
+				echo -e "Teste a interface gráfica do pacote com o comando a seguir: " 
+				echo -e "sfspike n1=1000 k1=300 | sfbandpass fhi=2 phase=y | sfwiggle clip=0.02 title="Welcome to Madagascar" | sfpen"
 			else
 				MENSAGEMERRO="Ocorreu um erro inesperado durante a instalação do pacote Madagascar!"
 				exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
