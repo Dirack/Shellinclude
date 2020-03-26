@@ -63,40 +63,56 @@ case "$1" in
 
 	-i | --install) ## Instalar o SU na pasta atual
 
+		# Baixar a versão atual do SU do servidor da CWP
+		URL="https://nextcloud.seismic-unix.org/index.php/s/WgXpRba4DPPaiNK/download"
+		echo -e "Baixar o pacote SU de $URL..."
+		if [ -d "$HOME/su" ]
+		then
+			echo "...Já existe uma versão do pacote SU em $HOME"
+		else
+			if wget -c "$URL" -P "$HOME" &> /dev/null
+			then
+				echo -e "...Pacote SU baixado com sucesso em $HOME"
+			else
+				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar baixar o pacote SU de $URL"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+
+			fi
+		fi
+
 		# Instalação das dependências
 		DEPENDENCIAS="g++ gfortran libglu1-mesa libglu1-mesa-dev freeglut3 freeglut3-dev libxmu6 libxi6 libxi-dev libc6 libx11-dev libxt-dev libxm4 libxt6 x11proto-print-dev libmotif-dev"
 
-		echo "Instalando as dependências..."
+		echo -e "Instalando as dependências...\n"
 		for i in $DEPENDENCIAS
 		do
-			sudo apt-get install "$i"
+			echo -e "Instalando $i..."
+			sudo apt-get install -y "$i"
 		done
 
 		# Definir CWPROOT e PATH
-		export CWPROOT=/home/$USER/$sunix
+		export CWPROOT=$HOME/su
 		export PATH=$PATH:$CWPROOT/bin
 		
-		# DESCOMENTE:linha 30) DO ARQUIVO Makefile SE ELE NÃO RECONHECER A VARIÁVEL CWPROOT:
-		#        Adicione a variável CWPROOT=/home/$USER/$sunix no Makefile:
-		
 		# Adicionando CWPROOT e PATH ao arquivo .bashrc
-		echo "export CWPROOT=/home/$USER/$sunix"  >> ~/.bashrc
-		echo "export PATH=$PATH:$CWPROOT/bin" >> ~/.bashrc
+		grep -qx 'export CWPROOT=$HOME/su' $HOME/.bashrc
+		[ "$?" -ne "0" ] && {
+			echo "export CWPROOT=$HOME/su"  >> $HOME/.bashrc
+		}
+
+		grep -qx  'export PATH=$PATH:$CWPROOT/bin' $HOME/.bashrc 
+		[ "$?" -ne "0" ] && {
+			echo "export PATH=$PATH:$CWPROOT/bin" >> $HOME/.bashrc
+		}
 
 		# Antes de configurando o CWP-SU
 		echo "________________________________"
 		echo "Antes de configurando o CWP-SU:"
 		cd /home/$USER/$sunix/src
 		# Edite o arquivo para concordar com as necessidades do seu sistema:     
-		echo "_______________________________________________________________________________"
-		echo "Edite o arquivo para concordar com as necessidades do seu Sistema Operacional:"             
-		echo ""
-		# Antes de aplicar o make install: Entrar no Makefile.config:
-		echo "_____________________________________________________________________________"
-		echo "Escolha o tipo de Ordenação de Bytes adequada para seu Sistema Operacional:"
-		echo " "
+	
 		read -p  'Digite:  first ---> big-endian  ou  last ---> tittle-endian  [first/last]? ' view
-		  if  [ $view = first ]; then 
+		if  [ $view = first ]; then 
 		    echo 'Força todos os dados SU para serem "big-endian" independentemente da arquitetura do processador.'
 		#   XDRFLAG=-DSUXDR  ---->  Forces all SU data to be big-endian.
 		  elif [ $view = last ]; then                   
