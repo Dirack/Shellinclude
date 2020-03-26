@@ -58,6 +58,7 @@ A instalação do pacote Madagascar pode ser realizada através do script de ins
 
 Para mais detalhes sobre a instalação do pacote Madagascar, consulte a página oficial do pacote em [ahay.org](http://www.ahay.org/wiki/Installation).
 
+Baixe os nossos containers do docker com a [Shellinclude pré-configurada](https://github.com/Dirack/Shellinclude/packages/162773)
 
 ## Lista de Programas
 
