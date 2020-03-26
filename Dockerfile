@@ -18,7 +18,7 @@
 FROM dirack/ubuntuenv18.04.4:1.0
 
 # Versão da Shellinclude
-ENV VERSION="Shellinclude-v1.2.1-beta.1"
+ENV VERSION="Shellinclude-v1.2.2-beta.1"
 
 # define o mantenedor da imagem
 LABEL maintainer="Rodolfo Dirack"
@@ -27,4 +27,4 @@ LABEL site="https://dirack.github.io"
 
 ADD "/" "/$VERSION"
 ENV PATH="/$VERSION:$PATH"
-RUN apt-get install -y bc && chmod 777 "/$VERSION" && echo 'PATH="/$VERSION:$PATH"' >> $HOME/.bashrc
+RUN apt-get install -y bc && apt-get install -y make && apt-get clean && chmod 777 "/$VERSION" && echo 'PATH="/$VERSION:$PATH"' >> $HOME/.bashrc
