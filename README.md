@@ -61,6 +61,7 @@ Para mais detalhes sobre a instalação do pacote Madagascar, consulte a página
 
 ## Lista de Programas
 
+* **suinstall**: Instalar o pacote de processamento sísmico Seismic Unix (SU).
 * **lipsum**: Programa para gerar texto aleatório (dummy text) no terminal.
 * **madagainstall**: Instalar o pacote de processamento sísmico Madagascar.
 * **backup**: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
@@ -79,6 +80,8 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
+* [v1.2.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.2.2-beta.1)
+    * Versão Beta - Novo programa _suinstall_
 * [v1.2.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.2.1-beta.1)
     * Versão Beta - Novo programa _lipsum_
 * [v1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.2-beta.1)
