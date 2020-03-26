@@ -35,17 +35,18 @@ criarPastaArquivosConfig(){
 
 	ARQUIVO_CONFIG="$1"
 	PASTA="$(dirname $1)"
+	TMP="$(mktemp /tmp/lipsum.XXXX)"
 
 	# Diretório de configuração existe?
 	[ -d "$PASTA" ] || {
 		mkdir "$PASTA"
-		echo '# Arquivo de configuração do programa lipsum - NÃO alterar!' >> "$ARQUIVO_CONFIG"
-		return 0
 	}
 
 	# Pasta existe, mas sem arquivo de configuração?
 	[ -f "$ARQUIVO_CONFIG" ] || {
-		echo '# Arquivo de configuração do programa lipsum - NÃO alterar!' >> "$ARQUIVO_CONFIG"
+		wget -c "https://raw.githubusercontent.com/Dirack/Shellinclude/feature/issue/25/.lipsum/dummy.txt" -P "$TMP" &> /dev/null
+		cat "$TMP/dummy.txt" >> "$ARQUIVO_CONFIG"
+		rm -r "$TMP"
 		return 0
 	}
 }
@@ -60,8 +61,12 @@ verificarSeArquivoExiste(){
 	return 0
 }
 
-# Armazena variáveis template para exibir no cabeçalho
+# Verificar se o arquivo de configuração 
+# está na pasta, se não, baixar da internet
 CONFIG="$(dirname $0)/.lipsum/dummy.txt"
+[ ! -f "$CONFIG" ] && {
+	criarPastaArquivosConfig "$CONFIG"
+}
 
 ## Variáveis que armazenam mensagem de ajuda do programa
 NOME_PROGRAMA="$(basename $0)"
