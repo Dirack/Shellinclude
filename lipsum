@@ -98,7 +98,13 @@ case "$1" in
 			NUM_LINHAS="$2"	
 		}
 
-		head -n "$NUM_LINHAS" "$CONFIG"
+		TOTAL_LINHAS=$(cat "$CONFIG" | wc -l)
+
+		for i in $(seq "$NUM_LINHAS")
+		do
+			LINHA=$(echo "$RANDOM % $TOTAL_LINHAS" | bc )
+			sed -n "${LINHA}p" "$CONFIG"
+		done
 	;;
 
 	*)
