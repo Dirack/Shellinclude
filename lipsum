@@ -28,7 +28,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Versão 1.2"
+VERSAO="Shellinclude - Versão 1.2"
 
 # Função para criar arquivo de configuração se não existir
 criarPastaArquivosConfig(){
@@ -69,7 +69,8 @@ DESCRICAO="Gerar texto aleatório para ser exibido no terminal"
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -v --version::Exibe a versão do programa e sai
 -r --random::Gera texto aleatório no terminal"
-EXEMPLO_DE_USO="~$ $(basename $0) -r # Gera texto aleatório no terminal"
+EXEMPLO_DE_USO="~$ $(basename $0) -r # Gerar uma linhas de texto aleatório no terminal
+\t~$ $(basename $0) -r 10 # Gerar 10 linhas de texto aleatório no terminal"
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
@@ -85,8 +86,14 @@ case "$1" in
 
 	-r | --random) ## Gerar texto aleatório
 
-		head -n 10 "$CONFIG"
-		exit 0
+		# Por padrão o programa gera uma linha apenas
+		NUM_LINHAS="1"
+
+		[ -z "$2" ] || {
+			NUM_LINHAS="$2"	
+		}
+
+		head -n "$NUM_LINHAS" "$CONFIG"
 	;;
 
 	*)
