@@ -44,7 +44,7 @@ criarPastaArquivosConfig(){
 
 	# Pasta existe, mas sem arquivo de configuração?
 	[ -f "$ARQUIVO_CONFIG" ] || {
-		wget -c "https://raw.githubusercontent.com/Dirack/Shellinclude/feature/issue/25/.lipsum/dummy.txt" -P "$TMP" &> /dev/null
+		wget -c "https://github.com/Dirack/Shellinclude/files/4385014/dummy.txt" -P "$TMP" &> /dev/null
 		cat "$TMP/dummy.txt" >> "$ARQUIVO_CONFIG"
 		rm -r "$TMP"
 		return 0
