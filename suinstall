@@ -109,13 +109,13 @@ case "$1" in
 		done
 
 		# Definir CWPROOT e PATH
-		export CWPROOT=$HOME/su
+		export CWPROOT=$HOME/src
 		export PATH=$PATH:$CWPROOT/bin
 		
 		# Adicionando CWPROOT e PATH ao arquivo .bashrc
-		grep -qx 'export CWPROOT=$HOME/su' $HOME/.bashrc
+		grep -qx 'export CWPROOT=$HOME/src' $HOME/.bashrc
 		[ "$?" -ne "0" ] && {
-			echo "export CWPROOT=$HOME/su"  >> $HOME/.bashrc
+			echo "export CWPROOT=$HOME/src"  >> $HOME/.bashrc
 		}
 
 		grep -qx  'export PATH=$PATH:$CWPROOT/bin' $HOME/.bashrc 
