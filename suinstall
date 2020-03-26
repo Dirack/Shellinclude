@@ -109,13 +109,13 @@ case "$1" in
 		done
 
 		# Definir CWPROOT e PATH
-		export CWPROOT=$HOME/src
+		export CWPROOT=$HOME
 		export PATH=$PATH:$CWPROOT/bin
 		
 		# Adicionando CWPROOT e PATH ao arquivo .bashrc
-		grep -qx 'export CWPROOT=$HOME/src' $HOME/.bashrc
+		grep -qx 'export CWPROOT=$HOME' $HOME/.bashrc
 		[ "$?" -ne "0" ] && {
-			echo "export CWPROOT=$HOME/src"  >> $HOME/.bashrc
+			echo "export CWPROOT=$HOME"  >> $HOME/.bashrc
 		}
 
 		grep -qx  'export PATH=$PATH:$CWPROOT/bin' $HOME/.bashrc 
@@ -124,7 +124,7 @@ case "$1" in
 		}
 
 		# Antes de configurando o CWP-SU
-		cd $HOME/src
+		cd $CWPROOT/src
 		
 		echo -e "Configurando endianess dos dados...\n"
 
