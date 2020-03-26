@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+# lipsum 
+#
+# Objetivo: Gerar texto aleatório a ser exibido no terminal.
+#
+# Site: http://www.dirackslounge.online
+#
+# Versão 1.2
+#
+# Programador: Rodolfo A. C. Neves 02/03/2020
+#
+# email: rodolfo_profissional@hotmail.com
+#
+# Licença: software de uso livre e código aberto.
+
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
+## Verificar se o usuário forneceu $1 e $2
+if [ -z "$1" ]
+then
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+# Versão deste programa
+VERSAO="Shellinclude - Versão 1.2"
+
+# Função para criar arquivo de configuração se não existir
+criarPastaArquivosConfig(){
+
+	ARQUIVO_CONFIG="$1"
+	PASTA="$(dirname $1)"
+	TMP="$(mktemp /tmp/lipsum.XXXX)"
+
+	# Diretório de configuração existe?
+	[ -d "$PASTA" ] || {
+		mkdir "$PASTA"
+	}
+
+	# Pasta existe, mas sem arquivo de configuração?
+	[ -f "$ARQUIVO_CONFIG" ] || {
+		wget -c "https://github.com/Dirack/Shellinclude/files/4385014/dummy.txt" -P "$TMP" &> /dev/null
+		cat "$TMP/dummy.txt" >> "$ARQUIVO_CONFIG"
+		rm -r "$TMP"
+		return 0
+	}
+}
+
+verificarSeArquivoExiste(){
+
+	ARQUIVO="$1"
+
+	[ -f "$ARQUIVO" ] && {
+		return 1
+	}
+	return 0
+}
+
+# Verificar se o arquivo de configuração 
+# está na pasta, se não, baixar da internet
+CONFIG="$(dirname $0)/.lipsum/dummy.txt"
+[ ! -f "$CONFIG" ] && {
+	criarPastaArquivosConfig "$CONFIG"
+}
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Gerar texto aleatório para ser exibido no terminal"
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-r --random::Gera texto aleatório no terminal"
+EXEMPLO_DE_USO="~$ $(basename $0) -r # Gerar uma linhas de texto aleatório no terminal
+\t~$ $(basename $0) -r 10 # Gerar 10 linhas de texto aleatório no terminal"
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	-r | --random) ## Gerar texto aleatório
+
+		# Por padrão o programa gera uma linha apenas
+		NUM_LINHAS="1"
+
+		[ -z "$2" ] || {
+			NUM_LINHAS="$2"	
+		}
+
+		TOTAL_LINHAS=$(cat "$CONFIG" | wc -l)
+
+		for i in $(seq "$NUM_LINHAS")
+		do
+			LINHA=$(echo "$RANDOM % $TOTAL_LINHAS" | bc )
+			sed -n "${LINHA}p" "$CONFIG"
+		done
+	;;
+
+	*)
+		MENSAGEMERRO="Opção $1 desconhecida!\nDigite $0 -h para obter ajuda."
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+	;;
+
+esac
