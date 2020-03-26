@@ -66,10 +66,11 @@ case "$1" in
 		# Baixar a versão atual do SU do servidor da CWP
 		URL="https://nextcloud.seismic-unix.org/index.php/s/WgXpRba4DPPaiNK/download"
 		echo -e "Baixar o pacote SU de $URL..."
-		if [ -d "$HOME/su" ]
+		if [ -d "$HOME/cwp_su_all_44R18" ]
 		then
-			echo "...Já existe uma versão do pacote SU em $HOME"
+			echo "...Já existe uma versão do pacote SU em $HOME/cwp_su_all_44R18"
 		else
+		
 			if wget -c "$URL" -P "$HOME" &> /dev/null
 			then
 				echo -e "...Pacote SU baixado com sucesso em $HOME"
@@ -80,6 +81,22 @@ case "$1" in
 			fi
 		fi
 
+		# Descompactar o pacote SU baixado
+		echo -e "Desompactar o pacote SU..."
+		if [ -d "$HOME/cwp_su_all_44R18/src" ]
+		then
+			echo -e "...Já existe uma versão descompactada do pacote SU em $HOME/cwp_su_all_44R18"
+		else
+			if tar -xzvf "$FILE" "$HOME"
+			then
+				echo -e "...Pacote SU descomapctado com sucesso"
+			else
+				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar descompactar o pacote SU em $HOME/cwp_su_all_44R18"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+
+			fi
+		fi
+	
 		# Instalação das dependências
 		DEPENDENCIAS="g++ gfortran libglu1-mesa libglu1-mesa-dev freeglut3 freeglut3-dev libxmu6 libxi6 libxi-dev libc6 libx11-dev libxt-dev libxm4 libxt6 x11proto-print-dev libmotif-dev"
 
