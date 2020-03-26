@@ -115,12 +115,12 @@ case "$1" in
 		# Adicionando CWPROOT e PATH ao arquivo .bashrc
 		grep -qx 'export CWPROOT=$HOME' $HOME/.bashrc
 		[ "$?" -ne "0" ] && {
-			echo "export CWPROOT=$HOME"  >> $HOME/.bashrc
+			echo 'export CWPROOT=$HOME'  >> $HOME/.bashrc
 		}
 
 		grep -qx  'export PATH=$PATH:$CWPROOT/bin' $HOME/.bashrc 
 		[ "$?" -ne "0" ] && {
-			echo "export PATH=$PATH:$CWPROOT/bin" >> $HOME/.bashrc
+			echo 'export PATH=$PATH:$CWPROOT/bin' >> $HOME/.bashrc
 		}
 
 		# Antes de configurando o CWP-SU
@@ -157,9 +157,10 @@ case "$1" in
 		make utils
 
 		echo -e "Testando instalação do SU...\n"
-		if suplane
+		if suplane | surange
 		then
 			echo -e "...Intalação do pacote SU realizada com sucesso :)"
+			echo -e "Para rodar o SU neste terminal, carregue as variáveis de ambiente com o comando source $HOME/.bashrc ou inicie outro terminal!"
 			echo -e "Teste a parte gráfica do pacote com o comando suplane | suxwigb"
 		else
 			MENSAGEMERRO="Ocorreu um erro inesperado ao instalar o pacote SU em $HOME/src"
