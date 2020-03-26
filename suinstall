@@ -1,0 +1,177 @@
+#!/bin/bash
+#
+# suinstall (Shell Script)
+# 
+# Objetivo: Script de instalação do pacote de processamento símico Seismic Unix (SU).
+# Desenvolvido pelo Center for Wave Phenomena (CWP) da Colorado School of Mines (CSM).
+# 
+# Site: https://dirack.github.io
+# 
+# Versão 1.2
+# 
+# Programador: Felipe (Script original-0.1) ??/??/????
+# Email: felipel6403@gmail.com
+#
+# Programador: José Jésus (Atualização-1.0) 24/09/2019
+#	 
+#		-Atualização do endereço do link para download 
+#		-Depende do unzip instalado
+#
+# Programador: Rodolfo A C Neves (Dirack) (Atualização-1.2) 24/03/2020
+#		-Incorporação à biblioteca Shellinclude
+#
+# Email: rodolfo_profissional@hotmail.com
+# 
+# Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
+
+# Biblioteca de funções para formatar a mensagem de ajuda
+source mensagemAjuda.sh 
+
+# Biblioteca de funções para formatar a mensagem de erro
+source mensagemErro.sh
+
+## Verificar se o usuário forneceu $1
+if [ -z "$1" ]
+then
+	MENSAGEMERRO="Usuário não ofereceu parâmetros ao programa!\nDigite $(basename $0) -h para obter ajuda!"
+	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
+fi
+
+# Versão deste programa
+VERSAO="Shellinclude - Versão 1.2"
+
+## Variáveis que armazenam mensagem de ajuda do programa
+NOME_PROGRAMA="$(basename $0)"
+DESCRICAO="Script de instalação do pacote de processamento sísmico Seismic Unix (SU)."
+PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
+-v --version::Exibe a versão do programa e sai
+-i --install::Instalar o seismic unix no diretório atual"
+
+EXEMPLO_DE_USO="~$ $(basename $0) -i # Instalar o SU"
+
+case "$1" in
+	-h | --help) ## Exibe a ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
+
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+
+	-i | --install) ## Instalar o SU na pasta atual
+
+		# Baixar a versão atual do SU do servidor da CWP
+		URL="https://nextcloud.seismic-unix.org/index.php/s/WgXpRba4DPPaiNK/download"
+		echo -e "Baixar o pacote SU de $URL..."
+		if [ -f "/tmp/download" ]
+		then
+			echo "...Já existe uma versão do pacote SU em /tmp/download"
+		else
+		
+			if wget -c "$URL" -P "/tmp" &> /dev/null
+			then
+				echo -e "...Pacote SU baixado com sucesso em /tmp/download"
+			else
+				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar baixar o pacote SU de $URL"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+
+			fi
+		fi
+
+		# Descompactar o pacote SU baixado
+		echo -e "Desompactar o pacote SU..."
+		FILE="/tmp/download"
+		if [ -d "$HOME/src" ]
+		then
+			echo -e "...Já existe uma versão descompactada do pacote SU em $HOME/src"
+		else
+			if tar -xzvf "$FILE" -C "$HOME"
+			then
+				echo -e "...Pacote SU descomapctado com sucesso"
+			else
+				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar descompactar o pacote SU em $HOME/src"
+				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
+
+			fi
+		fi
+		
+		# Instalação das dependências
+		DEPENDENCIAS="g++ gfortran libglu1-mesa libglu1-mesa-dev freeglut3 freeglut3-dev libxmu6 libxi6 libxi-dev libc6 libx11-dev libxt-dev libxm4 libxt6 x11proto-print-dev libmotif-dev"
+
+		echo -e "Instalando as dependências...\n"
+		for i in $DEPENDENCIAS
+		do
+			echo -e "Instalando $i..."
+			sudo apt-get install -y "$i"
+		done
+
+		# Definir CWPROOT e PATH
+		export CWPROOT=$HOME
+		export PATH=$PATH:$CWPROOT/bin
+		
+		# Adicionando CWPROOT e PATH ao arquivo .bashrc
+		grep -qx 'export CWPROOT=$HOME' $HOME/.bashrc
+		[ "$?" -ne "0" ] && {
+			echo 'export CWPROOT=$HOME'  >> $HOME/.bashrc
+		}
+
+		grep -qx  'export PATH=$PATH:$CWPROOT/bin' $HOME/.bashrc 
+		[ "$?" -ne "0" ] && {
+			echo 'export PATH=$PATH:$CWPROOT/bin' >> $HOME/.bashrc
+		}
+
+		# Antes de configurando o CWP-SU
+		cd $CWPROOT/src
+		
+		echo -e "Configurando endianess dos dados...\n"
+
+		# Edite o arquivo para concordar com as necessidades do seu sistema:
+		lscpu | grep -q "Little"
+		if  [ "$?" -ne "0" ]; then 
+		    echo -e '...Força todos os dados SU para serem "big-endian" independentemente da arquitetura do processador'
+		# XDRFLAG=-DSUXDR  ---->  Forces all SU data to be big-endian.
+		else                   
+		# XDRFLAG=  ----> Forces all SU data to be little-endian.
+		    sed 's/XDRFLAG =  -DSUXDR/#XDRFLAG =/g' Makefile.config >> Temporary.config
+		    mv Temporary.config Makefile.config 
+		fi
+
+		# Instalar o CWP-SU: 
+		echo -e "Instalando o pacote SU...\n"
+		echo "make install - instalar CWP/SU standard..."
+		make install
+		echo "make xtinstall - instalar X-toolkit..."
+		make xtinstall
+		echo " make xminstall - instalar X-Motif..."
+		make xminstall
+		echo " make finstall - instalar biblioteca de Fortran..."
+		make finstall
+		echo " make mglinstall - instalar Mesa/Open GL..."
+		make mglinstall
+		echo " make sfinstall - instalar SFIO materials e SEGDREAD"
+		make sfinstall
+		echo "make utils - instalar itens da biblioteca cwputils para compilação:"
+		make utils
+
+		echo -e "Testando instalação do SU...\n"
+		if suplane | surange
+		then
+			echo -e "...Intalação do pacote SU realizada com sucesso :)"
+			echo -e "Para rodar o SU neste terminal, carregue as variáveis de ambiente com o comando source $HOME/.bashrc ou inicie outro terminal!"
+			echo -e "Teste a parte gráfica do pacote com o comando suplane | suxwigb"
+		else
+			MENSAGEMERRO="Ocorreu um erro inesperado ao instalar o pacote SU em $HOME/src"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+		fi
+	;;
+
+	*)
+		MENSAGEMERRO="Opção $1 Desconhecida!\nDigite $(basename $0) -h para obter ajuda"
+		exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+	;;
+esac
+
+
