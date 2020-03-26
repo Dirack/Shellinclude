@@ -66,14 +66,14 @@ case "$1" in
 		# Baixar a versão atual do SU do servidor da CWP
 		URL="https://nextcloud.seismic-unix.org/index.php/s/WgXpRba4DPPaiNK/download"
 		echo -e "Baixar o pacote SU de $URL..."
-		if [ -d "$HOME/cwp_su_all_44R18" ]
+		if [ -f "/tmp/download" ]
 		then
-			echo "...Já existe uma versão do pacote SU em $HOME/cwp_su_all_44R18"
+			echo "...Já existe uma versão do pacote SU em /tmp/download"
 		else
 		
-			if wget -c "$URL" -P "$HOME" &> /dev/null
+			if wget -c "$URL" -P "/tmp" &> /dev/null
 			then
-				echo -e "...Pacote SU baixado com sucesso em $HOME"
+				echo -e "...Pacote SU baixado com sucesso em /tmp/download"
 			else
 				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar baixar o pacote SU de $URL"
 				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
@@ -83,28 +83,30 @@ case "$1" in
 
 		# Descompactar o pacote SU baixado
 		echo -e "Desompactar o pacote SU..."
-		if [ -d "$HOME/cwp_su_all_44R18/src" ]
+		FILE="/tmp/download"
+		if [ -d "$HOME/src" ]
 		then
-			echo -e "...Já existe uma versão descompactada do pacote SU em $HOME/cwp_su_all_44R18"
+			echo -e "...Já existe uma versão descompactada do pacote SU em $HOME/src"
 		else
-			if tar -xzvf "$FILE" "$HOME"
+			if tar -xzvf "$FILE" -C "$HOME"
 			then
 				echo -e "...Pacote SU descomapctado com sucesso"
 			else
-				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar descompactar o pacote SU em $HOME/cwp_su_all_44R18"
+				MENSAGEMERRO="Ocorreu um erro inesperado ao tentar descompactar o pacote SU em $HOME/src"
 				exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 
 			fi
 		fi
-	
+		
 		# Instalação das dependências
 		DEPENDENCIAS="g++ gfortran libglu1-mesa libglu1-mesa-dev freeglut3 freeglut3-dev libxmu6 libxi6 libxi-dev libc6 libx11-dev libxt-dev libxm4 libxt6 x11proto-print-dev libmotif-dev"
 
 		echo -e "Instalando as dependências...\n"
+		sudo
 		for i in $DEPENDENCIAS
 		do
 			echo -e "Instalando $i..."
-			sudo apt-get install -y "$i"
+			#apt-get install -y "$i"
 		done
 
 		# Definir CWPROOT e PATH
@@ -123,22 +125,23 @@ case "$1" in
 		}
 
 		# Antes de configurando o CWP-SU
-		echo "________________________________"
-		echo "Antes de configurando o CWP-SU:"
-		cd /home/$USER/$sunix/src
-		# Edite o arquivo para concordar com as necessidades do seu sistema:     
-	
-		read -p  'Digite:  first ---> big-endian  ou  last ---> tittle-endian  [first/last]? ' view
-		if  [ $view = first ]; then 
-		    echo 'Força todos os dados SU para serem "big-endian" independentemente da arquitetura do processador.'
-		#   XDRFLAG=-DSUXDR  ---->  Forces all SU data to be big-endian.
-		  elif [ $view = last ]; then                   
-		#  #XDRFLAG=  ----> Forces all SU data to be tittle-endian.
+		cd $HOME/src
+		
+		echo -e "Configurando endianess dos dados...\n"
+
+		# Edite o arquivo para concordar com as necessidades do seu sistema:
+		lscpu | grep -q "Little"
+		if  [ "$?" -ne "0" ]; then 
+		    echo -e '...Força todos os dados SU para serem "big-endian" independentemente da arquitetura do processador'
+		# XDRFLAG=-DSUXDR  ---->  Forces all SU data to be big-endian.
+		else                   
+		# XDRFLAG=  ----> Forces all SU data to be little-endian.
 		    sed 's/XDRFLAG =  -DSUXDR/#XDRFLAG =/g' Makefile.config >> Temporary.config
 		    mv Temporary.config Makefile.config 
-		  fi
-	
+		fi
+
 		# Instalar o CWP-SU: 
+		echo -e "Instalando o pacote SU...\n"
 		echo "make install - instalar CWP/SU standard..."
 		make install
 		echo "make xtinstall - instalar X-toolkit..."
@@ -153,6 +156,16 @@ case "$1" in
 		make sfinstall
 		echo "make utils - instalar itens da biblioteca cwputils para compilação:"
 		make utils
+
+		echo -e "Testando instalação do SU...\n"
+		if suplane
+		then
+			echo -e "...Intalação do pacote SU realizada com sucesso :)"
+			echo -e "Teste a parte gráfica do pacote com o comando suplane | suxwigb"
+		else
+			MENSAGEMERRO="Ocorreu um erro inesperado ao instalar o pacote SU em $HOME/src"
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+		fi
 	;;
 
 	*)
