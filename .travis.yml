@@ -1,4 +1,5 @@
+dist: bionic
 install:
  - make install
-test:
+script:
  - make test
