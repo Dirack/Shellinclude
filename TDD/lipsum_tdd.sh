@@ -14,16 +14,8 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
-error(){
-
-	[ "$1" != "$2" ] && {
-		echo "$(basename $0): ERRO($3): Teste falhou, resultado esperado $2"
-		exit 1
-	}
-
-	return 0
-}
+source $(dirname $0)/tdd_lib.sh
 
 # Testar se lipsum exibe a quantidade de linhas pedidas corretamente
-error "$(lipsum -r | wc -l)" "1" "1"
-error "$(lipsum -r 10 | wc -l)" "10" "2"
+error "$(lipsum -r | wc -l)" "1" "1" "Exibir uma linha com lipsum -r"
+error "$(lipsum -r 10 | wc -l)" "10" "2" "Exibir 10 linhas com lipsum -r 10"
