@@ -1,4 +1,4 @@
 install:
-	make install
+ - make install
 test:
-	make test
+ - make test
