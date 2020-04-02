@@ -2,6 +2,8 @@
 # Shellinclude
 > Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
+[![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
+
 <img src="https://github.com/Dirack/Shellinclude/blob/master/imagens/superuser-superhero.jpg" width="200">
 
 Os programas da Shellinclude representam a caixa de ferramentas padrão do meu dia-a-dia como programador. 
