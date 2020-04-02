@@ -12,12 +12,19 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
+TESTES = ambiente lipsum
+DIR_TESTES = ./TDD
+
 install:
 	echo "Instalação das dependências"
 	pwd
 	ls
 	ls /
 
-test:
+test:	msg $(TESTES)
+	
+msg:
 	@echo "Testando a biblioteca Shellinclude..."
-	@echo "...Testando lipsum" && ./TDD/lipsum_tdd.sh
+	
+%:	$(DIR_TESTES)/%_tdd.sh
+	@echo "...Testando $@" && $<
