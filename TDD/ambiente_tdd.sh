@@ -17,3 +17,11 @@
 source $(dirname $0)/tdd_lib.sh
 
 error "$(echo $PATH | grep -q /Shellinclude && echo $?)" "0" "1" "Verificar se Shellinclude faz parte do PATH"
+
+LISTA="backup cabecalho comp getscons img jonas lembrete lipsum madagainstall mensagemAjuda.sh mensagemErro.sh morse suinstall"
+
+PASTA="/Shellinclude"
+
+echo -e "\tVerificar se os programas estão instalados corretamente"
+verificaInstalacao "$LISTA" "$PASTA"
+error "$?" "0" "2" ""

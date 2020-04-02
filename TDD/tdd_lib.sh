@@ -33,3 +33,21 @@ error(){
 	return 0
 }
 
+verificaInstalacao(){
+	
+	LISTA="$1"
+	PASTA="$2"
+
+	for i in $LISTA
+	do
+		echo -en "\t\t$i..."
+		[ ! -f "$PASTA/$i" ] && {
+			echo "...$i não encontrado!"
+			return 1
+		}
+
+		echo "...Ok"
+	done
+
+	return 0
+}
