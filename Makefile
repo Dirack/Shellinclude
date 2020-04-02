@@ -19,4 +19,5 @@ install:
 	ls /
 
 test:
-	echo "Testes unitários"
+	@echo "Testando a biblioteca Shellinclude..."
+	@echo "...Testando lipsum" && ./TDD/lipsum_tdd.sh
