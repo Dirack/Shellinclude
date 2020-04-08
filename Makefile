@@ -18,7 +18,7 @@ PROGRAMAS= backup cabecalho comp getscons img jonas lembrete lipsum madagainstal
 VERSAO="1.3.0"
 
 install:
-	@echo "Instalação das dependências"
+	@echo "Instalação das dependências e configuração do ambiente..."
 
 test:	msg $(TESTES) versao
 
