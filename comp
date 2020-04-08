@@ -28,9 +28,8 @@ source mensagemErro.sh
 
 # Verificar se a variável RSFSRC está setada
 [ -z "$RSFSRC" ] && {
-	echo -e "\033[31m$(basename $0): AVISO: A variável RSFSRC não está setada!\033[m" 	
-	echo -e "\033[31m$(basename $0): AVISO: Informe onde está instalada a sua cópia local do pacote Madagascar!\033[m" 
-	read -p "RSFSRC: " RSFSRC
+	echo -e "\033[31m$(basename $0): AVISO: A variável RSFSRC não está setada!\033[m" 
+	echo -e "\033[31m$(basename $0): AVISO: Esta variável é importante para o programa enconstrar a sua instalação do Madagascar!\033[m"
 }
 
 #----------------{ Configuração de variáveis }-----------------------------#
