@@ -14,6 +14,8 @@
 
 TESTES = ambiente lipsum
 DIR_TESTES = ./TDD
+PROGRAMAS= backup cabecalho comp getscons img jonas lembrete lipsum madagainstall morse suinstall 
+VERSAO="1.3.0"
 
 install:
 	echo "Instalação das dependências"
@@ -21,7 +23,10 @@ install:
 	ls
 	ls /
 
-test:	msg $(TESTES)
+test:	msg $(TESTES) versao
+
+versao:	$(PROGRAMAS)
+	$(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
 	
 msg:
 	@echo "Testando a biblioteca Shellinclude..."
