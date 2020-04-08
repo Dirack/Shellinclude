@@ -11,7 +11,7 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.1
+# Versão 1.3.0
 #
 # Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0 - Beta)
 #	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.1)
@@ -42,7 +42,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
-VERSAO="Versão 1.1"
+VERSAO="Shellinclude - 1.3.0"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
@@ -72,7 +72,7 @@ case "$OPCAO" in
 ;;
 
 -v | --version) ## Exibir versão deste programa
-	echo -e "\033[00;01m$VERSAO\033[m"
+	echo "$VERSAO"
 	exit 0
 ;;
 

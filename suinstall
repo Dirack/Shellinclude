@@ -7,7 +7,7 @@
 # 
 # Site: https://dirack.github.io
 # 
-# Versão 1.2
+# Versão 1.3.0
 # 
 # Programador: Felipe (Script original-0.1) ??/??/????
 # Email: felipel6403@gmail.com
@@ -38,7 +38,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Shellinclude - Versão 1.2"
+VERSAO="Shellinclude - 1.3.0"
 
 ## Variáveis que armazenam mensagem de ajuda do programa
 NOME_PROGRAMA="$(basename $0)"
