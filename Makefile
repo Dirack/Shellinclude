@@ -20,7 +20,7 @@ VERSAO="1.3.0"
 install:
 	@echo "Instalação das dependências e configuração do ambiente..."
 
-test:	msg ambiente $(TESTES)
+test:	msg ambiente $(TESTES:=_tdd.sh)
 
 ambiente: 
 	@echo "...Teste de ambiente e configuração" && $(DIR_TESTES)/ambiente_tdd.sh $(PWD)
@@ -31,5 +31,5 @@ versao:	$(PROGRAMAS)
 msg:
 	@echo "Testando a biblioteca Shellinclude..."
 	
-%:	$(DIR_TESTES)/%_tdd.sh
+%_tdd.sh:	$(DIR_TESTES)/%_tdd.sh
 	@echo "...Testando $@" && $<
