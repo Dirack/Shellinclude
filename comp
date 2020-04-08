@@ -11,7 +11,7 @@
 # 
 # Site: http://www.dirackslouge.online
 #
-# Versão 1.1
+# Versão 1.3.0
 #
 # Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0 - Beta)
 #	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.1)
@@ -26,13 +26,6 @@ source mensagemAjuda.sh
 # Biblioteca de funções para formatar a mensagem de erro
 source mensagemErro.sh
 
-# Verificar se a variável RSFSRC está setada
-[ -z "$RSFSRC" ] && {
-	echo -e "\033[31m$(basename $0): AVISO: A variável RSFSRC não está setada!\033[m" 	
-	echo -e "\033[31m$(basename $0): AVISO: Informe onde está instalada a sua cópia local do pacote Madagascar!\033[m" 
-	read -p "RSFSRC: " RSFSRC
-}
-
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Diretório principal da sua instalação do pacote MADAGASCAR
@@ -42,7 +35,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
-VERSAO="Versão 1.1"
+VERSAO="Shellinclude - 1.3.0"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
@@ -72,11 +65,17 @@ case "$OPCAO" in
 ;;
 
 -v | --version) ## Exibir versão deste programa
-	echo -e "\033[00;01m$VERSAO\033[m"
+	echo "$VERSAO"
 	exit 0
 ;;
 
 -c) ## Compilar e adicionar programas ao MADAGASCAR
+
+	# Verificar se a variável RSFSRC está setada
+	[ -z "$RSFSRC" ] && {
+		MENSAGEMERRO="A variável RSFSRC não está setada!\nEsta variável é importante para o programa enconstrar a sua instalação do Madagascar!"
+        	exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
+	}
 
 	# Foi fornecida uma pasta de usuário a este programa?
 	# Sim, troque o nome em $PASTA_USUARIO_MADAGASCAR

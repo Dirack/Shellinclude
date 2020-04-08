@@ -6,7 +6,7 @@
 #
 # Site: http://www.dirackslounge.online
 #
-# Versão 1.2
+# Versão 1.3.0
 #
 # Programador: Rodolfo A. C. Neves 02/03/2020
 #
@@ -28,7 +28,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Shellinclude - Versão 1.2"
+VERSAO="Shellinclude - 1.3.0"
 
 # Função para criar arquivo de configuração se não existir
 criarPastaArquivosConfig(){

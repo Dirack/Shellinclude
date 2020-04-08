@@ -6,7 +6,7 @@
 # 
 # Site: http://www.dirackslounge.online
 # 
-# Versão 1.1
+# Versão 1.3.0
 # 
 # Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
 # 
@@ -20,7 +20,7 @@ source mensagemAjuda.sh
 # Biblioteca de funções para formatar a mensagem de erro
 source mensagemErro.sh
 
-VERSAO="Versão 1.1"
+VERSAO="Shellinclude - 1.3.0"
 SEPARADOR=":"
 ARQUIVO_LEMBRETES="$HOME/.post"
 

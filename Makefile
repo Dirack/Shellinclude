@@ -12,11 +12,24 @@
 # 
 # Licença: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
-install:
-	echo "Instalação das dependências"
-	pwd
-	ls
-	ls /
+TESTES = lipsum
+DIR_TESTES = ./TDD
+PROGRAMAS= backup cabecalho comp getscons img jonas lembrete lipsum madagainstall morse suinstall 
+VERSAO="1.3.0"
 
-test:
-	echo "Testes unitários"
+install:
+	@echo "Instalação das dependências e configuração do ambiente..."
+
+test:	msg ambiente versao $(TESTES:=_tdd.sh)
+
+ambiente: 
+	@echo "...Teste de ambiente e configuração" && $(DIR_TESTES)/ambiente_tdd.sh $(PWD)
+
+versao:	$(PROGRAMAS)
+	@echo "...Teste de versionamento: Versão $(VERSAO)" && $(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
+	
+msg:
+	@echo "Testando a biblioteca Shellinclude..."
+	
+%_tdd.sh:	$(DIR_TESTES)/%_tdd.sh
+	@echo "...Testando $@" && $<

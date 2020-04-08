@@ -7,7 +7,7 @@
 # 
 # Site: http://www.dirackslouge.online
 # 
-# Versão 1.1
+# Versão 1.3.0
 # 
 # Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
 # 
@@ -23,7 +23,7 @@ source mensagemErro.sh
 
 #----------------{ Configuração de variáveis }-----------------------------#
 
-VERSAO="Versão 1.1"
+VERSAO="Shellinclude - 1.3.0"
 
 NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Fazer backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual"
