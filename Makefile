@@ -26,7 +26,7 @@ install:
 test:	msg $(TESTES) versao
 
 versao:	$(PROGRAMAS)
-	$(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
+	@echo "...Teste de versionamento: Versão $(VERSAO)" && $(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
 	
 msg:
 	@echo "Testando a biblioteca Shellinclude..."
