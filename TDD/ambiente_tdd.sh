@@ -20,7 +20,7 @@ error "$(echo $PATH | grep -q /Shellinclude && echo $?)" "0" "1" "Verificar se S
 
 LISTA="backup cabecalho comp getscons img jonas lembrete lipsum madagainstall mensagemAjuda.sh mensagemErro.sh morse suinstall"
 
-PASTA="/Shellinclude"
+PASTA="$1"
 
 echo -e "\tVerificar se os programas estão instalados corretamente"
 verificaInstalacao "$LISTA" "$PASTA"
