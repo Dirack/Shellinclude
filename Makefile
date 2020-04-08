@@ -20,7 +20,7 @@ VERSAO="1.3.0"
 install:
 	@echo "Instalação das dependências e configuração do ambiente..."
 
-test:	msg ambiente $(TESTES:=_tdd.sh)
+test:	msg ambiente versao $(TESTES:=_tdd.sh)
 
 ambiente: 
 	@echo "...Teste de ambiente e configuração" && $(DIR_TESTES)/ambiente_tdd.sh $(PWD)
