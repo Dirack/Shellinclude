@@ -18,15 +18,12 @@ PROGRAMAS= backup cabecalho comp getscons img jonas lembrete lipsum madagainstal
 VERSAO="1.3.0"
 
 install:
-	echo "Instalação das dependências"
-	pwd
-	ls
-	ls /
+	@echo "Instalação das dependências"
 
 test:	msg $(TESTES) versao
 
 versao:	$(PROGRAMAS)
-	$(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
+	@echo "...Teste de versionamento: Versão $(VERSAO)" && $(DIR_TESTES)/versao_tdd.sh $(VERSAO) "$(PROGRAMAS)"
 	
 msg:
 	@echo "Testando a biblioteca Shellinclude..."
