@@ -2,7 +2,7 @@
 # Shellinclude
 > Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
-[![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
 
 <img src="https://github.com/Dirack/Shellinclude/blob/master/imagens/superuser-superhero.jpg" width="200">
 
@@ -115,5 +115,7 @@ Distribuído sob a licença GPL3. Veja `LICENSE` para mais informações.
 3. Faça o _commit_ (`git commit -am 'Add some fooBar'`)
 4. _Push_ (`git push origin feature/fooBar`)
 5. Crie um novo _Pull Request_
+
+[Para uma explicação detalhada, visite a página Contribua do nosso wiki](https://github.com/Dirack/Shellinclude/wiki/Contribua)
 
 #### Importante: O histórico de suas modificações deve ser claro, com mensagens de commit de um a dois parágrafos descrevendo cada modificação. _Pull Requests_ com histórico de commits insuficiente serão rejeitados.
