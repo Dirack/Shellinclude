@@ -24,6 +24,6 @@ for PROGRAMA in $LISTA
 do
 	error "$($PROGRAMA -v)" "Shellinclude - $VERSAO" "1" "Teste de versionamento do programa $PROGRAMA"
 	error "$($PROGRAMA --version)" "Shellinclude - $VERSAO" "2" "Teste de versionamento do programa $PROGRAMA"
-	VAR=$(grep -xq "# Versão $VERSAO" "$PROGRAMA")
-	error "$?" "0" "3" "Teste versionamento do cabeçalho do código fonte de $PROGRAMA"
+	#VAR=$(grep -xq "# Versão $VERSAO" "$PROGRAMA")
+	#error "$?" "0" "3" "Teste versionamento do cabeçalho do código fonte de $PROGRAMA"
 done
