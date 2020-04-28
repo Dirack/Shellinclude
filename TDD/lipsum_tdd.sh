@@ -24,7 +24,7 @@ error "$(lipsum -r 10 | wc -l)" "10" "2" "Exibir 10 linhas com lipsum -r 10"
 total="1000"
 for i in $(seq $total)
 do
-	echo -ne "Rodando lipsum repetidamente ($i/$total)\r\r"
+	echo -ne "\tRodando lipsum repetidamente ($i/$total)\r\r"
 	LINHAS=$(lipsum -r | wc -l)
 	if [ "$LINHAS" -ne "1" ]
 	then
@@ -32,3 +32,5 @@ do
 		error "$LINHAS" "1" "3" "Exibir uma linha com lipsum -r"
 	fi
 done
+
+error "$LINHAS" "1" "3" "Rodando lipsum repetidamente ($total/$total)"
