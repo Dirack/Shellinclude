@@ -83,20 +83,7 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
-* [v1.2.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.2.2-beta.1)
-    * Versão Beta - Novo programa _suinstall_
-* [v1.2.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.2.1-beta.1)
-    * Versão Beta - Novo programa _lipsum_
-* [v1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.2-beta.1)
-    * Versão Beta - Novo programa _madagainstall_
-* [v1.1.2](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.2)
-    * Versão Estável - Correção de bugs no programa cabecalho
-* [v1.1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1.1)
-    * Versão Estável - Correção de bugs do prgrama jonas
-* [v1.1](https://github.com/Dirack/Shellinclude/releases/tag/v1.1)
-    * Versão Estável
-* [v1.0](https://github.com/Dirack/Shellinclude/releases/tag/v1.0-beta.1)
-    * Versão Beta com os principais scripts
+* [v0.1-beta.1](https://github.com/Dirack/Shellinclude/releases/tag/v0.1-beta.1)
 
 [Visualize o histórico de modificações detalhado](https://github.com/Dirack/Shellinclude/wiki/Hist%C3%B3rico-de-vers%C3%B5es)
 
