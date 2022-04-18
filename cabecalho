@@ -36,10 +36,10 @@
 # Licença: software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]

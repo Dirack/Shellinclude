@@ -20,10 +20,10 @@
 # Licença: Software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 # Verificar se a variável RSFSRC está setada
 [ -z "$RSFSRC" ] && {

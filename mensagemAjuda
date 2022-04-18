@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# mensagemAjuda.sh (Shell Script)
+# mensagemAjuda (Shell Script)
 #
 # Objetivo: Função para formatar a mensagem de ajuda dos programas
 # da biblioteca shell script.
@@ -8,9 +8,9 @@
 # Para uma descrição mais detalhada desta biblioteca, consulte:
 # https://github.com/Dirack/Shellinclude/wiki/mensagemAjuda.sh
 # 
-# Site: http://www.dirackslouge.online
+# Site: https://www.geofisicando.com
 #
-# Versão 1.1
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 18/05/2019 
 # 
