@@ -67,7 +67,7 @@ _[Wiki](https://github.com/Dirack/Shellinclude/wiki)._
 
 ## Histórico de lançamentos
 
-* [v0.1-beta.1](https://github.com/Dirack/Shellinclude/releases/tag/v0.1-beta.1)
+* [v0.1.0-beta.1](https://github.com/Dirack/Shellinclude/releases/tag/v0.1.0-beta.1)
 
 [Visualize o histórico de modificações detalhado](https://github.com/Dirack/Shellinclude/wiki/Hist%C3%B3rico-de-vers%C3%B5es)
 
