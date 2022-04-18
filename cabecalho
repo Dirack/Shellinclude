@@ -143,9 +143,9 @@ case "$1" in
 
 		if [ -z "$VARIAVEL_EXISTENTE" ]
 		then
-			echo "$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO" >> "$CONFIG"
+			echo "$VARIAVEL_FORNECIDA=\"$VALOR_FORNECIDO\"" >> "$CONFIG"
 		else
-			sed -i "/^#/!s/$VARIAVEL_FORNECIDA=.*/$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO/" "$CONFIG"
+			sed -i "/^#/!s/$VARIAVEL_FORNECIDA=.*/$VARIAVEL_FORNECIDA=\"$VALOR_FORNECIDO\"/" "$CONFIG"
 		fi
 		exit 0
 	;;
