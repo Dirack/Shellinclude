@@ -123,10 +123,10 @@ case "$1" in
 	-l | --list ) ## Exibir a lista de aliases já cadastrados
 
 		[ -z "$2" ] && {
-			cut -d" " -f2 "$ALIAS_FILE" | cut -d "=" -f1
+			grep "alias" "$ALIAS_FILE" | cut -d" " -f2 | cut -d "=" -f1
 			exit 0
 		}
-		grep "$2" "$ALIAS_FILE"
+		grep "alias" "$ALIAS_FILE" | grep "$2"
 	;;
 
 	*)
