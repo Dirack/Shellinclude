@@ -1,9 +1,0 @@
-branches:
- only:
-  - master
-  - /^develop.*$/
-dist: bionic
-install:
- - make install
-script:
- - make test

@@ -6,9 +6,9 @@
 # determinada linguagem de programação com objetivo, nome do programa,
 # programador e etc.
 #
-# Site: http://www.dirackslounge.online
+# Site: https://www.geofisicando.com
 #
-# Versão 1.1
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 27/12/2018
 #
@@ -36,10 +36,10 @@
 # Licença: software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]
@@ -49,27 +49,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Versão 1.1"
-
-# Função para criar arquivo de configuração se não existir
-criarPastaArquivosConfig(){
-
-	ARQUIVO_CONFIG="$1"
-	PASTA="$(dirname $1)"
-
-	# Diretório de configuração existe?
-	[ -d "$PASTA" ] || {
-		mkdir "$PASTA"
-		echo '# Arquivo de configuração do programa cabecalho - NÃO alterar!' >> "$ARQUIVO_CONFIG"
-		return 0
-	}
-
-	# Pasta existe, mas sem arquivo de configuração?
-	[ -f "$ARQUIVO_CONFIG" ] || {
-		echo '# Arquivo de configuração do programa cabecalho - NÃO alterar!' >> "$ARQUIVO_CONFIG"
-		return 0
-	}
-}
+VERSAO="Versão 1.0"
 
 verificarSeArquivoExiste(){
 
@@ -82,15 +62,16 @@ verificarSeArquivoExiste(){
 }
 
 # Armazena variáveis template para exibir no cabeçalho
-CONFIG="$(dirname $0)/.config/cabecalho.config.txt"
+CONFIG="$HOME/.bash_aliases"
 
 ## Variáveis que armazenam mensagem de ajuda do programa
 NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc."
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -v --version::Exibe a versão do programa e sai
---config :: Configurar variáveis template para o cabeçalho
---list :: Lista todas as variáveis configuradas
+-conf --config :: Configurar variáveis template para o cabeçalho
+-l --list :: Lista todas as variáveis configuradas
+-en --english:: Cabeçalho em inglês
 -sh ::Cabeçalho para um programa em shell script
 -sci ::Cabeçalho para um programa do scilab
 -c ::Cabeçalho para um programa em C
@@ -107,16 +88,16 @@ PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -html-php :: Página HTML com PHP
 -m <objetivo>::Fornecer o Objetivo ao cabeçalho do arquivo"
 EXEMPLO_DE_USO="~$ $(basename $0) -sh Arquivo.sh # Cabeçalho para Arquivo.sh
+\t~$ $(basename $0) -en -sh Arquivo.sh # Cabeçalho em INGLÊS para Arquivo.sh
 \t~$ $(basename $0) -sh Arquivo.sh -m <objetivo> # Adiciona o <objetivo> ao cabeçalho do arquivo
 \t~$ $(basename $0) --config user.programador=<nome> # Configurar o nome do programador
 \t~$ $(basename $0) --config user.site=<url> # Configurar o site do programador
-u\t~$ $(basename $0) --config ser.email=<email> # Configurar o email do programador
-u\t~$ $(basename $0) --config ser.licenca=<licenca> # Configurar a licença de uso
+\t~$ $(basename $0) --config user.email=<email> # Configurar o email do programador
+\t~$ $(basename $0) --config user.licenca=<licenca> # Configurar a licença de uso
 "
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
-		clear
 		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 	;;
@@ -126,20 +107,14 @@ case "$1" in
 		exit 0
 	;;
 
-	--list) ## Listar variáveis em .config/cabecalho.config.txt
+	-l | --list) ## Listar variáveis em $HOME/.bash_aliases
 
-		if [ -f "$CONFIG" ]
-		then
-			sed -n '/^#/!p' "$CONFIG" | tr '§' '/'
-		else
-			criarPastaArquivosConfig "$CONFIG"
-		fi
-
+		sed -n '/^#/!p' "$CONFIG" | tr '§' '/' | grep -v "^alias" | grep "^CABECALHO__USER__"
 		exit 0
 
 	;;
 
-	--config) ## Configurar variáveis de template do cabeçalho
+	-conf | --config) ## Configurar variáveis de template do cabeçalho
 
 		## Usuário passou parâmetro para --config?
 		[ -z "$2" ] && {
@@ -149,27 +124,30 @@ case "$1" in
 		}
 
 		VARIAVEL_FORNECIDA=$(echo "$2" | cut -d"=" -f1)
+		case "$VARIAVEL_FORNECIDA" in
+			user.programador) VARIAVEL_FORNECIDA="CABECALHO__USER__PROGRAMADOR";;
+			user.site) VARIAVEL_FORNECIDA="CABECALHO__USER__SITE";;
+			user.email) VARIAVEL_FORNECIDA="CABECALHO__USER__EMAIL";;
+			user.licenca) VARIAVEL_FORNECIDA="CABECALHO__USER__LICENCA";;
+		esac
+
 		VALOR_FORNECIDO=$(echo "$2" | cut -d"=" -f2 | tr "/" '§')
 
-		if [ -f "$CONFIG" ]
-		then
-			# Verificar se já há um valor para a variável fornecida
-			# pelo usuário armazenado no arquivo
-			VARIAVEL_EXISTENTE=$(grep "$VARIAVEL_FORNECIDA" "$CONFIG")
+		[ -f "$CONFIG" ] || {
+			touch "$CONFIG"
+		}
 
-			if [ -z "$VARIAVEL_EXISTENTE" ]
-			then
-				echo "$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO" >> "$CONFIG"
-				exit 0
-			else
-				sed -i "/^#/!s/$VARIAVEL_FORNECIDA=.*/$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO/" "$CONFIG"
-				exit 0
-			fi
+		# Verificar se já há um valor para a variável fornecida
+		# pelo usuário armazenado no arquivo
+		VARIAVEL_EXISTENTE=$(grep "$VARIAVEL_FORNECIDA" "$CONFIG")
+
+		if [ -z "$VARIAVEL_EXISTENTE" ]
+		then
+			echo "$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO" >> "$CONFIG"
 		else
-			criarPastaArquivosConfig "$CONFIG"
-			echo "$2" >> "$CONFIG"
-			exit 0
+			sed -i "/^#/!s/$VARIAVEL_FORNECIDA=.*/$VARIAVEL_FORNECIDA=$VALOR_FORNECIDO/" "$CONFIG"
 		fi
+		exit 0
 	;;
 esac
 
@@ -178,12 +156,22 @@ esac
 [ -f "$CONFIG" ] && {
 
 	TMP=$(sed -n '/^#/!p' "$CONFIG" | tr '§' '/')
-	PROGRAMADOR=$(echo "$TMP" | grep "user.programador" | cut -d"=" -f2)
-	SITE=$(echo "$TMP" | grep "user.site" | cut -d"=" -f2)
-	EMAIL=$(echo "$TMP" | grep "user.email" | cut -d"=" -f2)
-	LICENCA=$(echo "$TMP" | grep "user.licenca" | cut -d"=" -f2)
+	PROGRAMADOR=$(echo "$TMP" | grep "CABECALHO__USER__PROGRAMADOR" | cut -d"=" -f2)
+	SITE=$(echo "$TMP" | grep "CABECALHO__USER__SITE" | cut -d"=" -f2)
+	EMAIL=$(echo "$TMP" | grep "CABECALHO__USER__EMAIL" | cut -d"=" -f2)
+	LICENCA=$(echo "$TMP" | grep "CABECALHO__USER__LICENCA" | cut -d"=" -f2)
 
 }
+
+## variável que armazena o cabeçalho padronizado
+DATA=$(date +%d/%m/%Y)
+if [ "-en" == "$1" -o "--english" == "$1" ]
+then
+	HEAD="$ARQUIVO_CRIADO (§)\n\nPurpose:\n\nSite: $SITE\n\nVersion 1.0\n\nProgrammer: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicense: $LICENCA."
+	shift
+else
+	HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENCA."
+fi
 
 # Usuário forneceu um nome para o arquivo a ser criado?
 [ -z "$2" ] && {
@@ -195,10 +183,6 @@ esac
 file="$2"
 ARQUIVO_CRIADO="$2"
 
-## variável que armazena o cabeçalho padronizado
-DATA=$(date +%d/%m/%Y)
-HEAD="$ARQUIVO_CRIADO (§)\n\nObjetivo:\n\nSite: $SITE\n\nVersão 1.0\n\nProgramador: $PROGRAMADOR $DATA\n\nEmail: $EMAIL\n\nLicença: $LICENCA."
-
 # Verificar se o usuário forneceu o nome 
 # de um arquivo que já existe.
 # Se sim, faça uma cópia.
@@ -206,7 +190,6 @@ verificarSeArquivoExiste "$file"
 
 if [ "$?" -ne "0" ] 
 then
-	echo "O arquivo existe! Fazendo uma cópia..."
 	mv "$2" "$2.bak" #cópia .bak
 	EXISTE="1"
 fi
@@ -315,6 +298,7 @@ if [ "$EXISTE" = "1" ]
 then
 	echo -e "\n" >> "$file"
 	cat "$file.bak" >> "$file"
+	rm $file.bak
 fi
 
 exit 0

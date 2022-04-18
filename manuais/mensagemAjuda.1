@@ -1,0 +1,91 @@
+.TH MENSAGEMAJUDA "17 ABR 2022" "Versão 1.0.0" "MENSAGEMAJUDA Manual de uso"
+
+.SH NOME
+mensagemAjuda - Formatar mensagem de ajuda dos programas da biblioteca Shellinclude
+
+.SH DESCRIÇÃO
+.PP
+A função exibirMensagemAjudaProgramaFormatada recebe os parâmetros da seguinte maneira:
+
+    $1 NOME DO PROGRAMA
+
+    $2 DESCRIÇÃO
+
+    $3 PARÂMETROS
+
+    $4 EXEMPLO DE USO
+
+Os parâmetros devem ser passados dentro de uma variável em que cada linha é um parâmetro, separados de sua legenda explicativa por '::' como no exemplo abaixo:
+
+PARÂMETROS="-h --help:: Exibe esta mensagem de ajuda e sai
+            -v --version:: Exibe a versão do programa e sai
+            -c:: Realiza alguma coisa"
+
+A função 'formatarTabelaParametros' recebe a variável com os parâmetros no formato descrito acima, adiciona a tabulação no início da linha e substitui o caractere separador '::' por um espaço em branco.
+
+.SH EXEMPLO DE USO
+
+Para compreender melhor a utilização desta biblioteca, utilize o seguinte exemplo de uso em um arquivo 'script.sh':
+
+	#!/bin/bash
+
+	source mensagemAjuda
+
+	NOME_PROGRAMA="TESTE"
+
+	DESCRICAO="Este é um teste"
+
+	PARAMETROS="-h --help::Exibe ajuda e sai"
+
+	EXEMPLO_DE_USO="Exemplo de teste"
+
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+
+Dê permissão de execução ao script:
+
+        chmod +x script.sh
+
+Execute o script com:
+
+        \./script.sh
+
+A saída esperada será:
+
+        NOME
+                TESTE
+        DESCRIÇÃO
+                Este é um teste
+        PARÂMETROS
+                -h --help Exibe ajuda e sai
+        EXEMPLO DE USO
+                Exemplo de teste
+
+.SH SUGESTÕES E 'BUG REPORTS'
+Qualquer bug encontrado deve ser reportado para o repositório do Github da Biblioteca Shellinclude na aba 'issues' em:
+
+	https://github.com/Dirack/Shellinclude/issues
+
+E deve-se notificar por email o responsável pela manutenção do código:
+
+	rodolfo_profissional@hotmail.com (Rodolfo Dirack).
+
+Quando reportar um bug é importante explicitar em que situação este foi produzido
+para que possa ser reproduzido pelo autor, a versão do programa e toda informação
+relevante será bem vinda.
+
+.SH AUTORES
+Rodolfo A. C. Neves (Dirack), e o Grupo de Programação Aplicada à Geofísica (GPGEOF).
+
+Contato:
+
+-Página no github (Dirack) https://github.com/Dirack
+
+-Página no github (GPGEOF) https://github.com/gpgeof.
+
+.SH VEJA TAMBÉM
+.BR mensagemErro(1),
+
+Visite o nosso canal de divulgação científica no Youtube (Geofisicando) em:
+
+	https://www.youtube.com/channel/UCi5XD5PCQtPrIRD0H_GJvag
+

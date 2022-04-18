@@ -1,20 +1,17 @@
-.TH CABECALHO 1 "10 JUL 2019" "Versão 1.3.0" "CABECALHO Manual de uso"
+.TH CABECALHO "17 ABR 2022" "Versão 1.0.0" "CABECALHO Manual de uso"
 
 .SH NOME
-cabecalho - Gerar cabeçalho padronizado para arquivos de códigos fonte 
-de programas com nome do programa, autor, data, email, etc.
+cabecalho - Gerar cabeçalho padronizado em Português/Inglês para arquivos de códigos fonte de programas com nome do programa, autor, data, email, etc.
 
 .SH RESUMO
 .B cabecalho
-[\-h] [\-\-help] [-v] [\-\-version] [\-\-config] [\-\-list] 
+[\-h] [\-\-help] [-v] [\-\-version] [\-conf] [\-\-config] [\-l] [\-\-list] [\-en] [\-\-english] 
 [\-sh] [\-sci] [\-c] [\-c++] [\-tex] [\-py] [\-f90] [\-mf90] [\-html] [\-js]
 [\-css] [\-java] [\-php] [\-html\-php] [\-m]
 
 .SH DESCRIÇÃO
 .PP
-CABECALHO é um auxiliar para gerar a documentação dos seus programas.
-Ao utilizar este programa você pode estabelecer um cabeçalho padrão para
-a maioria das linguagens de programação que for trabalhar.
+CABECALHO é um auxiliar para gerar a documentação dos seus programas. Ao utilizar este programa você pode estabelecer um cabeçalho padrão para a maioria das linguagens de programação que for trabalhar.
 
 .SH OPÇÕES
 CABECALHO aceita as seguintes opções:
@@ -25,13 +22,16 @@ Exibe a mensagem de ajuda do programa e sai.
 .B \-v, \-\-version
 Exibe a versão do programa.
 .TP 8
-.B \-\-config
+.B \-conf \-\-config
 Configura variáveis de ambiente do programa cabecalho, 
 como o nome do programador e email a serem exibidos no cabeçalho 
 do programa, por exemplo. Utilizando a sintaxe \fBvariável=valor\fP.
 .TP 8
-.B \-\-list
+.B \-l \-\-list
 Lista todas as variáveis de ambiente já definidas para o programa.
+.TP 8
+.B \-en \-\-english
+Gerar cabeçalho em inglês (passar como primeira opção).
 .TP 8
 .B \-sh
 Gerar cabeçalho para um programa em shell script.
@@ -88,11 +88,19 @@ Gerar cabeçalho com o objetivo do programa definido (Use aspas duplas).
 
 	~$ cabecalho -sh Arquivo.sh -m "Objetivo para este programa"
 .PP
+Gerar cabeçalho em INGLÊS para o arquivo .sh (Shell Script).
+
+	~$ cabecalho -en -sh Arquivo.sh
+.PP
+Gerar cabeçalho em INGLÊS com o objetivo do programa definido (Use aspas duplas).
+
+	~$ cabecalho -en -sh Arquivo.sh -m "Objetivo para este programa"
+.PP
 Configurar as variáveis de ambiente para utilizar em todos os cabeçalhos (Use aspas duplas).
 
 	~$ cabecalho --config user.programador="Rodolfo Dirack"
 
-	~$ cabecalho --config user.site="http://www.diracklounge.online"
+	~$ cabecalho --config user.site="http://www.geofisicando.com"
 
 	~$ cabecalho --config user.email="rodolfo_profissional@hotmail.com"
 
@@ -104,36 +112,30 @@ Exibir todas as variáveis de ambiente configuradas.
 	~$ cabecalho --list
 
 .SH AMBIENTE
-CABECALHO armazena as variáveis de ambiente para gerar os cabeçalhos
-padronizados no arquivo .config/cabecalho.config.txt, estas variáveis são:
+CABECALHO armazena as variáveis de ambiente para gerar os cabeçalhos padronizados no arquivo $HOME/.bash_aliases, estas variáveis são:
 .PP
 .TP 8
-.B user.programador
+.B CABECALHO__USER__PROGRAMADOR
 Nome do programdor.
 .TP 8
-.B user.site
+.B CABECALHO__USER__SITE
 Site pessoal do autor do programa.
 .TP 8
-.B user.email
+.B CABECALHO__USER__EMAIL
 Email do responsável pela manutenção do código.
 .TP 8
-.B user.licenca
+.B CABECALHO__USER__LICENCA
 Licensa de uso.
 
-.SH FILES
-CABECALHO é instalado na pasta /shellinclude, e precisa de permissão de execução.
-Outros usuários podem preferir instalar o programa no seu diretório de preferência, o que
-não afetará a sua usabilidade, desde que este diretório esteja na sua $PATH.
+O arquivo $HOME/.bash_aliases é carregado automaticamente pelo bash durante a inicialização do Shell.
 
-CABECALHO gera uma pasta .config com um arquivo de texto simples de configuração
-na pasta onde estiver instalado. Lá ficam guardadas as variáveis de ambiente do
-programa para personalizar os cabeçalhos.
+.SH FILES
+CABECALHO precisa de permissão de execução, utilize o comando 'chmod +x cabecalho' para dar permissão de execução ao script. Você pode instalar o programa no seu diretório de preferência, o que não afetará a sua usabilidade, desde que este diretório esteja na sua variável $PATH para que o Shell possa encontrá-lo.
 
 .SH SUGESTÕES E 'BUG REPORTS'
-Qualquer bug encontrado deve ser reportado para o repositório do
-Github da Biblioteca Shell Script na aba 'issues' em:
+Qualquer bug encontrado deve ser reportado para o repositório do Github da Biblioteca Shellinclude na aba 'issues' em:
 
-	https://github.com/Dirack/Shell-Script/issues
+	https://github.com/Dirack/Shellinclude/issues
 
 E deve-se notificar por email o responsável pela manutenção do código:
 

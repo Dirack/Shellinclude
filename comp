@@ -9,28 +9,27 @@
 #
 #	      -MADAGASCAR é um pacote open source de processamento sísmico (http://www.ahay.org/wiki/Main_Page)
 # 
-# Site: http://www.dirackslouge.online
+# Site: http://www.geofisicando.com
 #
-# Versão 1.1
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 10/01/2019 (original 1.0 - Beta)
-#	       Rodolfo A. C. Neves 11/05/2019 (modificada 1.1)
 # 
 # email (manutenção): rodolfo_profissional@hotmail.com
 # 
 # Licença: Software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 # Verificar se a variável RSFSRC está setada
 [ -z "$RSFSRC" ] && {
 	echo -e "\033[31m$(basename $0): AVISO: A variável RSFSRC não está setada!\033[m" 	
-	echo -e "\033[31m$(basename $0): AVISO: Informe onde está instalada a sua cópia local do pacote Madagascar!\033[m" 
-	read -p "RSFSRC: " RSFSRC
+	echo -e "\033[31m$(basename $0): AVISO: Não foi possível encontrar onde os códigos fonte do pacote Madagascar estão instalados!\033[m"
+	exit 1
 }
 
 #----------------{ Configuração de variáveis }-----------------------------#
@@ -42,7 +41,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
-VERSAO="Versão 1.1"
+VERSAO="Versão 1.0"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
@@ -51,7 +50,7 @@ NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Compila e adiciona programas escritos em linguagem C ao pacote de processamento sísmico MADAGASCAR."
 PARAMETROS="-h --help::Exibe esta mensagem de ajuda e sai
 -v --version::Exibe a Versão do programa e sai
--c pastaDeUsuario::Compila programas de uma pasta de usuário específica do pacote MADAGASCAR"
+-c :: Compila programas de uma pasta de usuário específica do pacote MADAGASCAR"
 EXEMPLO_DE_USO="~$ $(basename $0) -c pastaDeUsuario"
 
 #--------------------------------------------------------------------------#
@@ -66,7 +65,6 @@ EXEMPLO_DE_USO="~$ $(basename $0) -c pastaDeUsuario"
 
 case "$OPCAO" in
 -h | --help) ## Exibir ajuda
-	clear
 	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 	exit 0
 ;;

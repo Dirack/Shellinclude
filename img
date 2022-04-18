@@ -9,9 +9,9 @@
 #
 #	      -MADAGASCAR é um pacote open source de processamento sísmico (http://www.ahay.org/wiki/Main_Page)
 # 
-# Site: http://www.dirackslouge.online
+# Site: https://www.geofisicando.com
 #
-# Versão 1.1
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 13/01/2019
 # 
@@ -20,15 +20,15 @@
 # Licença: Software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
-VERSAO="Versão 1.1"
+VERSAO="Versão 1.0"
 
 # Opção passada pelo usuário
 OPCAO="$1"

@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# lipsum 
+# lipsum (Shell Script)
 #
 # Objetivo: Gerar texto aleatório a ser exibido no terminal.
 #
-# Site: http://www.dirackslounge.online
+# Site: http://www.geofisicando.com
 #
-# Versão 1.2
+# Versão 1.0
 #
 # Programador: Rodolfo A. C. Neves 02/03/2020
 #
@@ -15,10 +15,10 @@
 # Licença: software de uso livre e código aberto.
 
 # Biblioteca de funções para formatar a mensagem de ajuda
-source mensagemAjuda.sh 
+source mensagemAjuda 
 
 # Biblioteca de funções para formatar a mensagem de erro
-source mensagemErro.sh
+source mensagemErro
 
 ## Verificar se o usuário forneceu $1 e $2
 if [ -z "$1" ]
@@ -27,59 +27,45 @@ then
 	exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
 fi
 
+# Por padrão o programa gera uma linha apenas
+NUM_LINHAS="1"
+
+[ -z "$2" ] || {
+	NUM_LINHAS="$2"	
+}
+
+imprimirTextoAleatorio(){
+
+	TOTAL_LINHAS=$(echo "$CONFIG" | wc -l)
+
+	for i in $(seq "$NUM_LINHAS")
+	do
+		LINHA=$(echo "$RANDOM % $TOTAL_LINHAS + 1" | bc )
+		echo "$CONFIG" | sed -n "${LINHA}p"
+	done
+
+}
+
 # Versão deste programa
-VERSAO="Shellinclude - Versão 1.2"
-
-# Função para criar arquivo de configuração se não existir
-criarPastaArquivosConfig(){
-
-	ARQUIVO_CONFIG="$1"
-	PASTA="$(dirname $1)"
-	TMP="$(mktemp /tmp/lipsum.XXXX)"
-
-	# Diretório de configuração existe?
-	[ -d "$PASTA" ] || {
-		mkdir "$PASTA"
-	}
-
-	# Pasta existe, mas sem arquivo de configuração?
-	[ -f "$ARQUIVO_CONFIG" ] || {
-		wget -c "https://github.com/Dirack/Shellinclude/files/4385014/dummy.txt" -P "$TMP" &> /dev/null
-		cat "$TMP/dummy.txt" >> "$ARQUIVO_CONFIG"
-		rm -r "$TMP"
-		return 0
-	}
-}
-
-verificarSeArquivoExiste(){
-
-	ARQUIVO="$1"
-
-	[ -f "$ARQUIVO" ] && {
-		return 1
-	}
-	return 0
-}
-
-# Verificar se o arquivo de configuração 
-# está na pasta, se não, baixar da internet
-CONFIG="$(dirname $0)/.lipsum/dummy.txt"
-[ ! -f "$CONFIG" ] && {
-	criarPastaArquivosConfig "$CONFIG"
-}
+VERSAO="1.0"
 
 ## Variáveis que armazenam mensagem de ajuda do programa
 NOME_PROGRAMA="$(basename $0)"
 DESCRICAO="Gerar texto aleatório para ser exibido no terminal"
 PARAMETROS="-h --help::Exibe essa tela de ajuda e sai
 -v --version::Exibe a versão do programa e sai
--r --random::Gera texto aleatório no terminal"
-EXEMPLO_DE_USO="~$ $(basename $0) -r # Gerar uma linhas de texto aleatório no terminal
-\t~$ $(basename $0) -r 10 # Gerar 10 linhas de texto aleatório no terminal"
+-l --lorem::Gera texto aleatório no terminal (Lorem Ipsum)
+-m --mussum::Gera texto aleatório no terminal (Mussum Ipsum)
+-c --compadre::Gera texto aleatório no teminal (Compadre Ipsum)"
+EXEMPLO_DE_USO="~$ $(basename $0) -l # Gerar uma linha de texto aleatório no terminal
+\t~$ $(basename $0) -l 10 # Gerar 10 linhas de texto aleatório no terminal
+\t~$ $(basename $0) -m # Gerar uma linha de texto aleatório no terminal
+\t~$ $(basename $0) -m 10 # Gerar 10 linhas de texto aleatório no terminal
+\t~$ $(basename $0) -c # Gerar uma linha de texto aleatório no terminal
+\t~$ $(basename $0) -c 10 # Gerar 10 linhas de texto aleatório no terminal"
 
 case "$1" in
 	-h | --help) ## Exibe a ajuda
-		clear
 		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 	;;
@@ -89,24 +75,102 @@ case "$1" in
 		exit 0
 	;;
 
-	-r | --random) ## Gerar texto aleatório
+	-l | --lorem) ## Gerar texto aleatório Lorem Ipsum <https://pt.lipsum.com/feed/html>
 
-		# Por padrão o programa gera uma linha apenas
-		NUM_LINHAS="1"
 
-		[ -z "$2" ] || {
-			NUM_LINHAS="$2"	
-		}
+		CONFIG="
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque venenatis porttitor purus non facilisis.
+Etiam sagittis placerat nibh, pulvinar rhoncus metus faucibus eget.
+Ut auctor diam metus, nec egestas purus finibus eu.
+Donec interdum vulputate eros, a sollicitudin eros.
+Cras vel tincidunt libero. Duis gravida sapien quis nunc ultricies, sit amet tempus nisl iaculis.
+Aliquam dictum gravida turpis eu egestas. Nulla ac neque ac purus auctor tempus.
+Mauris volutpat faucibus risus, id consectetur magna iaculis a.
+Nam in ante quis lorem suscipit fermentum ut sollicitudin ligula.
+Aliquam hendrerit scelerisque hendrerit.
+Aliquam eu molestie urna, et dapibus orci.
+Fusce efficitur, dui at lobortis fringilla, mauris metus mollis est, fermentum gravida enim ex vitae urna.
+Nunc fringilla ex sit amet ipsum pulvinar, ac auctor nunc viverra.
+Vivamus nec elementum lorem, in lobortis felis.
+Nam aliquet lacus felis, vel ullamcorper quam efficitur at.
+Morbi sodales condimentum quam, vitae facilisis lectus accumsan ac.
+Morbi id laoreet est. Nam ultrices nunc ornare, congue justo vel, vestibulum ex.
+Nulla sed odio vitae sem aliquet convallis. Nunc viverra tincidunt iaculis.
+Morbi facilisis turpis velit, pharetra lacinia purus congue at.
+Vivamus libero risus, pellentesque vitae ex quis, malesuada vehicula lorem.
+Nam sollicitudin, enim feugiat pellentesque faucibus, risus dolor pretium diam, vel imperdiet arcu nibh non dolor.
+Donec accumsan tortor nisl, at dignissim eros bibendum at. Aliquam eget auctor augue.
+Fusce eget pellentesque lacus, eu condimentum risus.
+Sed venenatis dictum ultricies. Praesent porttitor sodales ante quis volutpat.
+Donec eu enim libero. Maecenas ac molestie nibh. Duis faucibus purus dui, interdum dapibus purus elementum eu.
+Maecenas viverra consectetur lacinia. Integer fringilla non velit ut feugiat.
+Sed commodo, ligula id dignissim efficitur, turpis nunc egestas nunc, ac dictum leo ligula id orci.
+Cras nec ipsum quis eros sollicitudin sodales id luctus neque. Nullam ac hendrerit orci.
+Aliquam tincidunt massa sed enim ultrices pulvinar.
+Pellentesque sed enim et nunc dignissim feugiat.
+Cras quis ipsum vel nisl accumsan blandit sed quis leo. Nulla ac malesuada libero.
+In maximus purus sit amet mi pretium viverra.
+Vivamus sed ante tincidunt, bibendum purus nec, pretium lectus.
+Nullam tempor posuere lectus. Sed eu metus eu neque dignissim aliquam nec ut leo.
+Ut semper auctor suscipit. Aliquam eget sapien sodales, fermentum enim a, gravida urna.
+Quisque tincidunt auctor nisi id mattis. Aliquam fermentum leo vel sem consectetur, ut fringilla nibh pellentesque.
+Nulla vulputate gravida lacus ut sollicitudin.
+Integer eleifend sapien eget feugiat rhoncus. Maecenas ornare id enim in scelerisque."
 
-		TOTAL_LINHAS=$(cat "$CONFIG" | wc -l)
-
-		for i in $(seq "$NUM_LINHAS")
-		do
-			LINHA=$(echo "$RANDOM % $TOTAL_LINHAS" | bc )
-			sed -n "${LINHA}p" "$CONFIG"
-		done
+		imprimirTextoAleatorio
 	;;
 
+	-m | --mussum) ## Gerar texto aleatório Mussum Ipsum <https://mussumipsum.com/>
+		CONFIG="Mussum Ipsum, cacilds vidis litro abertis.
+Per aumento de cachacis, eu reclamis.Aenean aliquam molestie leo, vitae iaculis nisl.
+Nullam volutpat risus nec leo commodo, ut interdum diam laoreet.
+Sed non consequat odio.Viva Forevis aptent taciti sociosqu ad litora torquent.
+Aenean aliquam molestie leo, vitae iaculis nisl.
+Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis.
+Leite de capivaris, leite de mula manquis sem cabeça.Posuere libero varius.
+Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi.
+Diuretics paradis num copo é motivis de denguis.
+Copo furadis é disculpa de bebadis, arcu quam euismod magna.
+Todo mundo vê os porris que eu tomo, mas ninguém vê os tombis que eu levo!
+Posuere libero varius. Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi.
+Mé faiz elementum girarzis, nisi eros vermeio.
+Interagi no mé, cursus quis, vehicula ac nisi.
+Quem manda na minha terra sou euzis!Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis.
+Leite de capivaris, leite de mula manquis sem cabeça.
+Detraxit consequat et quo num tendi nada.Em pé sem cair, deitado sem dormir, sentado sem cochilar e fazendo pose.
+Per aumento de cachacis, eu reclamis."
+
+		imprimirTextoAleatorio
+	;;
+	-c | --compadre) ## Gerar texto aleatório Compadre Ipsum
+		CONFIG="Eiiitaaa Mainhaaa!! Esse Lorem ipsum é só na sacanageeem!!
+E que abundância meu irmão viuu!! Assim você vai matar o papai.
+Só digo uma coisa, Domingo ela não vai! Danadaa!!
+Vem minha odalisca, agora faz essa cobra coral subir!!!
+Pau que nasce torto, Nunca se endireita. Tchannn!! Tchannn!!
+Tu du du pááá! Eu gostchu muitchu, heinn! danadinha! Mainhaa!
+Agora use meu lorem ipsum ordinária!!! Olha o quibeee! rema, rema, ordinária!. 
+Você usa o Lorem Ipsum tradicional? Sabe de nada inocente!!
+Conheça meu lorem que é Tchan, Tchan, Tchannn!! Txu Txu Tu Paaaaa!!
+Vem, vem ordinária!! Venha provar do meu dendê que você não vai se arrepender.
+Só na sacanageeem!! Eu gostchu muitchu, heinn! Eitchaaa template cheio de abundância danadaaa!!
+Assim você mata o papai hein!? Etâaaa Mainhaaaaa...me abusa nesse seu layout, me gera, me geraaaa ordinária!!!
+Só na sacanagem!!!! Venha provar do meu dendê Tu du du pááá!.
+Mas que abundância meu irmãooo!!! Esse é seu Layout danadaaa!???
+Sabe de nada inocente!! Vem, vem, vem ordinária, provar do meu dendê!!
+Eu gostxuu muitxuu desse seu Layout!! Etâ danadaaaa!!
+Tá tão lindo que vou falar em inglês só pra você mainhaaa!!
+Know nothing innocent. Ordinary!! Txhann Txhann, Txu txu tu paaa!! Damned.
+Only in Slutty!! Abundance that my borther!! Tchan, Tchan, Tchan...Tu tu tu pa!!!!  .
+Chama, Chama, Chama ordinária!!!! Tu du du pááá! rema, rema, ordinária!
+olha o quibe! eu gostchu muitchu, heinn! ordinária!! Domingo ela não vai.
+Tchannn!! Tchannn!! danadinha! Mainhaa! Eiiitaaa Mainhaaa!!
+Assim você mata o papai , viuu!! Danadaa!! Vem, vem ordinária!!
+Ahh mainhaa!! venha provar do meu dendê.
+Só na sacanageeem!! Sabe de nada inocente! que abundânciaaaa meu irmão!! Pau que nasce torto, Nunca se endireita...."
+		imprimirTextoAleatorio
+	;;
 	*)
 		MENSAGEMERRO="Opção $1 desconhecida!\nDigite $0 -h para obter ajuda."
 		exibirMensagemErroProgramaFormatada "$(basename $0)" "1" "$MENSAGEMERRO"
