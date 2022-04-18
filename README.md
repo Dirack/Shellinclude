@@ -1,15 +1,14 @@
 
 # Shellinclude
-> Programas utilitários que eu desenvolvi em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
+> Programas utilitários em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
 
 <img src="https://github.com/Dirack/Shellinclude/blob/master/imagens/superuser-superhero.jpg" width="200">
 
-Os programas da Shellinclude representam a caixa de ferramentas padrão do meu dia-a-dia como programador. 
-Estes scripts me ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos 
-fonte dos programas que desenvolvo em diferentes linguagens de programação, 
-baixar scripts SConstruct do site do projeto Madagascar ou produzir lembretes personalizados.
+Os programas da Shellinclude representam a caixa de ferramentas para o programador. 
+Estes scripts ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos fonte dos programas em diferentes linguagens de programação, 
+gerar texto aleatório e etc.
 
 Os scripts da Shellinclude também podem ser utilizados como templates por outros programadores,
 pois a sua interface é facilmente adaptável e pode ser reutilizada para o 
@@ -22,19 +21,24 @@ desenvolvimento em Shell Script alterando as opções e flags dos programas.
 Para instalar a Shellinclude basta fornecer permissão de execução aos scripts com _chmod_, assim:
 
 ```shell
-~$ chmod u+x script.sh
+chmod +x script.sh
 ```
 
 E você poderá chamar os scripts como qualquer outro Shell Script, fornecendo o caminho para o script ao
 terminal do bash. Exemplo, executando um script do shell em um diretório qualquer:
 
-```śhell
-~$ /diretorio/script.sh # Se o script estiver na pasta diretório
-~$ ./script # Se o script estiver na pasta atual em que foi aberto o terminal do bash
+```sh
+/diretorio/script.sh
+```
+
+Se o script estiver no diretório atual, basta utilizar o ponto:
+
+```sh
+./script.sh
 ```
 
 Você também pode chamar os scripts da Shellinclude como se fosse um comando nativo do _bash_. Basta adicionar os scripts
-a um diretório listado na sua variável de ambiente $PATH ou adicionar a seguinte linha ao final do seu arquivo _.bashrc_:
+a um diretório listado na sua variável de ambiente $PATH ou adicionar a seguinte linha ao final do seu arquivo '$HOME/.bashrc':
 
 ```shell
 PATH="$PATH:/caminhoParaShellinclude/Shellinclude"
@@ -42,39 +46,19 @@ PATH="$PATH:/caminhoParaShellinclude/Shellinclude"
 
 ## Dependências: 
 
-* **sendemail**: Possibilita enviar emails pelo terminal. Utilizado pelo programa _morse_.
-
-* **Madagascar**: Pacote de processamento símico open source. Roda através de scripts SConstruct baixados e formatados
-pelo programa _getscons_ e instalados pelo programa _comp_.
-
-* **lynx**: Permite baixar dados da internet pelo terminal. Utilizado por _getscons_ para baixar os scripts do Madagascar.
+* **Madagascar**: Pacote de processamento símico open source. Necessário para os programas _img_ e _comp_.
 
 ## Instalação das dependências
 
-```shell
-~$ sudo apt-get install sendemail # Instalar sendemail
-~$ sudo apt-get install lynx # instalar lynx
-```
-
-A instalação do pacote Madagascar pode ser realizada através do script de instalação [madagainstall](https://github.com/Dirack/Shellinclude/blob/master/madagainstall) disponível a partir da versão 1.2 desta biblioteca.
-
 Para mais detalhes sobre a instalação do pacote Madagascar, consulte a página oficial do pacote em [ahay.org](http://www.ahay.org/wiki/Installation).
-
-Baixe os nossos containers do docker com a [Shellinclude pré-configurada](https://github.com/Dirack/Shellinclude/packages/162773)
 
 ## Lista de Programas
 
-* **suinstall**: Instalar o pacote de processamento sísmico Seismic Unix (SU).
 * **lipsum**: Programa para gerar texto aleatório (dummy text) no terminal.
-* **madagainstall**: Instalar o pacote de processamento sísmico Madagascar.
-* **backup**: Fazer o backup de um arquivo ou de uma lista de arquivos em um arquivo zipado na pasta atual.
 * **cabecalho**: Gerar o cabeçalho para um arquivo de programa de uma determinada linguagem de programação com objetivo, nome do programa, programador e etc.
-* **comp**: Compilar e adicionar programas escritos em linguagem C a versão local do pacote de processamento sísmico MADAGASCAR.
-* **getscons**: Baixar arquivos SConstruct da página do MADAGASCAR para a pasta atual no formato correto do SConstruct.
+* **comp**: Compilar e adicionar programas escritos em linguagem C à versão local do pacote de processamento sísmico MADAGASCAR.
 * **img**: Converter arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
-* **jonas**: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh.  
-* **lembrete**: Armazenar lembretes e idéias no arquivo $HOME/.post
-* **morse**: Enviar email pelo terminal.
+* **jonas**: Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados no arquivo $'HOME/.bash_aliases'.  
 
 ## Exemplos de uso
 
