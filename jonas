@@ -3,14 +3,10 @@
 # Jonas (Shell Script)
 # 
 # Objetivo: Criar atalhos para pastas e aliases permanentes.
-# Os aliases ficarão armazenados em um arquivo $HOME/.aliases.sh
-# Adicione a linha abaixo ao seu arquivo $HOME/.bashrc
-#
-# source $HOME/.aliases.sh
 # 
-# Site: http://www.dirackslounge.online
+# Site: http://www.geofisicando.com
 # 
-# Versão 1.1
+# Versão 1.0
 # 
 # Programador: Rodolfo A. C. Neves (Dirack)	 27/12/2018
 # 
@@ -25,13 +21,13 @@ source mensagemAjuda.sh
 source mensagemErro.sh
 
 # Versão atual do programa
-VERSAO="Versão 1.1"
+VERSAO="Versão 1.0"
 
-# Verificar se o arquivo de aliases está referenciado
-# no arquivo $HOME/.bashrc, se não estiver referencie
-grep -x -q 'source $HOME/.aliases.sh #Arquivo de aliases definidos pelo programa jonas NÃO EDITAR!' ~/.bashrc
-[ "$?" -ne "0" ] && {
-	echo 'source $HOME/.aliases.sh #Arquivo de aliases definidos pelo programa jonas NÃO EDITAR!' >> $HOME/.bashrc
+ALIAS_FILE="$HOME/.bash_aliases"
+
+# Verificar se o arquivo de aliases existe
+[ -f "$ALIAS_FILE" ] || {
+	touch "$ALIAS_FILE"
 }
 
 # Verificar se o usuário passou parâmetros para o programa
@@ -42,19 +38,20 @@ then
 fi
 
 NOME_PROGRAMA="$(basename $0)"
-DESCRICAO="Criar atalhos para pastas e aliases permanentes. Os aliases ficarão armazenados em um arquivo \$HOME/.aliases.sh Adicione a linha abaixo ao seu arquivo $HOME/.bashrc source $HOME/.aliases.sh"
+DESCRICAO="Criar atalhos para pastas e aliases permanentes armazenados em ~/.bash_aliases"
 PARAMETROS="-h --help::Exibe este menu e sai 
 -v --version::Exibe a versão do programa e sai 
 -a ::Gera atalho para a pasta atual (alias)
 -c ::Gera comando personalizado (alias)
 -l --list::Exibe a lista de aliases já cadastrados"
-EXEMPLO_DE_USO="~$"
+EXEMPLO_DE_USO="~$ jonas -a # Criar atalho para a pasta atual
+\t~$ jonas -c # Cria um comando personalizado
+\t~$ jonas -l # Lista todos os aliases cadastrados
+\t~$ jonas -l SHELL # Lista um alias com nome SHELL"
 
 case "$1" in
-
 	-h | --help)
 
-		clear
 		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
 		exit 0
 		;;
@@ -66,7 +63,6 @@ case "$1" in
 		;;
 
 	-a)
-
 		# Peça para o usuário dar nome ao atalho
 		echo -e "Criando atalho para a pasta\n $PWD\n"
 		read -p "Dê nome ao atalho: " nome
@@ -76,13 +72,20 @@ case "$1" in
 			MENSAGEMERRO="Usuário não deu nenhum nome ao atalho!"			
 			exibirMensagemErroProgramaFormatada "$(basename $0)" "2" "$MENSAGEMERRO"
 		}
-	 
+
+	 	# Verificar se o alias já existe
+		lista=$(cut -d" " -f2 "$ALIAS_FILE" | cut -d "=" -f1 | grep -x "$nome") 
+
+		[ -n "$lista" ] && {
+			MENSAGEMERRO="O alias $apelido já está cadastrado!"	
+			exibirMensagemErroProgramaFormatada "$(basename $0)" "4" "$MENSAGEMERRO"
+		}
+
 		# Guarda a localização atual, substitua os espaços por '\ '
 		atalho=$(pwd | sed 's/ /\\ /g')
 
-		## escreva o atalho criado no arquivo .aliases.sh
-		sudo echo alias $nome=\"cd $atalho\" >> $HOME/.aliases.sh
-		source $HOME/.bashrc # Validar o atalho		
+		## escreva o atalho criado no arquivo de aliases
+		echo alias $nome=\"cd $atalho\" >> "$ALIAS_FILE"
 		echo  "Atalho criado com sucesso!"
 		exit 0
 		;;
@@ -97,7 +100,7 @@ case "$1" in
 		}
 
 		# Verificar se o alias já existe
-		 lista=$(cut -d" " -f2 $HOME/.aliases.sh | cut -d "=" -f1 | grep -x "$apelido") 
+		lista=$(cut -d" " -f2 "$ALIAS_FILE" | cut -d "=" -f1 | grep -x "$apelido") 
 
 		[ -n "$lista" ] && {
 			MENSAGEMERRO="O alias $apelido já está cadastrado!"	
@@ -113,14 +116,17 @@ case "$1" in
 		}
 		
 		##escreva o comando no arquivo .aliases.sh
-		sudo echo alias $apelido=\"$comando\" >> $HOME/.aliases.sh
-		source $HOME/.bashrc # Validar atalho 
+		echo alias $apelido=\"$comando\" >> "$ALIAS_FILE"
 		exit 0
 		;;
 
 	-l | --list ) ## Exibir a lista de aliases já cadastrados
 
-		 cut -d" " -f2 $HOME/.aliases.sh | cut -d "=" -f1 
+		[ -z "$2" ] && {
+			cut -d" " -f2 "$ALIAS_FILE" | cut -d "=" -f1
+			exit 0
+		}
+		grep "$2" "$ALIAS_FILE"
 	;;
 
 	*)
