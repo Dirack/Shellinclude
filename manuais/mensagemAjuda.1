@@ -1,42 +1,64 @@
-.TH SHELLINCLUDE "17 ABR 2022" "Versão 1.0.0" "SHELLINCLUDE Manual de uso"
+.TH MENSAGEMAJUDA "17 ABR 2022" "Versão 1.0.0" "MENSAGEMAJUDA Manual de uso"
 
 .SH NOME
-shellinclude - Programas utilitários em Shell Script
+mensagemAjuda - Formatar mensagem de ajuda dos programas da biblioteca Shellinclude
 
 .SH DESCRIÇÃO
 .PP
-A Shellinclude é uma biblioteca shell script com vários programas utilitários que ajudam a facilitar tarefas rotineiras do programador no sistema operacional Linux Ubuntu. Os scripts da Shellinclude também podem ser utilizados como templates para outros programadores desenvolverem os seus próprios programas.
+A função exibirMensagemAjudaProgramaFormatada recebe os parâmetros da seguinte maneira:
 
-.SH PROGRAMAS
+    $1 NOME DO PROGRAMA
 
-.B lipsum:
-Gerar texto aleatório na tela do terminal (dummy text).
+    $2 DESCRIÇÃO
 
-.B cabecalho:
-Gerar cabeçalho para o código fonte de um programa com objetivo, nome do programa e etc.
+    $3 PARÂMETROS
 
-.B comp:
-Compilar e instalar programas na versão local do pacote de processamento sísmico MADAGASCAR.
+    $4 EXEMPLO DE USO
 
-.B img:
-Converter .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
+Os parâmetros devem ser passados dentro de uma variável em que cada linha é um parâmetro, separados de sua legenda explicativa por '::' como no exemplo abaixo:
 
-.B jonas:
-Criar atalhos para pastas e aliases permanentes.
+PARÂMETROS="-h --help:: Exibe esta mensagem de ajuda e sai
+            -v --version:: Exibe a versão do programa e sai
+            -c:: Realiza alguma coisa"
 
-.SH SCRIPTS AUXILIARES
+A função 'formatarTabelaParametros' recebe a variável com os parâmetros no formato descrito acima, adiciona a tabulação no início da linha e substitui o caractere separador '::' por um espaço em branco.
 
-.B mensagemErro.sh:
-Formatar mensagem de erro dos programas da biblioteca Shellinclude
+.SH EXEMPLO DE USO
 
-.B mensagemAjuda.sh:
-Formatar mensagem de ajuda dos programas da biblioteca Shellinclude
+Para compreender melhor a utilização desta biblioteca, utilize o seguinte exemplo de uso em um arquivo 'script.sh':
 
-.SH AMBIENTE
-Por padrão, o apt instala os scripts da bilbioteca em '/usr/bin'.
+	#!/bin/bash
 
-.SH FILES
-Os scripts da biblioteca utilizam o arquivo de configuração '$HOME/bash_aliases' para armazenar variáveis e aliases utilizados pelos scripts. Este arquivo é carregado automaticamente pelo bash no momento da inicialização do Shell.
+	source mensagemAjuda
+
+	NOME_PROGRAMA="TESTE"
+
+	DESCRICAO="Este é um teste"
+
+	PARAMETROS="-h --help::Exibe ajuda e sai"
+
+	EXEMPLO_DE_USO="Exemplo de teste"
+
+	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+
+Dê permissão de execução ao script:
+
+        chmod +x script.sh
+
+Execute o script com:
+
+        \./script.sh
+
+A saída esperada será:
+
+        NOME
+                TESTE
+        DESCRIÇÃO
+                Este é um teste
+        PARÂMETROS
+                -h --help Exibe ajuda e sai
+        EXEMPLO DE USO
+                Exemplo de teste
 
 .SH SUGESTÕES E 'BUG REPORTS'
 Qualquer bug encontrado deve ser reportado para o repositório do Github da Biblioteca Shellinclude na aba 'issues' em:
@@ -61,13 +83,7 @@ Contato:
 -Página no github (GPGEOF) https://github.com/gpgeof.
 
 .SH VEJA TAMBÉM
-.BR lipsum(1),
-.BR cabecalho(1),
-.BR comp(1),
-.BR img(1),
-.BR jonas(1),
 .BR mensagemErro(1),
-.BR mensagemAjuda(1).
 
 Visite o nosso canal de divulgação científica no Youtube (Geofisicando) em:
 
