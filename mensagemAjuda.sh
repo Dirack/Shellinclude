@@ -34,11 +34,8 @@ exibirMensagemAjudaProgramaFormatada(){
 	TABELA_PARAMETROS="$3"
 	EXEMPLO_DE_USO="$4"
 
-	#set -xv
 
 	LISTA_OPCOES=$(echo "$TABELA_PARAMETROS" | cut -d" " -f1 | sed 's/^/ /' | sed 's/$/ /' | paste -s -d"|")
-
-	#exit 0
 
 	TABELA_PARAMETROS=$(formatarTabelaParametros "$TABELA_PARAMETROS")	
 
