@@ -10,12 +10,17 @@ Resolve #(issue)
 
 **Tipo da modificação**
 
-- [ ] Correção de Bug (modificação que corrige uma problema)
-- [ ] Nova feature (modificação que adiciona uma funcionalidade)
-- [ ] Atualização de documentação
-- [ ] Outros (_Descrever aqui_)
+- Correção de Bug (modificação que corrige uma problema)
+- Nova feature (modificação que adiciona uma funcionalidade)
+- Atualização de documentação
+- Outros (_Descrever aqui_)
 
 **Adicione imagens abaixo e o contexto se necessário**
 
 Descreva mais informação e testes que você usou para verificar as suas mudanças
 Adicione imagens descritivas.
+
+**Checklist manual (Adicione oque precisar verificar antes de lançar a nova versão)**
+
+- [ ] Versão da documentação
+- [ ] Outros

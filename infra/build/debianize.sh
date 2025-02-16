@@ -1,60 +1,67 @@
 #!/bin/bash
 
-VERSION=$1
+# Script for building a debian package using DPKG
 
-[ -z "$VERSION" ] && {
-	echo "You should define a package version!"
-	echo "Usage: $(basename $0) v0.1.0"
-	exit 1
-}
+# Set up the following variables based on your package
+PACKAGENAME=shellunity
+VERSION=$(git tag | sort -r | tr '\n' ' ' | cut -d" " -f1)
+VERSION=${VERSION##*v}
+BIN=bin
+MANUALS="docs/man1"
+DESCRIPTION="Framework de testes unitários em Shell Script"
+MANTAINER="Rodolfo A C Neves (Dirack) <https://www.geofisicando.com>"
+ORIGINAL_MANTAINER="GPGEOF <https://github.com/gpgeof>"
+BUGS="<https://github.com/Dirack/ShellUnity/issues>"
+HOMEPAGE="<https://github.com/Dirack/ShellUnity/wiki>"
+DEPENDS="bash"
 
-PROGRAMS_CURRENT_VERSION="cabecalho comp img jonas lipsum toolbox mensagemAjuda mensagemErro"
+if [ -z "$VERSION" ]
+then
+	VERSION="$(cat ../../docs/VERSION.md)-dev"
+fi
 
-CONTROL="Package: shellinclude
-Version: ${VERSION}
+CONTROL="Package: ${PACKAGENAME:=mypackage}
+Version: ${VERSION:=0.0.0-dev}
 Architecture: all
 Priority: optional
 Essential: no
-Maintainer: Rodolfo A C Neves (Dirack) <https://www.geofisicando.com>
-Original-Maintainer: GPGEOF <https://github.com/gpgeof>
-Bugs: https://github.com/Dirack/Shellinclude/issues
-Homepage: https://github.com/Dirack/Shellinclude/wiki
-Depends: bash
-Description: Programas utilitários em Shell Script para auxiliar em tarefas do cotidiano no Linux Ubuntu
- A Shellinclude é uma biblioteca shell script com vários programas utilitários que ajudam a facilitar tarefas rotineiras do programador no sistema operacional Linux Ubuntu.
- Os scripts da Shellinclude também podem ser utilizados como templates para outros programadores desenvolverem os seus próprios programas.
- .
- Programas da versão atual - v${VERSION}
- .
- lipsum: Gerar texto aleatório na tela do terminal (dummy text).
- cabecalho: Gerar cabeçalho para o código fonte de um programa com objetivo, nome do programa e etc.
- comp: Compilar e instalar programas na versão local do pacote de processamento sísmico MADAGASCAR.
- img: Converter .vpl (arquivos de imagem do MADAGASCAR) em imagens .jpeg
- jonas: Criar atalhos para pastas e aliases permanentes.
- .
- Scripts auxiliares:
- .
- mensagemErro.sh
- mensagemAjuda.sh"
+Maintainer: ${MANTAINER:='Rodolfo A C Neves (Dirack) <https://www.geofisicando.com>'}
+Original-Maintainer: ${MANTAINER:='GPGEOF <https://github.com/gpgeof>'}
+Bugs: ${BUGS:='GPGEOF \<https://github.com/gpgeof\>'}
+Homepage: ${HOMEPAGE:='GPGEOF <https://github.com/gpgeof>'}
+Depends: ${DEPENDS:='bash'}
+Description: ${DESCRIPTION:=Just a test! :)}
+"
 
-mkdir -p shellinclude_${VERSION}_all/DEBIAN
+mkdir bin
+cp ../../src/shellunity bin
 
-echo "$CONTROL" > shellinclude_${VERSION}_all/DEBIAN/control
+mkdir -p docs
+cp -r ../../docs docs
+mv docs/docs docs/man1
 
-mkdir -p shellinclude_${VERSION}_all/usr/bin
+mkdir -p ${PACKAGENAME}_${VERSION}_all/DEBIAN
 
-mkdir -p shellinclude_${VERSION}_all/usr/share/man/man1
+echo "$CONTROL" > ${PACKAGENAME}_${VERSION}_all/DEBIAN/control
 
-cd ..
+if [ -d "$BIN" ]
+then
+	mkdir -p ${PACKAGENAME}_${VERSION}_all/usr
+	cp -r ${BIN} ${PACKAGENAME}_${VERSION}_all/usr
+else
+	echo "BIN variable is not setup or BIN directory not found!"
+	exit 1
+fi
 
-cp ${PROGRAMS_CURRENT_VERSION} build/shellinclude_${VERSION}_all/usr/bin
+if [ -d "$MANUALS" ]
+then
+	mkdir -p ${PACKAGENAME}_${VERSION}_all/usr/share/man
+	cp -r ${MANUALS} ${PACKAGENAME}_${VERSION}_all/usr/share/man
+else
+	echo "MANUALS variable is not setup or MANUALS directory not found!"
+	exit 1
+fi
 
-MANUALS=$(ls manuais/*.1 | sed 's/manuais\///' | xargs)
 
-cd manuais
-
-cp ${MANUALS} ../build/shellinclude_${VERSION}_all/usr/share/man/man1
-
-cd ../build
-
-dpkg-deb -b shellinclude_${VERSION}_all
+# Build using the following command
+dpkg-deb -b ${PACKAGENAME}_${VERSION}_all

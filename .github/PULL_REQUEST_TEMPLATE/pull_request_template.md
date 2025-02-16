@@ -1,24 +1,26 @@
 :outbox_tray: **Pull Request**
 
-**Description**
+**Descrição**
 
-Please include a summary of the change and which issue is fixed.
-Please also include relevant motivation and context.
-List any dependencies that are required for this change.
+Inclua um resumo das suas modificações e qual issue é resolvida por este 
+Pull Request. Também inclua a motivação e o contexto.
+Liste as dependências necessárias para que esta modificação funcione.
 
 Resolve #(issue)
 
-**Type of change**
+**Tipo da modificação**
 
-Please delete options that are not relevant.
+- Correção de Bug (modificação que corrige uma problema)
+- Nova feature (modificação que adiciona uma funcionalidade)
+- Atualização de documentação
+- Outros (_Descrever aqui_)
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] This change requires a documentation update
+**Adicione imagens abaixo e o contexto se necessário**
 
-**Add images bellow and aditional context if needed**
+Descreva mais informação e testes que você usou para verificar as suas mudanças
+Adicione imagens descritivas.
 
-Please describe more information and tests that you ran to verify your changes.
-Or add descriptive images.
+**Checklist manual (Adicione oque precisar verificar antes de lançar a nova versão)**
 
+- [ ] Versão da documentação
+- [ ] Outros
