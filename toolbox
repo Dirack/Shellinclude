@@ -1,0 +1,3 @@
+#!/bin/bash
+
+see(){ [ -n "${1:?Erro: Não passou nenhum nome de arquivo RSF para a função\!}" ] && sfgrey < $1 ${2:+color=$2} ${3:+bias=$3} ${4:+scalebar=$4} | sfpen; }
