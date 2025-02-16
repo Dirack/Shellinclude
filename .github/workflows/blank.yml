@@ -29,14 +29,16 @@ jobs:
         run: echo "Build another test for shellinclude!!!"
   build:
     runs-on: ubuntu-latest
-    if: false
+    if: true
     needs: unit-tests
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Create a debian package
-        run: echo "Build a debian package for shellinclude"
+        run:  |
+          cd infra/build
+          ./debianize.sh
           
       - name: Install debian package
         run: echo "Build a debian package for shellinclude"
