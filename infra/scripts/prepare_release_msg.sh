@@ -6,7 +6,7 @@ CURRENTVERSION=$(git tag | sort -r | tr '\n' ' ' | cut -d" " -f1)
 
 LATESTVERSION=$(git tag | sort -r | tr '\n' ' ' | cut -d" " -f2)
 
-GITLOG=$(git log "...$LATESTVERSION" --oneline)
+GITLOG=$(git log "$LATESTVERSION...$CURRENTVERSION" --oneline)
 
 ADDED=$(echo "$GITLOG" | grep -E "\[(feat|test)\]" | sed 's/^/- /')
 if [ -n "$ADDED" ]
