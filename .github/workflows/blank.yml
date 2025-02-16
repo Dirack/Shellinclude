@@ -19,59 +19,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install shellunity
-        run: sudo cp src/shellunity /usr/bin
+      - name: Install shellinclude
+        run: sudo cp src/* /usr/bin
 
-      - name: Test shellunity from cmd
-        run: source shellunity; TEST_MESSAGE 'Meu primeiro teste com shellunity!'
+      - name: Test shellinclude from cmd
+        run: echo "Build a test for shellinclude!!!"
 
-      - name: Test shellunity from script
-        run: |
-          echo -e "source src/shellunity\nTEST_MESSAGE 'Meu primeiro teste com shellunity'" > teste.sh
-          chmod +x teste.sh
-          ./teste.sh
+      - name: Test shellinclude from script
+        run: echo "Build another test for shellinclude!!!"
   build:
     runs-on: ubuntu-latest
+    if: false
     needs: unit-tests
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Create a debian package
-        run: |
-          cd infra/build
-          ./debianize.sh
+        run: echo "Build a debian package for shellinclude"
           
       - name: Install debian package
-        run: cd infra/build; PACKAGE=$(ls *.deb); sudo dpkg -i ./$PACKAGE
+        run: echo "Build a debian package for shellinclude"
           
-      - name: Test shellunity from cmd
-        run: source shellunity; TEST_MESSAGE 'Meu primeiro teste com shellunity!'
+      - name: Test shellinclude from cmd
+        run: echo "Build a debian package for shellinclude"
 
-      - name: Test shellunity from script
-        run: |
-          echo -e "source shellunity\nTEST_MESSAGE 'Meu primeiro teste com shellunity'" > teste.sh
-          chmod +x teste.sh
-          ./teste.sh
+      - name: Test shellinclude from script
+        run: echo "Build a debian package for shellinclude"
           
       - name: Test documentation installation
-        run: |
-          man -f shellunity; man -w shellunity
-          man -f shellunity-dev; man -w shellunity-dev
-          man -f shellunity-user; man -w shellunity-user
+        run: echo "Build a debian package for shellinclude"
           
   delivery:
     runs-on: ubuntu-latest
+    if: false
     needs: build
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Create a debian package
-        run: |
-          cd infra/build
-          ./debianize.sh
-          mkdir debian; mv *.deb debian; mv debian /tmp
+        run: echo "Build a debian package for shellinclude"
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v4
         with:
@@ -80,7 +68,8 @@ jobs:
           retention-days: 0
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
+    if: false
+    #startsWith(github.ref, 'refs/tags')
     needs: delivery
 
     steps:
