@@ -19,15 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checkout tools repo
+      - name: Checkout test dependencies
         uses: actions/checkout@v4
         with:
           repository: Dirack/shellunity
           path: shellunity
           ref: v0.3.1
-
-      - name: Check things
-        run: ls shellunity/src
 
       - name: Install shellunity
         run: sudo cp shellunity/src/shellunity /usr/bin
@@ -36,12 +33,13 @@ jobs:
         run: sudo cp src/* /usr/bin
 
       - name: Test shellinclude from cmd
-        run: echo "Build a test for shellinclude!!!"
+        run: cd test && ./test_cabecalho.sh
 
       - name: Test shellinclude from script
         run: echo "Build another test for shellinclude!!!"
   build:
     runs-on: ubuntu-latest
+    if: false
     needs: unit-tests
 
     steps:
@@ -66,6 +64,7 @@ jobs:
           
   delivery:
     runs-on: ubuntu-latest
+    if: false
     needs: build
 
     steps:
@@ -84,7 +83,8 @@ jobs:
           retention-days: 0
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
+    if: false
+    #startsWith(github.ref, 'refs/tags')
     needs: delivery
 
     steps:
