@@ -1,7 +1,9 @@
 #!/bin/bash
 
-for doc in $(ls docs/*.1)
+for doc in "$(ls docs/*.1)"
 do
+    doc=${doc##*\/}
+    doc=${doc%%.*}
     man -f "$doc"
     subject=$(echo $?)
     man -w "$doc"

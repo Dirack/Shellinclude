@@ -36,8 +36,8 @@ Description: ${DESCRIPTION:=Just a test! :)}
 mkdir bin
 cp ../../src/* bin
 
-mkdir -p docs
-cp -r ../../docs docs
+mkdir -p docs/docs
+cp -r ../../docs/*.1 docs/docs
 mv docs/docs docs/man1
 
 mkdir -p ${PACKAGENAME}_${VERSION}_all/DEBIAN
