@@ -29,7 +29,6 @@ jobs:
         run: echo "Build another test for shellinclude!!!"
   build:
     runs-on: ubuntu-latest
-    if: true
     needs: unit-tests
 
     steps:
@@ -54,18 +53,20 @@ jobs:
           
   delivery:
     runs-on: ubuntu-latest
-    if: false
     needs: build
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Create a debian package
-        run: echo "Build a debian package for shellinclude"
+        run: |
+          cd infra/build
+          ./debianize.sh
+          mkdir debian; mv *.deb debian; mv debian /tmp
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v4
         with:
-          name: shellunity_debian
+          name: shellinclude_debian
           path: /tmp/debian
           retention-days: 0
   deploy:
