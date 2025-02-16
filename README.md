@@ -2,7 +2,7 @@
 # Shellinclude
 > Programas utilitários em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <img src="https://github.com/Dirack/Shellinclude/blob/master/res/superuser-superhero.jpg" width="200">
 
