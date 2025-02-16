@@ -91,7 +91,7 @@ jobs:
 
       - name: Build Release notes
         run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git fetch origin +refs/tags/*:refs/tags/*
           RELEASE_NAME=$(git tag -l --format='%(contents:subject)' ${{ github.ref_name }})
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
           git tag -l --format='%(contents:body)' ${{ github.ref_name }} >> ./release.md
