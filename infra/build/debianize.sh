@@ -3,16 +3,16 @@
 # Script for building a debian package using DPKG
 
 # Set up the following variables based on your package
-PACKAGENAME=shellunity
+PACKAGENAME=shellinclude
 VERSION=$(git tag | sort -r | tr '\n' ' ' | cut -d" " -f1)
 VERSION=${VERSION##*v}
 BIN=bin
 MANUALS="docs/man1"
-DESCRIPTION="Framework de testes unitários em Shell Script"
+DESCRIPTION="Programas utilitários em Shell Script para auxiliar em tarefas do cotidiano no linux ubuntu."
 MANTAINER="Rodolfo A C Neves (Dirack) <https://www.geofisicando.com>"
 ORIGINAL_MANTAINER="GPGEOF <https://github.com/gpgeof>"
-BUGS="<https://github.com/Dirack/ShellUnity/issues>"
-HOMEPAGE="<https://github.com/Dirack/ShellUnity/wiki>"
+BUGS="<https://github.com/Dirack/Shellinclude/issues>"
+HOMEPAGE="<https://github.com/Dirack/Shellinclude/wiki>"
 DEPENDS="bash"
 
 if [ -z "$VERSION" ]
@@ -34,7 +34,7 @@ Description: ${DESCRIPTION:=Just a test! :)}
 "
 
 mkdir bin
-cp ../../src/shellunity bin
+cp ../../src/* bin
 
 mkdir -p docs
 cp -r ../../docs docs
