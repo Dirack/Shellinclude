@@ -25,7 +25,6 @@ exibirMensagemErroProgramaFormatada(){
 	MENSAGEM_ERRO="$3"
 
 	echo -e "\033[31m$NOME_PROGRAMA: ERRO($NUMERO_ERRO):  $MENSAGEM_ERRO\033[m"
-	#echo -e "$NOME_PROGRAMA: ERRO($NUMERO_ERRO):  $MENSAGEM_ERRO"
 
 	exit "$NUMERO_ERRO"
 }
