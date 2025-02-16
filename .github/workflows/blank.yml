@@ -41,16 +41,16 @@ jobs:
           ./debianize.sh
           
       - name: Install debian package
-        run: echo "Build a debian package for shellinclude"
+        run: cd infra/build; PACKAGE=$(ls *.deb); sudo dpkg -i ./$PACKAGE
           
       - name: Test shellinclude from cmd
-        run: echo "Build a debian package for shellinclude"
+        run: echo "[TODO] Build a debian package for shellinclude"
 
       - name: Test shellinclude from script
-        run: echo "Build a debian package for shellinclude"
+        run: echo "[TODO] Build a debian package for shellinclude"
           
       - name: Test documentation installation
-        run: echo "Build a debian package for shellinclude"
+        run: ./infra/scripts/doc_install_check.sh
           
   delivery:
     runs-on: ubuntu-latest
