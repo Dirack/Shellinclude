@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Shell Script for developers configuration loading
+
+# Set up git hooks directory locally
+git config core.hooksPath $(dirname $0)/hooks
+
+# Set up git commit message template locally
+git config commit.template $(dirname $0)/templates/.gitmessage
