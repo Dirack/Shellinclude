@@ -33,7 +33,7 @@ jobs:
         run: sudo cp src/* /usr/bin
 
       - name: Test shellinclude from cmd
-        run: cd test && ./test_cabecalho.sh
+        run: cd test && for test in $(ls test_*.sh); do ./$test; done
 
       - name: Test shellinclude from script
         run: echo "Build another test for shellinclude!!!"
