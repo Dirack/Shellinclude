@@ -18,6 +18,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Checkout tools repo
+        uses: actions/checkout@v4
+        with:
+          repository: Dirack/shellunity
+          path: shellunity
+          ref: v0.3.1
+
+      - name: Check things
+        run: ls
       
       - name: Install shellinclude
         run: sudo cp src/* /usr/bin
