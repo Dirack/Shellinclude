@@ -4,7 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.com/Dirack/Shellinclude.svg?branch=master)](https://travis-ci.com/Dirack/Shellinclude)
 
-<img src="https://github.com/Dirack/Shellinclude/blob/master/imagens/superuser-superhero.jpg" width="200">
+<img src="https://github.com/Dirack/Shellinclude/blob/master/res/superuser-superhero.jpg" width="200">
 
 Os programas da Shellinclude representam a caixa de ferramentas para o programador. 
 Estes scripts ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos fonte dos programas em diferentes linguagens de programação, 
