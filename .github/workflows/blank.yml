@@ -71,8 +71,7 @@ jobs:
           retention-days: 0
   deploy:
     runs-on: ubuntu-latest
-    if: false
-    #startsWith(github.ref, 'refs/tags')
+    if: startsWith(github.ref, 'refs/tags')
     needs: delivery
 
     steps:
