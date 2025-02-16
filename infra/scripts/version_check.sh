@@ -22,7 +22,7 @@ else
 	exit 1
 fi
 
-for doc in $(ls docs/shellunity*)
+for doc in $(ls docs/*.1)
 do
 	docversion=$(sed -n '/Versão/p' $doc)
 	docversion=$(echo ${docversion##*Versão} | cut -d"\"" -f1)
