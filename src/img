@@ -11,8 +11,6 @@
 # 
 # Site: https://www.geofisicando.com
 #
-# Versão 1.0
-#
 # Programador: Rodolfo A. C. Neves 13/01/2019
 # 
 # email: rodolfo_profissional@hotmail.com
@@ -28,7 +26,7 @@ source mensagemErro
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
-VERSAO="Versão 1.0"
+VERSAO="Versão 0.1.1"
 
 # Opção passada pelo usuário
 OPCAO="$1"
@@ -112,7 +110,7 @@ case "$OPCAO" in
 ;;
 
 -v | --version) ## Exibir versão
-	echo -e "\033[00;01m$VERSAO\033[m"
+	echo -e "$VERSAO"
 	exit 0
 ;;
 

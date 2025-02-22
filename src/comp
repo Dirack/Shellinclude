@@ -41,7 +41,7 @@ PASTA_PRINCIPAL_MADAGASCAR="$RSFSRC"
 PASTA_USUARIO_MADAGASCAR="$RSFSRC/user"
  
 # Versão deste programa
-VERSAO="Versão 1.0"
+VERSAO="Versão 0.1.1"
 
 OPCAO="$1"
 PASTA_USUARIO_FORNECIDA="$2"
@@ -70,7 +70,7 @@ case "$OPCAO" in
 ;;
 
 -v | --version) ## Exibir versão deste programa
-	echo -e "\033[00;01m$VERSAO\033[m"
+	echo -e "$VERSAO"
 	exit 0
 ;;
 

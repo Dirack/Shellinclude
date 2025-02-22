@@ -1,3 +1,13 @@
 #!/bin/bash
 
+# Versão deste programa
+VERSAO="Versão 0.1.1"
+
+case "$1" in
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+esac
+
 see(){ [ -n "${1:?Erro: Não passou nenhum nome de arquivo RSF para a função\!}" ] && sfgrey < $1 ${2:+color=$2} ${3:+bias=$3} ${4:+scalebar=$4} | sfpen; }

@@ -18,6 +18,16 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
+# Versão deste programa
+VERSAO="Versão 0.1.1"
+
+case "$1" in
+	-v | --version) ## Exibe a versão do programa
+		echo $VERSAO
+		exit 0
+	;;
+esac
+
 formatarTabelaParametros(){
 
 	
