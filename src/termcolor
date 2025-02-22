@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# termcolor (Shell Script)
+#
+# Objetivo: Biblioteca de funções para exibir mensagens formatadas e com
+# cor no terminal do shell (pretty print)
+# 
+# Site: http://www.geofisicando.com
+#
+#
+# Programador: Rodolfo A. C. Neves 22/02/2025
+# 
+# email (manutenção): rodolfo_profissional@hotmail.com
+# 
+# Licença: Software de uso livre e código aberto.
+
+#bold=$(tput bold)
+#underline=$(tput sgr 0 1)
+reset="\033[m"
+
+red="\033[31m"
+green="\033[32m"
+yellow="\033[33m"
+blue="\033[34m"
+purple="\033[35m"
+
+e_color(){
+    echo -e "$1$2${reset}"
+}
+
+e_red(){
+    e_color "${red}" "$@"
+}
+
+e_green(){
+    e_color "${green}" "$@"
+}
+
+e_yellow(){
+    e_color "${yellow}" "$@"
+}
+
+e_blue(){
+    e_color "${blue}" "$@"
+}
+
+e_purple(){
+    e_color "${purple}" "$@"
+}
+
+e_header() {
+    e_purple "==========  $@  =========="
+}
+
+e_success() {
+    e_green "✔ $@"
+}
+
+e_error() {
+    e_red "✖ $@"
+}
+
+e_warning() {
+    e_yellow "➜ $@"
+}
+
+e_underline() {
+    echo -e "\033[4m$@\033[m"
+}
+
+e_bold() {
+    echo -e "\033[1m$@\033[m"
+}
+
+e_note() {
+    MSG=$(e_color ${blue} "$@")
+    echo -e "\033[4;34mNote:\033[m $MSG"
+}
