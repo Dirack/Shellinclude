@@ -21,7 +21,7 @@ source mensagemAjuda
 source mensagemErro
 
 # Versão atual do programa
-VERSAO="Versão 0.1.1"
+VERSAO="Versão 0.1.2"
 
 ALIAS_FILE="$HOME/.bash_aliases"
 

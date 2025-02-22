@@ -47,7 +47,7 @@ then
 fi
 
 # Versão deste programa
-VERSAO="Versão 0.1.1"
+VERSAO="Versão 0.1.2"
 
 verificarSeArquivoExiste(){
 
