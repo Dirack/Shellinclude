@@ -8,7 +8,7 @@ cd ../src
 
 
 LIB_VERSION=$(cat ../docs/VERSION.md)
-
+echo -e  "\033[33mTestando opções -v e --versiondos programas\033[m"
 echo -e "\033[33mVersão atual do programa encontrada em docs/VERSION.md: ${LIB_VERSION}\033[m"
 
 progs=("cabecalho" "comp" "img" "jonas" "lipsum" "mensagemAjuda" "mensagemErro" "toolbox")
