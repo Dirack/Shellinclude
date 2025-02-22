@@ -2,6 +2,12 @@
 
 # Script for building a debian package using DPKG
 
+if [ "$1" == "clean" ]
+then
+	rm -rf shellinclude_*_all* bin docs *.deb *.zip
+	exit 0
+fi
+
 # Set up the following variables based on your package
 PACKAGENAME=shellinclude
 VERSION=$(git tag | sort -r | tr '\n' ' ' | cut -d" " -f1)
