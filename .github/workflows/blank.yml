@@ -49,8 +49,10 @@ jobs:
 
       - name: Load Docker image
         run: docker load --input /tmp/testimage.tar
-      - name: Run unit tests on a docker with Madagascar 3.0
-        run: docker run -t shellinclude bash -c "cd test/docker; cp ../../src/* /usr/bin; ./test_img.sh"
+      - name: Run unit tests on docker with Madagascar 3.0
+        run: |
+            docker run -t shellinclude bash -c "cd test/docker; cp ../../src/* /usr/bin; ./test_img.sh"
+            docker run -t shellinclude bash -c "cd test/docker; cp ../../src/* /usr/bin; ./test_comp.sh"
 
   build:
     runs-on: ubuntu-latest
