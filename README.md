@@ -5,8 +5,8 @@
 [![Github release](https://img.shields.io/github/v/release/Dirack/Shellinclude)](https://github.com/Dirack/Shellinclude/releases/latest) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Madagascar](https://img.shields.io/badge/Madagascar-v3.0-blue)](https://github.com/ahay/src/tree/master)
 
 > Programas utilitários em Shell Script para me auxiliar em tarefas do cotidiano no linux ubuntu.
-
-<img src="https://github.com/Dirack/Shellinclude/blob/master/res/superuser-superhero.jpg" width="200">
+> 
+<img src="https://github.com/Dirack/Shellinclude/blob/master/res/superuser-superhero.jpg" width="500">
 
 Os programas da Shellinclude representam a caixa de ferramentas para o programador. 
 Estes scripts ajudam a realizar tarefas rotineiras, como escrever um cabeçalho padronizado para os arquivos fonte dos programas em diferentes linguagens de programação, 
