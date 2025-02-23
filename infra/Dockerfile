@@ -8,4 +8,5 @@ COPY . /home/tryitondocker/shellinclude/
 RUN echo "Clean APT" && apt-get clean
 RUN echo "Installing shellunity..." && echo 'deb [trusted=yes] https://gpgeof.github.io/debian ./' >> /etc/apt/sources.list && apt-get update && apt-get clean && echo "...done"
 RUN apt-get install shellunity=0.3.1
+WORKDIR /home/tryitondocker/shellinclude
 CMD [ "bash" ]
