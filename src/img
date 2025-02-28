@@ -31,26 +31,29 @@ VERSAO="Versão 0.1.2"
 # Opção passada pelo usuário
 OPCAO="$1"
 
-# Pasta fornecida pelo usuário
-PASTA_FORNECIDA_USUARIO="$2"
-
 # O endereço de um diretório deve terminar com /
 # Se o usuário esqueceu de colocar a / 
 # adicione o caractere ao final do nome da pasta
 formataNomePasta(){
 
-	[ ! $(echo "$1" | rev | cut -c1) == "/" ] && {
+		[ ! $(echo "$1" | rev | cut -c1) == "/" ] && {
 
-		echo "$1/"
+			echo "$1/"
 
-		return 0
+			return 0
 
-	}
+		}
 
-	echo "$1"
+		echo "$1"
 }
 
-PASTA_FORNECIDA_USUARIO=$(formataNomePasta "$PASTA_FORNECIDA_USUARIO")
+if [ -d "$2" ]
+then
+	# Pasta fornecida pelo usuário
+	PASTA_FORNECIDA_USUARIO="$2"
+
+	PASTA_FORNECIDA_USUARIO=$(formataNomePasta "$PASTA_FORNECIDA_USUARIO")
+fi
 
 NOME_PROGRAMA="$(basename $0)" 
 DESCRICAO="Converte arquivos .vpl (arquivos de imagem do MADAGASCAR) em imagens '.jpeg'."
@@ -88,14 +91,37 @@ verificarSeTemVplNaPasta(){
 }
 
 # Verificar se há arquivos .jpeg a remover em uma pasta
-verificarSeTemJpegNaPasta(){
+verificarSeTemFiguraNaPasta(){
 
 	PASTA=$( formataNomePasta "$1")
+	TIPO="$2"
 
-	TEMARQUIVOVPL=$(find $PASTA -name '*.jpeg')	
+	# Verifica se o usuário quer converter para jpeg (padrão)
+	# Ou para outro tipo (pdf, png, gif)
+		case "$TIPO" in
+			pdf)
+				EXTENSAO="pdf"
+			;;
+
+			png)
+				EXTENSAO="png"
+			;;
+
+
+			gif)
+				EXTENSAO="gif"
+			;;
+			
+
+			*)
+				EXTENSAO="jpeg"
+			;;
+		esac
+
+	TEMARQUIVOVPL=$(find $PASTA -name "*.$EXTENSAO")	
 	
 	[ -z "$TEMARQUIVOVPL" ] && {
-		MENSAGEMERRO="Não há arquivos .jpeg na pasta!"
+		MENSAGEMERRO="Não há arquivos .$EXTENSAO na pasta!"
 		exibirMensagemErroProgramaFormatada "$(basename $0)" "3" "$MENSAGEMERRO"
 	}
 
@@ -103,18 +129,21 @@ verificarSeTemJpegNaPasta(){
 }
 
 case "$OPCAO" in
--h | --help) ## Exibir ajuda
-	clear
-	exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
-	exit 0
-;;
+	-h | --help)
+		## Exibir ajuda
+		clear
+		exibirMensagemAjudaProgramaFormatada "$NOME_PROGRAMA" "$DESCRICAO" "$PARAMETROS" "$EXEMPLO_DE_USO"
+		exit 0
+	;;
 
--v | --version) ## Exibir versão
+-v | --version)
+	## Exibir versão
 	echo -e "$VERSAO"
 	exit 0
 ;;
 
--i) ## Converter arquivos .vpl (MADAGASCAR) em imagens jpeg
+-i)
+	## Converter arquivos .vpl (MADAGASCAR) em imagens jpeg
 
 	# Se o usuário não forneceu uma pasta, converta
 	# arquivos .vpl da pasta atual
@@ -128,11 +157,37 @@ case "$OPCAO" in
 		# em um arquivo temporário
 		ls -1 *.vpl > /tmp/lista-temporaria-arquivos.txt
 
+		# Verifica se o usuário quer converter para jpeg (padrão)
+		# Ou para outro tipo (pdf, png, gif)
+		case "$2" in
+			pdf)
+				CONVERSOR="pdfpen"
+				EXTENSAO="pdf"
+			;;
+
+			png)
+				CONVERSOR="pngpen"
+				EXTENSAO="png"
+			;;
+
+
+			gif)
+				CONVERSOR="vpconvert format=gif"
+				EXTENSAO="gif"
+			;;
+			
+
+			*)
+				CONVERSOR="jpegpen"
+				EXTENSAO="jpeg"
+			;;
+		esac
+
 		# Obtenha a imagem jpeg de cada arquivo na lista dos arquivos
 		while read LINHA_LISTA_TEMPORARIA
 		do
-			< "$LINHA_LISTA_TEMPORARIA" jpegpen bgcolor=w > \
-			$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".jpeg"
+			< "$LINHA_LISTA_TEMPORARIA" $CONVERSOR bgcolor=w > \
+			$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".$EXTENSAO"
 		
 		done < /tmp/lista-temporaria-arquivos.txt
 
@@ -155,13 +210,39 @@ case "$OPCAO" in
 		# em um arquivo temporário
 		ls -1 "$PASTA_FORNECIDA_USUARIO" | grep ".vpl$" > /tmp/lista-temporaria-arquivos.txt
 
+		# Verifica se o usuário quer converter para jpeg (padrão)
+		# Ou para outro tipo (pdf, png, gif)
+		case "$3" in
+			pdf)
+				CONVERSOR="pdfpen"
+				EXTENSAO="pdf"
+			;;
+
+			png)
+				CONVERSOR="pngpen"
+				EXTENSAO="png"
+			;;
+
+
+			gif)
+				CONVERSOR="vpconvert format=gif"
+				EXTENSAO="gif"
+			;;
+			
+
+			*)
+				CONVERSOR="jpegpen"
+				EXTENSAO="jpeg"
+			;;
+		esac
+
 		# Obtenha a imagem jpeg a partir dos arquivos .vpl na lista
 		while read LINHA_LISTA_TEMPORARIA
 		do
 	
 			# Converter de .vpl para jpeg
-			< "$PASTA_FORNECIDA_USUARIO${LINHA_LISTA_TEMPORARIA}" jpegpen bgcolor=w > \
-			"$PASTA_FORNECIDA_USUARIO"$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".jpeg"
+			< "$PASTA_FORNECIDA_USUARIO${LINHA_LISTA_TEMPORARIA}" $CONVERSOR bgcolor=w > \
+			"$PASTA_FORNECIDA_USUARIO"$(echo "$LINHA_LISTA_TEMPORARIA" | cut -d"." -f1)".$EXTENSAO"
 		
 		done < /tmp/lista-temporaria-arquivos.txt
 
@@ -169,7 +250,8 @@ case "$OPCAO" in
 	fi
 ;;
 
--r) ## Remover arquivos jpeg de uma pasta
+-r)
+	## Remover arquivos jpeg de uma pasta
 
 	
 	# Se o usuário não forneceu uma pasta, apague
@@ -177,12 +259,34 @@ case "$OPCAO" in
 	if [ -z "$PASTA_FORNECIDA_USUARIO" ]
 	then
 
+		# Verifica se o usuário quer converter para jpeg (padrão)
+		# Ou para outro tipo (pdf, png, gif)
+		case "$2" in
+			pdf)
+				EXTENSAO="pdf"
+			;;
+
+			png)
+				EXTENSAO="png"
+			;;
+
+
+			gif)
+				EXTENSAO="gif"
+			;;
+			
+
+			*)
+				EXTENSAO="jpeg"
+			;;
+		esac
+
 		# Tem .JPEG na pasta atual?
-		verificarSeTemJpegNaPasta "$PWD"
+		verificarSeTemFiguraNaPasta "$PWD" "$EXTENSAO"
 
 		# Remover arquivos?
 		echo "Pasta atual: $PWD"
-		read -p "Remover arquivos .jpeg da pasta atual? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
+		read -p "Remover arquivos .$EXTENSAO da pasta atual? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
 
 		# Usuário desistiu?
 		if [ "$RESPOSTA_REMOVER_ARQUIVOS" = "n" ]
@@ -192,13 +296,13 @@ case "$OPCAO" in
 			
 		elif [ "$RESPOSTA_REMOVER_ARQUIVOS" = "y" ]
 		then
-			rm *.jpeg
+			rm *.$EXTENSAO
 			[ $? -eq "0" ] && {
-				echo "Arquivos .jpeg removidos com sucesso!"
+				echo "Arquivos .$EXTENSAO removidos com sucesso!"
 				exit 0
 			}
 
-			echo "Não foram encontrados arquivos .jpeg na pasta!"
+			echo "Não foram encontrados arquivos .$EXTENSAO na pasta!"
 			exit 1
 
 		else
@@ -211,18 +315,39 @@ case "$OPCAO" in
 	else
 
 		# Verifique se o endereço fornecido existe
-		[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
-			MENSAGEMERRO="Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado!"
-			exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
-		}
+		#[ -d "$PASTA_FORNECIDA_USUARIO" ] || {
+		#	MENSAGEMERRO="Diretório $PASTA_FORNECIDA_USUARIO NÃO encontrado!"
+		#	exibirMensagemErroProgramaFormatada "$(basename $0)" "6" "$MENSAGEMERRO"
+		#}
 	
+		# Verifica se o usuário quer converter para jpeg (padrão)
+		# Ou para outro tipo (pdf, png, gif)
+		case "$3" in
+			pdf)
+				EXTENSAO="pdf"
+			;;
+
+			png)
+				EXTENSAO="png"
+			;;
+
+
+			gif)
+				EXTENSAO="gif"
+			;;
+			
+
+			*)
+				EXTENSAO="jpeg"
+			;;
+		esac
 
 		# Tem .JPEG na pasta fornecida?
-		verificarSeTemJpegNaPasta "$PASTA_FORNECIDA_USUARIO"
+		verificarSeTemFiguraNaPasta "$PASTA_FORNECIDA_USUARIO" "$EXTENSAO"
 
 		# Remover arquivos?
 		echo "Pasta escolhida: $PASTA_FORNECIDA_USUARIO"
-		read -p "Remover arquivos .jpeg da pasta? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
+		read -p "Remover arquivos .$EXTENSAO da pasta? (y/n)" RESPOSTA_REMOVER_ARQUIVOS
 
 		# Usuário desistiu de remover os arquivos?
 		if [ "$RESPOSTA_REMOVER_ARQUIVOS" = "n" ]
@@ -234,10 +359,10 @@ case "$OPCAO" in
 		then
 
 			# Verifique se há algum .jpeg na pasta para ser removido
-			rm "$PASTA_FORNECIDA_USUARIO"*.jpeg && {
-				echo "Arquivos .jpeg removidos de $PASTA_FORNECIDA_USUARIO com sucesso!"
+			rm ${PASTA_FORNECIDA_USUARIO}*.$EXTENSAO && {
+				echo "Arquivos .$EXTENSAO removidos de $PASTA_FORNECIDA_USUARIO com sucesso!"
 			} || {
-				MENSAGEMERRO="Arquivos .jpeg não foram encontrados em $PASTA_FORNECIDA_USUARIO"
+				MENSAGEMERRO="Arquivos .$EXTENSAO não foram encontrados em $PASTA_FORNECIDA_USUARIO"
 				
 				exibirMensagemErroProgramaFormatada "$(basename $0)" "7" "$MENSAGEMERRO"
 			}
