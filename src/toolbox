@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Versão deste programa
-VERSAO="Versão 0.1.2"
+VERSAO="Versão 0.1.3"
 
 case "$1" in
 	-v | --version) ## Exibe a versão do programa

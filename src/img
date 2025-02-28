@@ -26,7 +26,7 @@ source mensagemErro
 #----------------{ Configuração de variáveis }-----------------------------#
 
 # Versão deste programa
-VERSAO="Versão 0.1.2"
+VERSAO="Versão 0.1.3"
 
 # Opção passada pelo usuário
 OPCAO="$1"
