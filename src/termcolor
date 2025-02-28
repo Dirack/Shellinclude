@@ -14,8 +14,6 @@
 # 
 # Licença: Software de uso livre e código aberto.
 
-#bold=$(tput bold)
-#underline=$(tput sgr 0 1)
 reset="\033[m"
 
 red="\033[31m"
